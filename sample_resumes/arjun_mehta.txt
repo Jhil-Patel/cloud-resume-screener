@@ -1,0 +1,42 @@
+Arjun Mehta
+arjun.mehta@gmail.com | +91-9876543210 | github.com/arjunmehta | linkedin.com/in/arjunmehta
+Pune, Maharashtra, India
+
+EDUCATION
+Master of Technology in Computer Science — IIT Bombay, 2024 | CGPA: 8.9/10
+Bachelor of Engineering in Information Technology — NIT Surat, 2022 | CGPA: 8.4/10
+
+WORK EXPERIENCE
+Machine Learning Engineer — Flipkart AI, Bangalore (Jun 2024 – Present)
+  - Developed recommendation engine using PyTorch and TensorFlow, improving CTR by 18%
+  - Deployed production NLP models using HuggingFace BERT transformers for product search
+  - Built and maintained REST APIs with FastAPI for real-time model inference
+  - Managed AWS infrastructure: S3, EC2, Lambda, RDS for ML model deployment pipeline
+  - Containerized services using Docker and orchestrated with Kubernetes
+
+Data Science Intern — Infosys, Pune (Jan 2023 – May 2023)
+  - Built classification models using scikit-learn (Random Forest, XGBoost, SVM) — 91% accuracy
+  - Performed exploratory data analysis with pandas, numpy, matplotlib, seaborn
+  - Created automated reporting dashboards using Plotly
+
+TECHNICAL SKILLS
+Programming Languages: Python, SQL, R, Bash, Scala
+Machine Learning / AI: TensorFlow, PyTorch, scikit-learn, Keras, HuggingFace Transformers,
+  BERT, GPT, LLM, NLP, Computer Vision, XGBoost, LightGBM, Random Forest, Deep Learning,
+  Reinforcement Learning, Feature Engineering, Neural Network
+Cloud & DevOps: AWS (S3, EC2, Lambda, RDS, SageMaker), Docker, Kubernetes, Git, GitHub Actions, CI/CD
+Databases: PostgreSQL, MongoDB, Redis, Elasticsearch, SQLite
+Web Frameworks: FastAPI, Flask, Streamlit, REST API
+
+PROJECTS
+Cloud Resume Screener (Sep 2025)
+  NLP pipeline with spaCy, TF-IDF cosine similarity matching, FastAPI backend,
+  React frontend, PostgreSQL database, AWS S3 storage — live deployed on AWS EC2
+
+Real-time Sentiment Analysis (2024)
+  Fine-tuned BERT model on 500K Amazon reviews; 94% accuracy; deployed via FastAPI + Docker
+
+ACHIEVEMENTS
+- Published: NLP-based Resume Screening using Transformer Models — ICML Workshop 2024
+- Top 50 in Kaggle NLP competition (2023)
+- Smart India Hackathon finalist (2022)

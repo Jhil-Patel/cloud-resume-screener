@@ -1,0 +1,39 @@
+Priya Sharma
+priya.sharma@gmail.com | +91-9988776655 | github.com/priyasharma | linkedin.com/in/priya-sharma-dev
+Mumbai, Maharashtra, India
+
+EDUCATION
+Bachelor of Engineering in Computer Science — VIT Vellore, 2023 | CGPA: 8.2/10
+
+WORK EXPERIENCE
+Software Developer — Wipro Technologies, Mumbai (Aug 2023 – Present)
+  - Full stack web development using React, Node.js, and PostgreSQL
+  - Designed and implemented REST APIs serving 50K+ daily requests
+  - Built responsive dashboards with React and Tailwind CSS
+  - Integrated AWS S3 for media file storage in production applications
+  - Deployed applications using Docker on AWS EC2
+  - Version control with Git and GitHub
+
+Junior Developer Intern — StartupXYZ (Jan 2023 – Jun 2023)
+  - Developed CRUD applications using Django and MySQL
+  - Created API integrations with third-party services
+  - Unit testing with pytest
+
+TECHNICAL SKILLS
+Frontend: JavaScript, TypeScript, React, Angular, HTML, CSS, Tailwind
+Backend: Node.js, Django, Flask, Express, REST API, GraphQL
+Cloud: AWS S3, EC2, Git, Docker, Linux
+Databases: PostgreSQL, MySQL, MongoDB, Firebase, Redis
+Tools: Git, GitHub, Postman, Figma, Jira
+
+BASIC DATA SCIENCE EXPOSURE
+Python, pandas, numpy, matplotlib
+Completed Coursera Machine Learning Specialization (Andrew Ng)
+Beginner-level scikit-learn experience
+
+PROJECTS
+E-commerce Platform (2023)
+  React + Node.js + PostgreSQL + AWS S3; live at startup-demo.com
+
+Student Portal (2022)
+  Django + MySQL; student management system with REST API

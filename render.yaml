@@ -1,0 +1,27 @@
+# render.yaml — Render Web Service deployment config
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: cloud-resume-screener
+    runtime: python
+    region: oregon
+    plan: starter          # Always-on web service
+    rootDir: .
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_skCu7zjyQYn5@ep-delicate-field-ad8iq0tg-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require
+
+      # AWS S3 — add these in Render dashboard after setup
+      - key: AWS_ACCESS_KEY_ID
+        value: ""
+      - key: AWS_SECRET_ACCESS_KEY
+        value: ""
+      - key: AWS_REGION
+        value: ap-south-1
+      - key: S3_BUCKET_NAME
+        value: ""

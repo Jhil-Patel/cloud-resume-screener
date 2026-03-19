@@ -1,0 +1,38 @@
+Sneha Patel
+sneha.patel@hotmail.com | +91-8765432190 | linkedin.com/in/snehapatel | github.com/sneha-patel
+Ahmedabad, Gujarat, India
+
+EDUCATION
+Master of Science in Data Science — Georgia Institute of Technology (Online), 2025
+Bachelor of Technology in Computer Science — BITS Pilani, 2022 | CGPA: 9.1/10
+
+WORK EXPERIENCE
+Senior Data Engineer — Tata Consultancy Services, Ahmedabad (Jul 2022 – Present)
+  3 years of experience in data engineering and machine learning
+  - Architected end-to-end ETL pipelines using Apache Spark and Apache Airflow on AWS
+  - Designed and maintained data warehouse on AWS Redshift with PostgreSQL upstream
+  - Processed 10TB+ daily datasets using PySpark and Kafka for real-time streaming
+  - Built ML feature engineering pipelines using scikit-learn and pandas
+  - Deployed NLP models using spaCy and HuggingFace for document processing
+  - Infrastructure automation using Docker, Kubernetes, and Terraform on AWS
+  - Implemented CI/CD pipelines with GitHub Actions for ML model deployment
+
+TECHNICAL SKILLS
+Programming: Python, SQL, R, Scala, Bash
+Data Engineering: Apache Spark, PySpark, Apache Airflow, Kafka, ETL, Data Pipeline,
+  Data Warehouse, Snowflake, Redshift, BigQuery, dbt, Databricks, Hive, Presto
+Machine Learning / AI: TensorFlow, PyTorch, scikit-learn, Keras, NLP, HuggingFace, BERT,
+  Machine Learning, Deep Learning, Feature Engineering, XGBoost, Neural Network
+Cloud & DevOps: AWS (S3, EC2, Lambda, RDS, Redshift, SageMaker, EMR), GCP, Docker,
+  Kubernetes, Terraform, Ansible, Git, GitHub Actions, CI/CD, Linux
+Databases: PostgreSQL, MySQL, MongoDB, Redis, Cassandra, Elasticsearch
+Web: FastAPI, Flask, REST API, GraphQL
+
+PROJECTS
+Real-time Financial Fraud Detection (2024)
+  Kafka + Spark Streaming pipeline, XGBoost classifier, FastAPI inference API,
+  PostgreSQL storage, Docker + Kubernetes deployment on AWS
+
+PUBLICATIONS & TALKS
+- "Scalable NLP Pipelines with spaCy and Spark" — PyData India 2024
+- "ETL at Scale with Apache Airflow" — PyCon India 2023

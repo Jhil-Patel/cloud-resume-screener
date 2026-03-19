@@ -1,0 +1,45 @@
+Rohan Verma
+rohan.verma@iitd.ac.in | +91-9123456789 | github.com/rohanverma-ai | linkedin.com/in/rohanvermaai
+New Delhi, India
+
+EDUCATION
+Doctor of Philosophy (PhD) in Computer Science — IIT Delhi, 2026 (Expected)
+  Thesis: "Efficient Transformer Architectures for Low-Resource NLP"
+  Advisor: Prof. Rajeev Sangal
+Master of Technology in Artificial Intelligence — IIT Delhi, 2021
+Bachelor of Technology in Computer Science — DTU Delhi, 2019
+
+RESEARCH & WORK EXPERIENCE
+Graduate Research Associate — IIT Delhi AI Lab (2021 – Present)
+  5 years of research experience in NLP and deep learning
+  - Developed novel attention mechanisms for transformer models using PyTorch
+  - Published 4 papers in top-tier venues (ACL, EMNLP, NeurIPS)
+  - Implemented NLP pipelines using spaCy, HuggingFace Transformers, BERT, GPT
+  - Built scalable ML training infrastructure on AWS (EC2, S3, SageMaker) with Docker
+  - Mentored 8 undergraduate students on ML projects
+
+Applied ML Intern — Google Brain, Bangalore (May 2023 – Aug 2023)
+  - Researched efficient fine-tuning methods for large language models (LLMs)
+  - Implemented LoRA and QLoRA techniques in PyTorch, reducing training cost by 60%
+  - Used GCP BigQuery and Kubernetes for distributed training pipelines
+
+TECHNICAL SKILLS
+Programming: Python, C++, CUDA, SQL, R, Bash
+ML / AI: PyTorch, TensorFlow, HuggingFace Transformers, BERT, GPT, LLM, NLP,
+  spaCy, scikit-learn, Keras, Deep Learning, Computer Vision, Reinforcement Learning,
+  Machine Learning, Neural Network, XGBoost, Feature Engineering, RAG, Embeddings
+Cloud & DevOps: AWS (EC2, S3, SageMaker, Lambda), GCP, Docker, Kubernetes,
+  Terraform, Git, GitHub Actions, CI/CD, Linux
+Databases: PostgreSQL, MongoDB, Redis, Elasticsearch, SQLite
+Frameworks: FastAPI, Flask, REST API, PyTorch Lightning, Weights & Biases
+
+PUBLICATIONS (selected)
+1. "Sparse Attention for Long-Document NLP" — ACL 2024
+2. "Low-Resource NER with Cross-lingual Transfer" — EMNLP 2023
+3. "Efficient Fine-tuning of LLMs using LoRA" — NeurIPS 2023 Workshop
+4. "Domain Adaptation for Resume Parsing" — EACL 2022
+
+ACHIEVEMENTS
+- Google PhD Fellowship (2022)
+- Best Paper Award — ACL 2024 Workshop
+- AIR 47 — GATE CS 2021

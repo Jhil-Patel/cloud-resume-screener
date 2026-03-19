@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CloudScreen — Resume Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap"/>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:       #07080f;
+  --bg2:      #0d0f1a;
+  --bg3:      #111422;
+  --bg4:      #161928;
+  --border:   rgba(99,120,255,0.12);
+  --border2:  rgba(99,120,255,0.22);
+  --accent:   #6366f1;
+  --accent2:  #818cf8;
+  --green:    #34d399;
+  --amber:    #fbbf24;
+  --red:      #f87171;
+  --coral:    #fb7185;
+  --text:     #e8eaf5;
+  --text2:    #8b93b8;
+  --text3:    #485077;
+  --mono:     'DM Mono', monospace;
+  --serif:    'DM Serif Display', serif;
+  --sans:     'Outfit', sans-serif;
+  --radius:   14px;
+  --radius-sm: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+body { overflow-x: hidden; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* Layout */
+.app { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 240px; min-height: 100vh; background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  position: fixed; left: 0; top: 0; bottom: 0; z-index: 100;
+  padding: 0;
+}
+.main { margin-left: 240px; flex: 1; min-height: 100vh; }
+
+/* Sidebar */
+.logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-mark {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 4px;
+}
+.logo-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.logo-name { font-family: var(--serif); font-size: 20px; color: var(--text); }
+.logo-tag { font-size: 10px; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; }
+
+.nav { padding: 16px 12px; flex: 1; }
+.nav-section { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text3); padding: 0 8px; margin: 16px 0 8px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 13.5px; color: var(--text2);
+  transition: all 0.15s; margin-bottom: 2px;
+  border: 1px solid transparent;
+  user-select: none;
+}
+.nav-item:hover { background: var(--bg3); color: var(--text); }
+.nav-item.active {
+  background: rgba(99,102,241,0.15); color: var(--accent2);
+  border-color: rgba(99,102,241,0.2);
+}
+.nav-item .icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+
+.sidebar-footer {
+  padding: 16px; border-top: 1px solid var(--border);
+  font-size: 11px; color: var(--text3);
+}
+.storage-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 20px; padding: 4px 10px; font-size: 10px;
+  margin-top: 6px;
+}
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.dot.amber { background: var(--amber); }
+
+/* Top bar */
+.topbar {
+  padding: 16px 32px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg); position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(12px);
+}
+.page-title { font-family: var(--serif); font-size: 22px; }
+.page-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+/* Content */
+.content { padding: 28px 32px; }
+
+/* Cards */
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px;
+}
+.card-sm {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px;
+}
+
+/* KPI Grid */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.kpi { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.kpi-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
+.kpi-value { font-family: var(--mono); font-size: 28px; font-weight: 500; }
+.kpi-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+/* Grid layouts */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+/* Forms */
+.input {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 14px;
+  color: var(--text); font-family: var(--sans); font-size: 13.5px;
+  outline: none; transition: border-color 0.15s;
+}
+.input:focus { border-color: var(--accent); }
+.input::placeholder { color: var(--text3); }
+textarea.input { resize: vertical; min-height: 120px; line-height: 1.6; }
+select.input { cursor: pointer; }
+
+.label { font-size: 11px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+.form-group { margin-bottom: 16px; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 18px; border-radius: var(--radius-sm);
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  cursor: pointer; border: none; transition: all 0.15s;
+  user-select: none; white-space: nowrap;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #5254d0; transform: translateY(-1px); }
+.btn-ghost { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--border2); color: var(--text); }
+.btn-danger { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+.btn-danger:hover { background: rgba(248,113,113,0.2); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+/* Upload zone */
+.upload-zone {
+  border: 2px dashed var(--border2); border-radius: var(--radius);
+  padding: 40px 20px; text-align: center; cursor: pointer;
+  transition: all 0.2s; background: var(--bg3);
+}
+.upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(99,102,241,0.05); }
+.upload-icon { font-size: 36px; margin-bottom: 12px; }
+.upload-text { font-size: 14px; color: var(--text2); }
+.upload-sub { font-size: 11px; color: var(--text3); margin-top: 5px; }
+
+/* Rank card */
+.rank-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 22px;
+  margin-bottom: 10px; display: flex; align-items: center; gap: 20px;
+  cursor: pointer; transition: all 0.2s;
+}
+.rank-card:hover { border-color: var(--border2); transform: translateY(-1px); }
+.rank-num {
+  font-family: var(--mono); font-size: 20px; font-weight: 500;
+  min-width: 36px; flex-shrink: 0;
+}
+.rank-info { flex: 1; min-width: 0; }
+.rank-name { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rank-file { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.rank-bar-wrap { min-width: 180px; }
+.rank-bar-bg { background: var(--bg3); border-radius: 4px; height: 6px; overflow: hidden; }
+.rank-bar { height: 6px; border-radius: 4px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+.rank-score { font-family: var(--mono); font-weight: 500; font-size: 14px; }
+.rank-meta { font-size: 11px; color: var(--text3); min-width: 110px; text-align: right; }
+
+/* Verdict badge */
+.verdict {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
+}
+.verdict.strong { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+.verdict.good   { background: rgba(99,102,241,0.12); color: var(--accent2); border: 1px solid rgba(99,102,241,0.2); }
+.verdict.partial { background: rgba(251,191,36,0.12); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
+.verdict.weak   { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+
+/* Skill tags */
+.tag {
+  display: inline-flex; align-items: center;
+  background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.18);
+  color: var(--accent2); border-radius: 20px;
+  padding: 3px 10px; font-size: 11px; margin: 2px;
+}
+
+/* Section head */
+.section-head {
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--accent); border-left: 3px solid var(--accent);
+  padding-left: 10px; margin: 24px 0 14px;
+}
+
+/* Chart container */
+.chart-wrap { position: relative; height: 240px; }
+
+/* Toast */
+.toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 9999; }
+.toast {
+  background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius-sm);
+  padding: 12px 18px; margin-top: 8px; font-size: 13px;
+  display: flex; align-items: center; gap: 8px;
+  animation: slideIn 0.2s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  max-width: 340px;
+}
+@keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.toast.success { border-left: 3px solid var(--green); }
+.toast.error   { border-left: 3px solid var(--red); }
+.toast.info    { border-left: 3px solid var(--accent); }
+
+/* Loader */
+.spinner {
+  width: 20px; height: 20px; border: 2px solid var(--border);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 0.7s linear infinite; flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  z-index: 500; display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.15s;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 28px; width: 90%; max-width: 680px;
+  max-height: 85vh; overflow-y: auto;
+  animation: scaleIn 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes scaleIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* Gauge */
+.gauge-wrap { position: relative; width: 140px; height: 80px; }
+.gauge-num { font-family: var(--mono); font-size: 28px; font-weight: 500; }
+
+/* Empty state */
+.empty { text-align: center; padding: 60px 20px; color: var(--text3); }
+.empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.4; }
+.empty-text { font-size: 15px; color: var(--text2); margin-bottom: 6px; }
+.empty-sub { font-size: 13px; }
+
+/* Progress bar */
+.progress-bar { height: 3px; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+.progress-track { background: var(--bg3); border-radius: 2px; overflow: hidden; }
+
+/* Radar chart canvas */
+canvas { display: block; }
+
+/* Job selector */
+.job-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 20px; font-size: 12px;
+  cursor: pointer; transition: all 0.15s; border: 1px solid var(--border); margin: 3px;
+  background: var(--bg3); color: var(--text2);
+}
+.job-chip.active { background: rgba(99,102,241,0.15); border-color: var(--accent); color: var(--accent2); }
+.job-chip:hover:not(.active) { border-color: var(--border2); }
+
+/* Stat row */
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.stat-row:last-child { border-bottom: none; }
+
+/* Breakdown bar */
+.breakdown-item { margin-bottom: 12px; }
+.breakdown-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px; }
+.breakdown-track { background: var(--bg3); border-radius: 3px; height: 5px; overflow: hidden; }
+.breakdown-fill { height: 5px; border-radius: 3px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .sidebar { width: 60px; }
+  .main { margin-left: 60px; }
+  .logo-name, .logo-tag, .nav-item span, .nav-section, .sidebar-footer { display: none; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .grid-2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+const API = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+  ? "http://localhost:8000/api"
+  : "/api";
+
+// ── Utilities ──────────────────────────────────────────────────────────────
+function scoreColor(s) {
+  if (s >= 75) return "var(--green)";
+  if (s >= 55) return "var(--accent2)";
+  if (s >= 35) return "var(--amber)";
+  return "var(--red)";
+}
+function verdictClass(v) {
+  if (!v) return "";
+  if (v.includes("Strong")) return "strong";
+  if (v.includes("Good"))   return "good";
+  if (v.includes("Partial")) return "partial";
+  return "weak";
+}
+
+// ── Toast system ───────────────────────────────────────────────────────────
+function useToasts() {
+  const [toasts, setToasts] = useState([]);
+  const add = useCallback((msg, type="info") => {
+    const id = Date.now();
+    setToasts(t => [...t, { id, msg, type }]);
+    setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 4000);
+  }, []);
+  return { toasts, add };
+}
+
+function ToastContainer({ toasts }) {
+  return (
+    <div className="toast-wrap">
+      {toasts.map(t => (
+        <div key={t.id} className={`toast ${t.type}`}>
+          {t.type === "success" && "✓"}
+          {t.type === "error" && "✕"}
+          {t.type === "info" && "•"}
+          <span>{t.msg}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Mini Radar Chart ────────────────────────────────────────────────────────
+function RadarChart({ data }) {
+  const ref = useRef(null);
+  const chartRef = useRef(null);
+  useEffect(() => {
+    if (!ref.current || !data) return;
+    if (chartRef.current) chartRef.current.destroy();
+    const bd = data.score_breakdown || {};
+    chartRef.current = new Chart(ref.current, {
+      type: "radar",
+      data: {
+        labels: ["TF-IDF", "Skills", "Experience", "Education"],
+        datasets: [{
+          data: [bd.tfidf_similarity||0, bd.skill_match||0, bd.experience_fit||0, bd.education_fit||0],
+          backgroundColor: "rgba(99,102,241,0.15)",
+          borderColor: "#6366f1",
+          pointBackgroundColor: "#818cf8",
+          borderWidth: 1.5,
+          pointRadius: 3,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { r: {
+          min: 0, max: 100,
+          grid: { color: "rgba(99,120,255,0.1)" },
+          ticks: { display: false },
+          pointLabels: { color: "#8b93b8", font: { size: 10, family: "Outfit" } }
+        }},
+        plugins: { legend: { display: false } },
+        animation: { duration: 400 }
+      }
+    });
+    return () => chartRef.current?.destroy();
+  }, [data]);
+  return <canvas ref={ref}/>;
+}
+
+// ── Bar Chart ──────────────────────────────────────────────────────────────
+function BarChart({ resumes }) {
+  const ref = useRef(null);
+  const chartRef = useRef(null);
+  useEffect(() => {
+    if (!ref.current || !resumes?.length) return;
+    if (chartRef.current) chartRef.current.destroy();
+    const labels = resumes.slice(0,10).map(r => r.candidate_name?.split(" ")[0] || "?");
+    const scores = resumes.slice(0,10).map(r => r.score||0);
+    const colors = scores.map(s => scoreColor(s));
+    chartRef.current = new Chart(ref.current, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{
+          label: "Match Score",
+          data: scores,
+          backgroundColor: colors.map(c => c.replace(")", ",0.7)").replace("var(", "").replace("--green", "rgba(52,211,153").replace("--accent2", "rgba(129,140,248").replace("--amber", "rgba(251,191,36").replace("--red", "rgba(248,113,113")),
+          borderColor: colors.map(c => c.replace("var(--green)", "#34d399").replace("var(--accent2)", "#818cf8").replace("var(--amber)", "#fbbf24").replace("var(--red)", "#f87171")),
+          borderWidth: 1,
+          borderRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          y: { min: 0, max: 100, grid: { color: "rgba(99,120,255,0.06)" }, ticks: { color: "#485077", font: { size: 10 } }},
+          x: { grid: { display: false }, ticks: { color: "#8b93b8", font: { size: 11 } }}
+        },
+        plugins: { legend: { display: false } },
+        animation: { duration: 500 }
+      }
+    });
+    return () => chartRef.current?.destroy();
+  }, [resumes]);
+  return <canvas ref={ref}/>;
+}
+
+// ── Doughnut Chart ──────────────────────────────────────────────────────────
+function DonutChart({ distribution }) {
+  const ref = useRef(null);
+  const chartRef = useRef(null);
+  useEffect(() => {
+    if (!ref.current || !distribution) return;
+    if (chartRef.current) chartRef.current.destroy();
+    const labels = Object.keys(distribution);
+    const vals   = Object.values(distribution);
+    chartRef.current = new Chart(ref.current, {
+      type: "doughnut",
+      data: {
+        labels,
+        datasets: [{
+          data: vals,
+          backgroundColor: ["rgba(248,113,113,0.7)","rgba(251,191,36,0.7)","rgba(99,102,241,0.7)","rgba(129,140,248,0.7)","rgba(52,211,153,0.7)"],
+          borderColor: "transparent",
+          borderWidth: 2,
+          hoverOffset: 4,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: "68%",
+        plugins: {
+          legend: { position: "right", labels: { color: "#8b93b8", font: { size: 10, family: "Outfit" }, boxWidth: 10, padding: 8 }}
+        },
+        animation: { duration: 400 }
+      }
+    });
+    return () => chartRef.current?.destroy();
+  }, [distribution]);
+  return <canvas ref={ref}/>;
+}
+
+// ── Candidate Detail Modal ──────────────────────────────────────────────────
+function CandidateModal({ resume, onClose }) {
+  if (!resume) return null;
+  const bd = resume.score_breakdown || {};
+  const scoreC = scoreColor(resume.score || 0);
+  return (
+    <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="modal">
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:24}}>
+          <div>
+            <div style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:4}}>{resume.candidate_name}</div>
+            <div style={{fontSize:12,color:"var(--text3)"}}>{resume.filename}</div>
+            <div style={{marginTop:8}}>
+              <span className={`verdict ${verdictClass(resume.verdict)}`}>{resume.verdict}</span>
+            </div>
+          </div>
+          <div style={{textAlign:"right"}}>
+            <div style={{fontFamily:"var(--mono)",fontSize:36,color:scoreC,fontWeight:500}}>
+              {(resume.score||0).toFixed(1)}
+            </div>
+            <div style={{fontSize:11,color:"var(--text3)"}}>match score</div>
+          </div>
+        </div>
+
+        <div className="grid-2" style={{gap:20,marginBottom:20}}>
+          {/* Contact */}
+          <div className="card-sm">
+            <div style={{fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--text3)",marginBottom:12}}>Contact</div>
+            {[
+              ["📧", resume.email],["📞", resume.phone],
+              ["💻", resume.github],["🔗", resume.linkedin]
+            ].map(([icon, val]) => val && (
+              <div key={icon} style={{fontSize:12,color:"var(--text2)",marginBottom:5}}>
+                {icon} {val}
+              </div>
+            ))}
+            <div style={{marginTop:10,fontSize:12,color:"var(--text2)"}}>
+              🎓 {resume.experience_years}+ years exp
+            </div>
+          </div>
+          {/* Radar */}
+          <div className="card-sm" style={{height:160}}>
+            <RadarChart data={resume}/>
+          </div>
+        </div>
+
+        {/* Score breakdown */}
+        <div className="section-head">Score Breakdown</div>
+        {[
+          ["TF-IDF Similarity", bd.tfidf_similarity||0, "#6366f1"],
+          ["Skill Match",       bd.skill_match||0,       "#34d399"],
+          ["Experience Fit",    bd.experience_fit||0,    "#fbbf24"],
+          ["Education Fit",     bd.education_fit||0,     "#818cf8"],
+        ].map(([label, val, color]) => (
+          <div className="breakdown-item" key={label}>
+            <div className="breakdown-row">
+              <span style={{color:"var(--text2)"}}>{label}</span>
+              <span style={{fontFamily:"var(--mono)",color}}>{val.toFixed(1)}%</span>
+            </div>
+            <div className="breakdown-track">
+              <div className="breakdown-fill" style={{width:`${val}%`,background:color}}/>
+            </div>
+          </div>
+        ))}
+
+        {/* Skills */}
+        {/* Gap Analysis */}
+        <div className="section-head">Gap Analysis vs Job Description</div>
+        <GapAnalysisPanel resume={resume}/>
+
+        {/* Keyword Highlighting */}
+        <KeywordBadges keywords={resume.matched_keywords}/>
+
+        {resume.skills && Object.keys(resume.skills).length > 0 && (
+          <>
+            <div className="section-head">Skills Detected</div>
+            {Object.entries(resume.skills).map(([cat, skills]) =>
+              skills.length > 0 && (
+                <div key={cat} style={{marginBottom:12}}>
+                  <div style={{fontSize:11,color:"var(--text3)",marginBottom:6}}>{cat}</div>
+                  <div>{skills.map(s => <span key={s} className="tag">{s}</span>)}</div>
+                </div>
+              )
+            )}
+          </>
+        )}
+
+        {/* Education */}
+        {resume.education?.length > 0 && (
+          <>
+            <div className="section-head">Education</div>
+            {resume.education.map((e,i) => (
+              <div key={i} className="card-sm" style={{marginBottom:8,fontSize:13,color:"var(--text2)"}}>🎓 {e}</div>
+            ))}
+          </>
+        )}
+
+        <div style={{marginTop:24,display:"flex",justifyContent:"flex-end"}}>
+          <button className="btn btn-ghost" onClick={onClose}>Close</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Create Job Modal ────────────────────────────────────────────────────────
+function CreateJobModal({ onClose, onCreate }) {
+  const [form, setForm] = useState({ title:"", company:"", description:"", min_experience:0 });
+  const [loading, setLoading] = useState(false);
+
+  const SAMPLE_JDS = {
+    "Data Engineer": `We are seeking a Data Engineer with experience in Python, SQL, and cloud platforms.
+Required Skills: Python, SQL, Apache Spark, ETL, AWS S3, Airflow, PostgreSQL, Docker, Git.
+Responsibilities: Build scalable data pipelines, work with cloud infrastructure (AWS/GCP), design data warehouse schemas, and optimize query performance.
+Education: Bachelor's or Master's degree in Computer Science, Data Science, or related field.
+Experience: 1-3 years in data engineering or related role.`,
+    "ML Engineer": `Looking for a Machine Learning Engineer to build and deploy ML models at scale.
+Required: Python, TensorFlow or PyTorch, scikit-learn, NLP, REST APIs, Git.
+Preferred: Experience with GCP or AWS, MLOps, Kubernetes, Docker.
+Education: Master's in Computer Science, Statistics, or Data Science preferred.
+Experience: 2+ years building production ML systems.`,
+    "Full Stack Developer": `Full Stack Developer to build modern web applications.
+Required: JavaScript, React, Node.js, REST APIs, SQL, Git, Docker.
+Nice to have: TypeScript, AWS, MongoDB, Redis, Next.js.
+Education: Bachelor's in Computer Science or Engineering.
+Experience: 2+ years of full-stack web development.`,
+    "DevOps / Cloud Engineer": `DevOps Engineer to manage and scale our cloud infrastructure.
+Required: AWS or Azure, Kubernetes, Docker, Terraform, CI/CD, Linux, Python.
+Responsibilities: Infrastructure automation, deployment pipelines, monitoring, security.
+Education: Bachelor's in Computer Science or related field.
+Experience: 2+ years in DevOps or cloud engineering.`
+  };
+
+  async function submit() {
+    if (!form.title || !form.description) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/jobs`, {
+        method: "POST", headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(form)
+      });
+      const data = await res.json();
+      onCreate(data);
+      onClose();
+    } finally { setLoading(false); }
+  }
+
+  return (
+    <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="modal">
+        <div style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:6}}>Create Job Posting</div>
+        <div style={{fontSize:12,color:"var(--text3)",marginBottom:24}}>Define the role to screen candidates against</div>
+
+        <div className="form-group">
+          <label className="label">Job Title *</label>
+          <input className="input" placeholder="e.g. Senior Data Engineer" value={form.title}
+            onChange={e => setForm(f=>({...f,title:e.target.value}))}/>
+        </div>
+        <div className="form-group">
+          <label className="label">Company</label>
+          <input className="input" placeholder="e.g. Anthropic" value={form.company}
+            onChange={e => setForm(f=>({...f,company:e.target.value}))}/>
+        </div>
+        <div className="form-group">
+          <label className="label">Load Sample JD</label>
+          <select className="input" onChange={e => {
+            if (e.target.value) {
+              setForm(f=>({...f, description: SAMPLE_JDS[e.target.value], title: f.title||e.target.value}));
+            }
+          }}>
+            <option value="">— Choose a template —</option>
+            {Object.keys(SAMPLE_JDS).map(k => <option key={k} value={k}>{k}</option>)}
+          </select>
+        </div>
+        <div className="form-group">
+          <label className="label">Job Description *</label>
+          <textarea className="input" style={{minHeight:180}} placeholder="Paste full job description with required skills, experience, and education..."
+            value={form.description} onChange={e => setForm(f=>({...f,description:e.target.value}))}/>
+        </div>
+        <div className="form-group">
+          <label className="label">Min. Experience (years)</label>
+          <input className="input" type="number" min="0" max="20" value={form.min_experience}
+            onChange={e => setForm(f=>({...f,min_experience:parseInt(e.target.value)||0}))}/>
+        </div>
+        <div style={{display:"flex",gap:10,justifyContent:"flex-end",marginTop:8}}>
+          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
+          <button className="btn btn-primary" onClick={submit} disabled={loading||!form.title||!form.description}>
+            {loading ? <><div className="spinner"/>&nbsp;Creating...</> : "Create Job"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Upload Panel ─────────────────────────────────────────────────────────────
+function UploadPanel({ job, onUploaded, toast }) {
+  const [files, setFiles] = useState([]);
+  const [drag, setDrag]   = useState(false);
+  const [loading, setLoading] = useState(false);
+  const inputRef = useRef(null);
+
+  function addFiles(newFiles) {
+    const valid = [...newFiles].filter(f =>
+      f.type === "application/pdf" || f.name.endsWith(".txt")
+    );
+    setFiles(prev => {
+      const names = new Set(prev.map(f => f.name));
+      return [...prev, ...valid.filter(f => !names.has(f.name))];
+    });
+  }
+
+  async function upload() {
+    if (!files.length || !job) return;
+    setLoading(true);
+    try {
+      const fd = new FormData();
+      files.forEach(f => fd.append("files", f));
+      const res = await fetch(`${API}/jobs/${job.id}/upload`, { method:"POST", body: fd });
+      if (!res.ok) throw new Error((await res.json()).detail || "Upload failed");
+      const data = await res.json();
+      toast(`✅ ${data.message}`, "success");
+      setFiles([]);
+      onUploaded();
+    } catch(e) {
+      toast(e.message, "error");
+    } finally { setLoading(false); }
+  }
+
+  return (
+    <div className="card">
+      <div style={{fontFamily:"var(--serif)",fontSize:18,marginBottom:16}}>Upload Resumes</div>
+      <div
+        className={`upload-zone ${drag?"drag":""}`}
+        onClick={() => inputRef.current?.click()}
+        onDragOver={e=>{e.preventDefault();setDrag(true)}}
+        onDragLeave={()=>setDrag(false)}
+        onDrop={e=>{e.preventDefault();setDrag(false);addFiles(e.dataTransfer.files)}}
+      >
+        <div className="upload-icon">📂</div>
+        <div className="upload-text">Drop PDF/TXT resumes here or click to browse</div>
+        <div className="upload-sub">Multiple files supported · Max 10MB per file</div>
+        <input ref={inputRef} type="file" multiple accept=".pdf,.txt" style={{display:"none"}}
+          onChange={e=>addFiles(e.target.files)}/>
+      </div>
+
+      {files.length > 0 && (
+        <div style={{marginTop:14}}>
+          {files.map((f,i) => (
+            <div key={i} style={{
+              display:"flex",alignItems:"center",justifyContent:"space-between",
+              background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,
+              padding:"8px 12px",marginBottom:6,fontSize:12
+            }}>
+              <span style={{color:"var(--text2)"}}>📄 {f.name}</span>
+              <span style={{display:"flex",alignItems:"center",gap:10}}>
+                <span style={{color:"var(--text3)"}}>{(f.size/1024).toFixed(0)} KB</span>
+                <button style={{background:"none",border:"none",cursor:"pointer",color:"var(--text3)",fontSize:14}}
+                  onClick={()=>setFiles(prev=>prev.filter((_,j)=>j!==i))}>✕</button>
+              </span>
+            </div>
+          ))}
+          <div style={{marginTop:12,display:"flex",gap:10}}>
+            <button className="btn btn-primary" onClick={upload} disabled={loading}>
+              {loading ? <><div className="spinner"/> Analyzing...</> : `🚀 Screen ${files.length} Resume${files.length>1?"s":""}`}
+            </button>
+            <button className="btn btn-ghost" onClick={()=>setFiles([])}>Clear</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Rankings Panel ───────────────────────────────────────────────────────────
+function RankingsPanel({ resumes, jobId, onDeleted, toast }) {
+  const [selected, setSelected] = useState(null);
+  const [deleting, setDeleting] = useState(null);
+
+  async function deleteResume(r, e) {
+    e.stopPropagation();
+    setDeleting(r.id);
+    try {
+      await fetch(`${API}/jobs/${jobId}/resumes/${r.id}`, {method:"DELETE"});
+      toast(`Removed ${r.candidate_name}`, "info");
+      onDeleted();
+    } finally { setDeleting(null); }
+  }
+
+  if (!resumes?.length) {
+    return (
+      <div className="empty">
+        <div className="empty-icon">📋</div>
+        <div className="empty-text">No resumes screened yet</div>
+        <div className="empty-sub">Upload resumes above to see rankings</div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {resumes.map(r => {
+        const sc = scoreColor(r.score||0);
+        const isDeleting = deleting === r.id;
+        return (
+          <div key={r.id} className="rank-card" onClick={()=>setSelected(r)}>
+            <div className="rank-num" style={{color:sc}}>#{r.rank}</div>
+            <div className="rank-info">
+              <div className="rank-name">{r.candidate_name}</div>
+              <div className="rank-file">{r.filename}</div>
+              <div style={{marginTop:6}}>
+                <span className={`verdict ${verdictClass(r.verdict)}`}>{r.verdict}</span>
+              </div>
+            </div>
+            <div className="rank-bar-wrap">
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:5,fontSize:12,color:"var(--text3)"}}>
+                <span>Match</span>
+                <span className="rank-score" style={{color:sc}}>{(r.score||0).toFixed(1)}%</span>
+              </div>
+              <div className="rank-bar-bg">
+                <div className="rank-bar" style={{width:`${r.score||0}%`,background:sc}}/>
+              </div>
+            </div>
+            <div className="rank-meta">
+              🛠 {Object.values(r.skills||{}).flat().length} skills<br/>
+              ⏱ {r.experience_years||0}+ yrs
+            </div>
+            <button
+              className="btn btn-danger btn-sm"
+              onClick={e=>deleteResume(r,e)}
+              disabled={isDeleting}
+            >{isDeleting ? "…" : "✕"}</button>
+          </div>
+        );
+      })}
+      {selected && <CandidateModal resume={selected} onClose={()=>setSelected(null)}/>}
+    </>
+  );
+}
+
+// ── Analytics Page ──────────────────────────────────────────────────────────
+function AnalyticsPage({ toast }) {
+  const [overview, setOverview] = useState(null);
+  const [skills, setSkills]     = useState([]);
+  const [dist, setDist]         = useState(null);
+  const [loading, setLoading]   = useState(true);
+
+  async function load() {
+    setLoading(true);
+    try {
+      const [ov, sk, di] = await Promise.all([
+        fetch(`${API}/analytics/overview`).then(r=>r.json()),
+        fetch(`${API}/analytics/skills`).then(r=>r.json()),
+        fetch(`${API}/analytics/score-distribution`).then(r=>r.json()),
+      ]);
+      setOverview(ov); setSkills(sk.top_skills||[]); setDist(di.distribution);
+    } catch(e) { toast("Failed to load analytics","error"); }
+    finally { setLoading(false); }
+  }
+
+  useEffect(()=>{ load(); },[]);
+
+  if (loading) return (
+    <div style={{display:"flex",justifyContent:"center",padding:80}}>
+      <div className="spinner" style={{width:32,height:32}}/>
+    </div>
+  );
+
+  return (
+    <div>
+      <div className="kpi-grid">
+        {[
+          ["Total Jobs", overview?.total_jobs||0, "var(--accent2)"],
+          ["Resumes Screened", overview?.total_resumes||0, "var(--green)"],
+          ["Screening Sessions", overview?.total_sessions||0, "var(--amber)"],
+          ["Avg Score", `${overview?.avg_score_across_all||0}%`, "var(--coral)"],
+        ].map(([l,v,c]) => (
+          <div key={l} className="kpi">
+            <div className="kpi-label">{l}</div>
+            <div className="kpi-value" style={{color:c}}>{v}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid-2" style={{marginBottom:20}}>
+        <div className="card">
+          <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:16}}>Score Distribution</div>
+          <div className="chart-wrap" style={{height:200}}>
+            {dist && <DonutChart distribution={dist}/>}
+          </div>
+        </div>
+        <div className="card">
+          <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:16}}>Top Skills in Pool</div>
+          {skills.slice(0,8).map(({skill,count}) => (
+            <div key={skill} style={{marginBottom:8}}>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:3,color:"var(--text2)"}}>
+                <span>{skill}</span><span style={{color:"var(--text3)"}}>{count}</span>
+              </div>
+              <div className="progress-track">
+                <div className="progress-bar" style={{width:`${Math.min((count/(skills[0]?.count||1))*100,100)}%`}}/>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {overview?.recent_activity?.length > 0 && (
+        <div className="card">
+          <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:16}}>Recent Activity</div>
+          {overview.recent_activity.map((s,i) => (
+            <div key={i} className="stat-row">
+              <div>
+                <div style={{fontSize:13,color:"var(--text2)"}}>{s.top_candidate}</div>
+                <div style={{fontSize:11,color:"var(--text3)"}}>{s.resumes} resumes · {new Date(s.at).toLocaleDateString()}</div>
+              </div>
+              <div style={{fontFamily:"var(--mono)",color:"var(--accent2)"}}>{s.avg_score}%</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Storage Page ─────────────────────────────────────────────────────────────
+function StoragePage({ toast }) {
+  const [status, setStatus] = useState(null);
+  useEffect(()=>{
+    fetch(`${API}/storage/status`).then(r=>r.json()).then(setStatus).catch(()=>{});
+  },[]);
+
+  return (
+    <div>
+      <div className="card" style={{marginBottom:20}}>
+        <div style={{fontFamily:"var(--serif)",fontSize:18,marginBottom:4}}>Storage Configuration</div>
+        <div style={{fontSize:12,color:"var(--text3)",marginBottom:20}}>
+          Resume files are stored in AWS S3 when configured, with automatic local fallback
+        </div>
+        {status && (
+          <>
+            <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}>
+              <div className={`dot ${status.s3_configured?"green":"amber"}`}/>
+              <span style={{fontWeight:500}}>{status.storage_mode}</span>
+              {status.s3_configured && <span style={{fontSize:12,color:"var(--text3)"}}>· {status.bucket}</span>}
+            </div>
+            <div className="grid-2">
+              <div className="card-sm">
+                <div className="kpi-label">Storage Mode</div>
+                <div style={{fontFamily:"var(--mono)",fontSize:16,color:status.s3_configured?"var(--green)":"var(--amber)"}}>{status.storage_mode}</div>
+              </div>
+              <div className="card-sm">
+                <div className="kpi-label">Local Files</div>
+                <div style={{fontFamily:"var(--mono)",fontSize:16,color:"var(--accent2)"}}>{status.local_files}</div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+      {(!status?.s3_configured) && (
+        <div className="card">
+          <div style={{fontFamily:"var(--serif)",fontSize:18,marginBottom:16}}>Enable AWS S3</div>
+          <div style={{fontSize:13,color:"var(--text2)",lineHeight:1.8,marginBottom:16}}>
+            Set these environment variables before starting the FastAPI server:
+          </div>
+          {[
+            ["AWS_ACCESS_KEY_ID", "your_access_key"],
+            ["AWS_SECRET_ACCESS_KEY", "your_secret_key"],
+            ["AWS_REGION", "us-east-1"],
+            ["S3_BUCKET_NAME", "your-resume-screener-bucket"],
+          ].map(([k,v]) => (
+            <div key={k} style={{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:"10px 14px",marginBottom:8,fontFamily:"var(--mono)",fontSize:12}}>
+              <span style={{color:"var(--amber)"}}>{k}</span>
+              <span style={{color:"var(--text3)"}}>=</span>
+              <span style={{color:"var(--text2)"}}>{v}</span>
+            </div>
+          ))}
+          <div style={{fontSize:12,color:"var(--text3)",marginTop:12}}>
+            Then create your S3 bucket and attach AmazonS3FullAccess to your IAM user.
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── About Page ──────────────────────────────────────────────────────────────
+function AboutPage() {
+  const FEATURES = [
+    ["🧠", "NLP Pipeline", "spaCy rule-based entity recognition extracts candidate names, skills, education, experience, and contact details from raw PDF/TXT files"],
+    ["📊", "TF-IDF Matching", "sklearn TfidfVectorizer with (1,2)-ngrams and sublinear TF scaling + cosine similarity computes contextual relevance between resumes and job descriptions"],
+    ["⚡", "Real-time Re-ranking", "Every new upload triggers a full re-ranking of all candidates using the complete corpus IDF, so scores always reflect the competitive pool"],
+    ["☁️", "Cloud Storage", "AWS S3 for resume file storage with automatic local filesystem fallback — zero configuration required to start"],
+    ["🗄️", "PostgreSQL Compatible", "SQLAlchemy ORM with SQLite (development) / PostgreSQL (production) — just change the DATABASE_URL env var"],
+    ["🔌", "FastAPI REST", "Fully documented REST API (OpenAPI/Swagger) for jobs, resumes, analytics — built with FastAPI and async support"],
+  ];
+  return (
+    <div>
+      <div className="card" style={{marginBottom:20}}>
+        <div style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:8}}>Cloud Resume Screener v2</div>
+        <div style={{fontSize:13,color:"var(--text2)",lineHeight:1.8,maxWidth:600}}>
+          An NLP-powered recruitment intelligence platform. Upload candidate resumes, define job descriptions, and get AI-ranked results with skill analysis, experience matching, and education scoring — all running on a real FastAPI backend with PostgreSQL and AWS S3.
+        </div>
+      </div>
+
+      <div className="section-head">Tech Stack</div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:24}}>
+        {["Python 3.12","FastAPI","spaCy","sklearn TF-IDF","SQLAlchemy","SQLite/PostgreSQL","AWS S3","React (this UI)","Chart.js","pdfplumber"].map(t => (
+          <span key={t} className="tag" style={{fontSize:12,padding:"5px 12px"}}>{t}</span>
+        ))}
+      </div>
+
+      <div className="section-head">Features</div>
+      <div className="grid-2" style={{gap:16}}>
+        {FEATURES.map(([icon,title,desc]) => (
+          <div key={title} className="card-sm">
+            <div style={{fontSize:20,marginBottom:8}}>{icon}</div>
+            <div style={{fontWeight:500,fontSize:14,marginBottom:6}}>{title}</div>
+            <div style={{fontSize:12,color:"var(--text2)",lineHeight:1.7}}>{desc}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="section-head">API Endpoints</div>
+      <div className="card-sm">
+        {[
+          ["GET",    "/api/jobs",                          "List all active job postings"],
+          ["POST",   "/api/jobs",                          "Create a new job posting"],
+          ["DELETE", "/api/jobs/{id}",                     "Delete a job and all resumes"],
+          ["POST",   "/api/jobs/{id}/upload",              "Upload + parse + score resumes"],
+          ["GET",    "/api/jobs/{id}/resumes",             "Get ranked candidates for a job"],
+          ["DELETE", "/api/jobs/{id}/resumes/{rid}",       "Remove a candidate + re-rank"],
+          ["GET",    "/api/analytics/overview",            "Platform-wide analytics"],
+          ["GET",    "/api/analytics/skills",              "Top skills across all resumes"],
+          ["GET",    "/api/analytics/score-distribution",  "Score histogram"],
+          ["GET",    "/api/storage/status",                "AWS S3 / local storage status"],
+        ].map(([m,path,desc]) => (
+          <div key={path} style={{display:"flex",gap:12,alignItems:"baseline",padding:"8px 0",borderBottom:"1px solid var(--border)",fontSize:12}}>
+            <span style={{
+              fontFamily:"var(--mono)",fontSize:10,padding:"2px 7px",borderRadius:4,
+              background: m==="GET"?"rgba(52,211,153,0.1)":m==="POST"?"rgba(99,102,241,0.1)":"rgba(248,113,113,0.1)",
+              color: m==="GET"?"#34d399":m==="POST"?"#818cf8":"#f87171",
+              flexShrink:0,
+            }}>{m}</span>
+            <span style={{fontFamily:"var(--mono)",color:"var(--text2)",flexShrink:0}}>{path}</span>
+            <span style={{color:"var(--text3)"}}>{desc}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Main App ─────────────────────────────────────────────────────────────────
+function App() {
+  const [page, setPage]     = useState("screen");
+  const [jobs, setJobs]     = useState([]);
+  const [activeJob, setActiveJob] = useState(null);
+  const [resumes, setResumes] = useState([]);
+  const [showCreate, setShowCreate] = useState(false);
+  const [apiOk, setApiOk]   = useState(null);
+  const { toasts, add: toast } = useToasts();
+
+  async function checkHealth() {
+    try {
+      const r = await fetch(`${API}/health`, {signal: AbortSignal.timeout(3000)});
+      setApiOk(r.ok);
+    } catch { setApiOk(false); }
+  }
+
+  async function loadJobs() {
+    try {
+      const data = await fetch(`${API}/jobs`).then(r=>r.json());
+      setJobs(Array.isArray(data) ? data : []);
+    } catch { setJobs([]); }
+  }
+
+  async function loadResumes(jobId) {
+    try {
+      const data = await fetch(`${API}/jobs/${jobId}/resumes`).then(r=>r.json());
+      setResumes(Array.isArray(data) ? data : []);
+    } catch { setResumes([]); }
+  }
+
+  useEffect(() => {
+    checkHealth();
+    loadJobs();
+    const iv = setInterval(checkHealth, 30000);
+    return () => clearInterval(iv);
+  }, []);
+
+  useEffect(() => {
+    if (activeJob) loadResumes(activeJob.id);
+    else setResumes([]);
+  }, [activeJob]);
+
+  function selectJob(j) {
+    setActiveJob(j);
+    setPage("screen");
+  }
+
+  const NAV = [
+    { id:"screen",    icon:"🔍", label:"Screen" },
+    { id:"analytics", icon:"📊", label:"Analytics" },
+    { id:"storage",   icon:"☁️",  label:"Storage" },
+    { id:"about",     icon:"📖", label:"About" },
+  ];
+
+  return (
+    <div className="app">
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="logo">
+          <div className="logo-mark">
+            <div className="logo-icon">⚡</div>
+            <div className="logo-name">CloudScreen</div>
+          </div>
+          <div className="logo-tag">Resume Intelligence</div>
+        </div>
+
+        <nav className="nav">
+          <div className="nav-section">Navigation</div>
+          {NAV.map(n => (
+            <div key={n.id} className={`nav-item ${page===n.id?"active":""}`}
+              onClick={()=>setPage(n.id)}>
+              <span className="icon">{n.icon}</span>
+              <span>{n.label}</span>
+            </div>
+          ))}
+
+          {jobs.length > 0 && (
+            <>
+              <div className="nav-section" style={{marginTop:20}}>Job Postings</div>
+              {jobs.slice(0,8).map(j => (
+                <div key={j.id} className={`nav-item ${activeJob?.id===j.id?"active":""}`}
+                  onClick={()=>selectJob(j)}>
+                  <span className="icon">💼</span>
+                  <span style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>
+                    {j.title}
+                  </span>
+                  <span style={{fontSize:10,color:"var(--text3)",flexShrink:0}}>({j.resume_count})</span>
+                </div>
+              ))}
+            </>
+          )}
+        </nav>
+
+        <div className="sidebar-footer">
+          <div>API Status</div>
+          <div className="storage-pill">
+            <div className={`dot ${apiOk===null?"amber":apiOk?"green":"amber"}`}/>
+            {apiOk===null ? "Connecting…" : apiOk ? "API Online" : "Offline — see setup"}
+          </div>
+        </div>
+      </aside>
+
+      {/* Main */}
+      <main className="main">
+        {/* Topbar */}
+        <div className="topbar">
+          <div>
+            {page==="screen"   && <><div className="page-title">Resume Screening</div><div className="page-sub">Upload resumes · NLP extraction · TF-IDF ranking</div></>}
+            {page==="analytics"&& <><div className="page-title">Analytics</div><div className="page-sub">Insights across all screening sessions</div></>}
+            {page==="storage"  && <><div className="page-title">Cloud Storage</div><div className="page-sub">AWS S3 configuration and file management</div></>}
+            {page==="about"    && <><div className="page-title">About & API</div><div className="page-sub">Architecture, tech stack, and endpoints</div></>}
+          </div>
+          {page==="screen" && (
+            <div style={{display:"flex",gap:10,alignItems:"center"}}>
+              {activeJob && <ExportButtons jobId={activeJob?.id} jobTitle={activeJob?.title}/>}
+              <button className="btn btn-primary" onClick={()=>setShowCreate(true)}>
+                + New Job
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="content">
+          {/* API offline banner */}
+          {apiOk === false && (
+            <div style={{
+              background:"rgba(251,191,36,0.08)",border:"1px solid rgba(251,191,36,0.2)",
+              borderRadius:8,padding:"12px 18px",marginBottom:20,fontSize:13,
+              display:"flex",alignItems:"center",gap:10,color:"#fbbf24"
+            }}>
+              ⚠️ FastAPI server not detected at localhost:8000 —&nbsp;
+              <code style={{fontFamily:"var(--mono)",fontSize:11,background:"var(--bg3)",padding:"2px 6px",borderRadius:4}}>
+                cd backend && python main.py
+              </code>
+            </div>
+          )}
+
+          {page === "screen" && (
+            <>
+              {/* Job selector */}
+              <div className="card" style={{marginBottom:20}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+                  <div style={{fontFamily:"var(--serif)",fontSize:18}}>Active Job Posting</div>
+                  {activeJob && (
+                    <button className="btn btn-danger btn-sm" onClick={async()=>{
+                      await fetch(`${API}/jobs/${activeJob.id}`,{method:"DELETE"});
+                      setActiveJob(null); loadJobs(); toast("Job deleted","info");
+                    }}>Delete Job</button>
+                  )}
+                </div>
+                {jobs.length === 0 ? (
+                  <div style={{fontSize:13,color:"var(--text3)"}}>
+                    No jobs yet. <span style={{color:"var(--accent2)",cursor:"pointer"}} onClick={()=>setShowCreate(true)}>Create your first job posting →</span>
+                  </div>
+                ) : (
+                  <div style={{display:"flex",flexWrap:"wrap"}}>
+                    {jobs.map(j => (
+                      <div key={j.id} className={`job-chip ${activeJob?.id===j.id?"active":""}`}
+                        onClick={()=>selectJob(j)}>
+                        💼 {j.title}
+                        {j.company && <span style={{color:"var(--text3)"}}> · {j.company}</span>}
+                        <span style={{fontSize:10,color:"var(--text3)"}}>{j.resume_count}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Upload */}
+              {activeJob ? (
+                <>
+                  <UploadPanel
+                    job={activeJob}
+                    toast={toast}
+                    onUploaded={()=>{ loadResumes(activeJob.id); loadJobs(); }}
+                  />
+
+                  {resumes.length > 0 && (
+                    <>
+                      {/* KPIs */}
+                      <div className="kpi-grid" style={{marginTop:20}}>
+                        {[
+                          ["Candidates", resumes.length, "var(--accent2)"],
+                          ["Top Score", `${(resumes[0]?.score||0).toFixed(1)}%`, "var(--green)"],
+                          ["Avg Score", `${(resumes.reduce((s,r)=>s+(r.score||0),0)/resumes.length).toFixed(1)}%`, "var(--amber)"],
+                          ["Total Skills", resumes.reduce((s,r)=>s+Object.values(r.skills||{}).flat().length,0), "var(--accent2)"],
+                        ].map(([l,v,c]) => (
+                          <div key={l} className="kpi">
+                            <div className="kpi-label">{l}</div>
+                            <div className="kpi-value" style={{color:c,fontSize:22}}>{v}</div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Chart */}
+                      <div className="card" style={{marginTop:20,marginBottom:20}}>
+                        <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:16}}>Score Comparison</div>
+                        <div className="chart-wrap"><BarChart resumes={resumes}/></div>
+                      </div>
+
+                      {/* Rankings */}
+                      <div className="section-head">Candidate Rankings</div>
+                      <RankingsPanel
+                        resumes={resumes} jobId={activeJob.id}
+                        toast={toast}
+                        onDeleted={()=>{ loadResumes(activeJob.id); loadJobs(); }}
+                      />
+                      <SkillHeatmap jobId={activeJob.id}/>
+                      <BatchCompareChart jobId={activeJob.id}/>
+                    </>
+                  )}
+                </>
+              ) : (
+                <div className="empty">
+                  <div className="empty-icon">💼</div>
+                  <div className="empty-text">Select or create a job posting</div>
+                  <div className="empty-sub">Then upload resumes to start screening</div>
+                  <button className="btn btn-primary" style={{marginTop:16}} onClick={()=>setShowCreate(true)}>
+                    + Create Job
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+
+          {page === "analytics" && <AnalyticsPage toast={toast}/>}
+          {page === "storage"   && <StoragePage toast={toast}/>}
+          {page === "about"     && <AboutPage/>}
+        </div>
+      </main>
+
+      {showCreate && (
+        <CreateJobModal
+          onClose={()=>setShowCreate(false)}
+          onCreate={j=>{ loadJobs(); selectJob(j); toast(`Created: ${j.title}`,"success"); }}
+        />
+      )}
+
+      <ToastContainer toasts={toasts}/>
+    </div>
+  );
+}
+
+
+// ── Unique Feature 1: Gap Analysis Panel ──────────────────────────────────
+function GapAnalysisPanel({ resume }) {
+  const gap = resume?.gap_analysis;
+  if (!gap || !gap.total_required) return (
+    <div style={{fontSize:12,color:"var(--text3)",padding:"12px 0"}}>
+      No required skills detected in job description.
+    </div>
+  );
+  return (
+    <div>
+      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:14}}>
+        <div style={{fontFamily:"var(--mono)",fontSize:28,color:gap.match_percentage>=70?"var(--green)":gap.match_percentage>=40?"var(--amber)":"var(--red)"}}>
+          {gap.match_percentage}%
+        </div>
+        <div>
+          <div style={{fontSize:13,fontWeight:500}}>Skill Coverage</div>
+          <div style={{fontSize:11,color:"var(--text3)"}}>
+            {gap.total_matched} of {gap.total_required} required skills matched
+          </div>
+        </div>
+      </div>
+      <div style={{marginBottom:10}}>
+        <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--green)",marginBottom:6}}>
+          ✓ Matched ({gap.total_matched})
+        </div>
+        <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+          {(gap.matched_skills||[]).map(s=>(
+            <span key={s} style={{background:"rgba(52,211,153,0.1)",border:"1px solid rgba(52,211,153,0.25)",
+              color:"var(--green)",borderRadius:20,padding:"2px 9px",fontSize:11}}>{s}</span>
+          ))}
+        </div>
+      </div>
+      {gap.missing_skills?.length > 0 && (
+        <div>
+          <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--red)",marginBottom:6}}>
+            ✗ Missing ({gap.total_missing})
+          </div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+            {gap.missing_skills.map(s=>(
+              <span key={s} style={{background:"rgba(248,113,113,0.1)",border:"1px solid rgba(248,113,113,0.25)",
+                color:"var(--red)",borderRadius:20,padding:"2px 9px",fontSize:11}}>{s}</span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Unique Feature 2: Skill Heatmap ───────────────────────────────────────
+function SkillHeatmap({ jobId }) {
+  const [data, setData] = React.useState(null);
+  React.useEffect(() => {
+    if (!jobId) return;
+    fetch(`${API}/jobs/${jobId}/heatmap`).then(r=>r.json()).then(setData).catch(()=>{});
+  }, [jobId]);
+  if (!data || !data.matrix?.length) return null;
+  const maxVal = Math.max(...data.matrix.flatMap(row =>
+    data.categories.map(cat => row[cat] || 0)
+  ), 1);
+  return (
+    <div className="card" style={{marginTop:20,overflowX:"auto"}}>
+      <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:14}}>
+        Skill Coverage Heatmap
+      </div>
+      <table style={{borderCollapse:"collapse",width:"100%",fontSize:11}}>
+        <thead>
+          <tr>
+            <th style={{padding:"6px 10px",color:"var(--text3)",textAlign:"left",fontWeight:400,minWidth:120}}>Candidate</th>
+            {data.categories.map(cat=>(
+              <th key={cat} style={{padding:"6px 6px",color:"var(--text3)",fontWeight:400,
+                fontSize:10,textAlign:"center",writingMode:"vertical-lr",
+                transform:"rotate(180deg)",height:80,minWidth:36}}>
+                {cat.replace(" & "," &\n")}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.matrix.map((row,i)=>(
+            <tr key={i} style={{borderTop:"1px solid var(--border)"}}>
+              <td style={{padding:"8px 10px",color:"var(--text2)",fontSize:12,whiteSpace:"nowrap"}}>
+                #{row.rank} {row.name}
+              </td>
+              {data.categories.map(cat=>{
+                const val = row[cat]||0;
+                const intensity = val/maxVal;
+                const bg = val===0?"var(--bg3)":`rgba(99,102,241,${0.12+intensity*0.7})`;
+                return (
+                  <td key={cat} style={{textAlign:"center",padding:"8px 4px"}}>
+                    <div style={{background:bg,borderRadius:4,padding:"4px 2px",
+                      color:val===0?"var(--text3)":"var(--accent2)",fontFamily:"var(--mono)",
+                      fontSize:11,minWidth:28}}>
+                      {val||"—"}
+                    </div>
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// ── Unique Feature 4: Keyword Highlighting in detail modal ────────────────
+function KeywordBadges({ keywords }) {
+  if (!keywords?.length) return null;
+  return (
+    <div>
+      <div className="section-head">JD Keywords Found in Resume</div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+        {keywords.slice(0,25).map(kw=>(
+          <span key={kw} style={{background:"rgba(251,191,36,0.1)",
+            border:"1px solid rgba(251,191,36,0.25)",
+            color:"var(--amber)",borderRadius:20,padding:"2px 9px",fontSize:11}}>
+            {kw}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Unique Feature 5: Batch Comparison radar chart ────────────────────────
+function BatchCompareChart({ jobId }) {
+  const ref = React.useRef(null);
+  const chartRef = React.useRef(null);
+  const [candidates, setCandidates] = React.useState([]);
+
+  React.useEffect(() => {
+    if (!jobId) return;
+    fetch(`${API}/jobs/${jobId}/compare?top=3`)
+      .then(r=>r.json()).then(setCandidates).catch(()=>{});
+  }, [jobId]);
+
+  React.useEffect(() => {
+    if (!ref.current || !candidates.length) return;
+    if (chartRef.current) chartRef.current.destroy();
+    const colors2 = ["#6366f1","#34d399","#fbbf24"];
+    const labels = ["TF-IDF Sim","Skill Match","Exp Fit","Edu Fit"];
+    chartRef.current = new Chart(ref.current, {
+      type: "radar",
+      data: {
+        labels,
+        datasets: candidates.map((c,i)=>({
+          label: `#${c.rank} ${c.name?.split(" ")[0]}`,
+          data: [
+            c.breakdown?.tfidf_similarity||0,
+            c.breakdown?.skill_match||0,
+            c.breakdown?.experience_fit||0,
+            c.breakdown?.education_fit||0,
+          ],
+          backgroundColor: colors2[i]+"26",
+          borderColor: colors2[i],
+          pointBackgroundColor: colors2[i],
+          borderWidth: 2, pointRadius: 4,
+        }))
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        scales:{r:{min:0,max:100,
+          grid:{color:"rgba(99,120,255,0.1)"},
+          ticks:{display:false},
+          pointLabels:{color:"#8b93b8",font:{size:10,family:"Outfit"}}
+        }},
+        plugins:{
+          legend:{position:"bottom",labels:{color:"#8b93b8",font:{size:10,family:"Outfit"},
+            boxWidth:10,padding:8}}
+        },
+        animation:{duration:400}
+      }
+    });
+    return ()=>chartRef.current?.destroy();
+  }, [candidates]);
+
+  if (!candidates.length) return null;
+  return (
+    <div className="card" style={{marginTop:20}}>
+      <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:4}}>
+        Top {candidates.length} Candidates — Side-by-Side Comparison
+      </div>
+      <div style={{fontSize:11,color:"var(--text3)",marginBottom:14}}>
+        Radar chart comparing all 4 scoring dimensions
+      </div>
+      <div style={{height:280}}><canvas ref={ref}/></div>
+    </div>
+  );
+}
+
+// ── Export Buttons ────────────────────────────────────────────────────────
+function ExportButtons({ jobId, jobTitle }) {
+  if (!jobId) return null;
+  return (
+    <div style={{display:"flex",gap:8}}>
+      <a href={`${API}/jobs/${jobId}/export/pdf`} target="_blank"
+        className="btn btn-ghost btn-sm" style={{textDecoration:"none"}}>
+        ⬇ PDF Report
+      </a>
+      <a href={`${API}/jobs/${jobId}/export/csv`} target="_blank"
+        className="btn btn-ghost btn-sm" style={{textDecoration:"none"}}>
+        ⬇ CSV Export
+      </a>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
