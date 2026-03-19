@@ -50,14 +50,14 @@
 └────────────────────────┬────────────────────────────────────────┘
                          │  REST API (fetch)
 ┌────────────────────────▼────────────────────────────────────────┐
-│                    FastAPI Backend                               │
-│                                                                  │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
-│  │   spaCy NLP     │  │  sklearn TF-IDF │  │   AWS S3        │ │
-│  │  EntityRuler    │  │  cosine_sim     │  │  boto3 upload   │ │
-│  │  PERSON NER     │  │  (1,2)-ngrams   │  │  local fallback │ │
-│  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
-│                                                                  │
+│                    FastAPI Backend                              │
+│                                                                 │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  │
+│  │   spaCy NLP     │  │  sklearn TF-IDF │  │   AWS S3        │  │
+│  │  EntityRuler    │  │  cosine_sim     │  │  boto3 upload   │  │
+│  │  PERSON NER     │  │  (1,2)-ngrams   │  │  local fallback │  │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘  │
+│                                                                 │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │         SQLAlchemy ORM → Neon PostgreSQL                 │   │
 │  │     JobPosting · Resume · ScreeningSession tables        │   │
