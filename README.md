@@ -4,7 +4,7 @@
 
 ### NLP-powered recruitment intelligence platform
 
-[![Live Demo](https://cloud-resume-screener.onrender.com)
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-cloud--resume--screener.onrender.com-6366f1?style=for-the-badge)](https://cloud-resume-screener.onrender.com)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
 [![spaCy](https://img.shields.io/badge/spaCy-3.7+-09a3d5?style=for-the-badge&logo=spacy)](https://spacy.io)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?style=for-the-badge&logo=postgresql)](https://neon.tech)
@@ -13,8 +13,6 @@
 [![Deploy](https://img.shields.io/badge/Deployed_on-Render-46e3b7?style=for-the-badge&logo=render)](https://render.com)
 
 <br/>
-
-![Dashboard Preview](https://raw.githubusercontent.com/Jhil-Patel/cloud-resume-screener/main/docs/preview.png)
 
 **Upload resumes → NLP extracts skills → TF-IDF ranks candidates → Live dashboard shows results**
 
