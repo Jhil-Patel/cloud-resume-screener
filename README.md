@@ -1,163 +1,152 @@
-# ☁️ Cloud Resume Screener v2
+<div align="center">
 
-> **NLP-powered recruitment intelligence platform** — FastAPI · spaCy · sklearn TF-IDF · React · PostgreSQL · AWS S3
+# ☁️ Cloud Resume Screener
+
+### NLP-powered recruitment intelligence platform
+
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-cloud--resume--screener.onrender.com-6366f1?style=for-the-badge)](https://cloud-resume-screener.onrender.com)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
+[![spaCy](https://img.shields.io/badge/spaCy-3.7+-09a3d5?style=for-the-badge&logo=spacy)](https://spacy.io)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?style=for-the-badge&logo=postgresql)](https://neon.tech)
+[![Python](https://img.shields.io/badge/Python-3.9--3.13-3776ab?style=for-the-badge&logo=python)](https://python.org)
+[![Tests](https://img.shields.io/badge/Tests-32%20passed-22c55e?style=for-the-badge&logo=pytest)](tests/)
+[![Deploy](https://img.shields.io/badge/Deployed_on-Render-46e3b7?style=for-the-badge&logo=render)](https://render.com)
+
+<br/>
+
+![Dashboard Preview](https://raw.githubusercontent.com/Jhil-Patel/cloud-resume-screener/main/docs/preview.png)
+
+**Upload resumes → NLP extracts skills → TF-IDF ranks candidates → Live dashboard shows results**
+
+[🚀 Live Demo](https://cloud-resume-screener.onrender.com) • [📖 API Docs](https://cloud-resume-screener.onrender.com/docs) • [🐛 Issues](https://github.com/Jhil-Patel/cloud-resume-screener/issues)
+
+</div>
 
 ---
 
-## 📌 Resume Bullet Points (Accurate)
+## ✨ Features
 
-```
-Cloud Resume Screener | Python • spaCy • FastAPI • sklearn • AWS S3 • React • PostgreSQL  Sep 2025 – Dec 2025
-
-▸ Built a rule-based NLP pipeline using spaCy (EntityRuler + sentencizer) to extract candidate 
-  name, skills, education, experience years, and contact info from uploaded PDF/TXT resumes.
-
-▸ Implemented TF-IDF cosine similarity (sklearn TfidfVectorizer, (1,2)-ngrams, sublinear TF) to 
-  match resumes against job descriptions; combined with weighted skill-match, experience-fit, and 
-  education-fit scores to produce a final ranked candidate leaderboard.
-
-▸ Built a REST API with FastAPI (10+ endpoints) connected to a PostgreSQL-compatible SQLAlchemy 
-  database; integrated AWS S3 (boto3) for resume file storage with automatic local fallback.
-
-▸ Developed a React single-page frontend with Chart.js visualizations (bar, radar, doughnut), 
-  real-time drag-and-drop upload, candidate detail modals, multi-job management, and live analytics.
-```
+| Feature | Description |
+|---|---|
+| 🧠 **spaCy NLP Pipeline** | EntityRuler + sentencizer extracts candidate name, skills, education, experience from PDF/TXT |
+| 📊 **TF-IDF Cosine Similarity** | sklearn TfidfVectorizer (1,2)-ngrams + cosine_similarity matches resumes to job descriptions |
+| ⚡ **Competitive Re-ranking** | Every upload re-scores ALL candidates together — scores reflect the real competitive pool |
+| 🔍 **Gap Analysis** | Shows exactly which required skills each candidate has vs is missing |
+| 🔥 **Skill Heatmap** | Visual matrix of all candidates × all skill categories |
+| 📤 **PDF & CSV Export** | Download professional ranked leaderboard reports via ReportLab |
+| 🔑 **Keyword Highlighting** | JD keywords found in each resume highlighted in candidate detail view |
+| 📡 **Batch Comparison** | Radar chart comparing top 3 candidates across all 4 scoring dimensions |
+| ☁️ **Cloud Storage** | AWS S3 via boto3 with automatic local fallback — zero config to start |
+| 🗄️ **PostgreSQL** | SQLAlchemy ORM on Neon PostgreSQL — survives redeploys, persistent data |
+| 🔌 **REST API** | 12 FastAPI endpoints, auto-documented Swagger UI at `/docs` |
+| 🧪 **32 Tests** | Full pytest suite covering all endpoints, NLP functions, and scoring logic |
 
 ---
 
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     React Frontend                          │
-│   Upload → Jobs → Rankings → Analytics → Storage → About   │
-└────────────────────┬────────────────────────────────────────┘
-                     │  HTTP REST (fetch API)
-┌────────────────────▼────────────────────────────────────────┐
-│                  FastAPI Backend                            │
-│  /api/jobs  /api/jobs/{id}/upload  /api/analytics/*        │
-│                                                             │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐  │
-│  │  NLP Engine  │  │  TF-IDF      │  │  Cloud Storage   │  │
-│  │  spaCy rules │  │  sklearn     │  │  AWS S3 / local  │  │
-│  │  + regex     │  │  cosine sim  │  │  boto3           │  │
-│  └──────────────┘  └──────────────┘  └──────────────────┘  │
-│                                                             │
-│  ┌──────────────────────────────────────────────────────┐   │
-│  │  SQLAlchemy ORM → SQLite (dev) / PostgreSQL (prod)  │   │
-│  └──────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                     React Frontend (SPA)                        │
+│  Jobs · Upload · Rankings · Gap Analysis · Heatmap · Analytics  │
+└────────────────────────┬────────────────────────────────────────┘
+                         │  REST API (fetch)
+┌────────────────────────▼────────────────────────────────────────┐
+│                    FastAPI Backend                               │
+│                                                                  │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
+│  │   spaCy NLP     │  │  sklearn TF-IDF │  │   AWS S3        │ │
+│  │  EntityRuler    │  │  cosine_sim     │  │  boto3 upload   │ │
+│  │  PERSON NER     │  │  (1,2)-ngrams   │  │  local fallback │ │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
+│                                                                  │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │         SQLAlchemy ORM → Neon PostgreSQL                 │   │
+│  │     JobPosting · Resume · ScreeningSession tables        │   │
+│  └──────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Install dependencies
+### Local Development
+
 ```bash
+# 1. Clone
+git clone https://github.com/Jhil-Patel/cloud-resume-screener.git
+cd cloud-resume-screener
+
+# 2. Install (Python 3.9-3.13, no C compiler needed)
 pip install -r requirements.txt
-```
 
-### 2. Run (one command)
-```bash
+# 3. Run
 python start.py
+# → http://localhost:8000        (app)
+# → http://localhost:8000/docs   (API docs)
 ```
-This starts the FastAPI server at `http://localhost:8000` and opens the frontend automatically.
 
-**Or manually:**
+### Run Tests
+
 ```bash
-# Terminal 1 — Backend
-cd backend
-python main.py
-
-# Terminal 2 — Frontend (just open in browser)
-open frontend/index.html
+pytest tests/ -v
+# → 32 passed
 ```
 
-### 3. Explore the API docs
-```
-http://localhost:8000/docs      ← Swagger UI
-http://localhost:8000/redoc     ← ReDoc
+### Docker
+
+```bash
+docker-compose up --build
+# Starts FastAPI + PostgreSQL
 ```
 
 ---
 
-## 🔑 Environment Variables
+## 🧠 How Scoring Works
 
-| Variable | Required | Description |
-|---|---|---|
-| `DATABASE_URL` | No | PostgreSQL URL (default: SQLite) |
-| `AWS_ACCESS_KEY_ID` | No | AWS credentials for S3 |
-| `AWS_SECRET_ACCESS_KEY` | No | AWS credentials for S3 |
-| `AWS_REGION` | No | AWS region (default: us-east-1) |
-| `S3_BUCKET_NAME` | No | S3 bucket for resume storage |
+Each resume is scored against the job description using **4 weighted signals**:
 
-### Switch to PostgreSQL
-```bash
-export DATABASE_URL="postgresql://user:password@localhost:5432/resume_screener"
-python start.py
+```
+Final Score = TF-IDF Similarity × 40%
+            + Skill Match       × 35%
+            + Experience Fit    × 15%
+            + Education Fit     × 10%
 ```
 
-### Enable AWS S3
-```bash
-export AWS_ACCESS_KEY_ID=your_key
-export AWS_SECRET_ACCESS_KEY=your_secret
-export AWS_REGION=ap-south-1
-export S3_BUCKET_NAME=your-bucket-name
-python start.py
-```
+| Signal | Method |
+|---|---|
+| **TF-IDF Similarity** | `sklearn.TfidfVectorizer` (1,2)-ngrams, sublinear TF, full-corpus IDF |
+| **Skill Match** | Skill overlap ratio between resume skills and JD requirements |
+| **Experience Fit** | Candidate years vs JD requirement (power-scaled) |
+| **Education Fit** | Degree level scoring (BSc=2, MSc=3, PhD=4) vs JD requirement |
+
+**Unique: Competitive IDF** — when multiple resumes are uploaded, IDF is computed across the full candidate pool, so scores reflect actual competition rather than absolute quality.
 
 ---
 
 ## 📁 Project Structure
 
 ```
-resume-screener/
+cloud-resume-screener/
 ├── backend/
-│   ├── main.py            ← FastAPI app, all API endpoints
-│   ├── database.py        ← SQLAlchemy models (Job, Resume, Session)
-│   ├── nlp_engine.py      ← spaCy pipeline + sklearn TF-IDF scorer
+│   ├── main.py            ← FastAPI app, 12 REST endpoints
+│   ├── nlp_engine.py      ← spaCy EntityRuler + sklearn TF-IDF scorer
+│   ├── database.py        ← SQLAlchemy ORM (Job, Resume, Session)
 │   ├── pdf_parser.py      ← pdfplumber + PyPDF2 text extraction
-│   └── cloud_storage.py   ← AWS S3 upload + local fallback
+│   ├── cloud_storage.py   ← AWS S3 upload + local fallback
+│   └── export_utils.py    ← ReportLab PDF + CSV export
 ├── frontend/
-│   └── index.html         ← React SPA (Chart.js, drag-drop, modals)
-├── sample_resumes/        ← 4 sample resumes for demo
-│   ├── arjun_mehta.txt
-│   ├── sneha_patel.txt
-│   ├── priya_sharma.txt
-│   └── rohan_verma.txt
-├── uploads/               ← Local resume file storage
+│   └── index.html         ← React 18 SPA + Chart.js
+├── tests/
+│   └── test_api.py        ← 32 pytest tests
+├── sample_resumes/        ← 4 demo resumes
+├── render.yaml            ← Render deployment config
+├── docker-compose.yml     ← PostgreSQL + API container setup
+├── Dockerfile
 ├── requirements.txt
-├── start.py               ← One-click launcher
-└── README.md
+└── start.py               ← One-click local launcher
 ```
-
----
-
-## 🧠 How It Works
-
-### NLP Pipeline (spaCy)
-1. **Text extraction** — pdfplumber extracts text from PDFs (PyPDF2 fallback)
-2. **Name detection** — spaCy sentencizer + heuristic line analysis
-3. **Skill extraction** — Rule-based matching against 120+ skills in 7 categories
-4. **Education parsing** — Keyword matching with degree-level scoring (BSc=2, MSc=3, PhD=4)
-5. **Experience detection** — Regex patterns + job title heuristics
-6. **Contact extraction** — Regex for email, phone, GitHub, LinkedIn
-
-### Scoring Engine (sklearn)
-| Component | Weight | Method |
-|---|---|---|
-| TF-IDF Similarity | 40% | sklearn TfidfVectorizer (1,2)-ngrams + cosine_similarity |
-| Skill Match | 35% | Skill overlap ratio vs JD skill requirements |
-| Experience Fit | 15% | Years vs JD requirement (power-scaled) |
-| Education Fit | 10% | Degree level vs JD requirements |
-
-### Unique Features
-- **Competitive re-ranking**: Every upload re-computes IDF across the full candidate pool — scores reflect actual competition, not just absolute quality
-- **Real-time analytics**: Score distribution, top skills in pool, session history
-- **Multi-job management**: Create multiple jobs, switch between them — data persists in DB
-- **Delete & re-rank**: Remove a candidate and the rest automatically re-rank
-- **Live storage status**: Detects whether S3 is configured and shows connection status
 
 ---
 
@@ -165,48 +154,32 @@ resume-screener/
 
 | Method | Endpoint | Description |
 |---|---|---|
-| GET | `/api/health` | Health check |
-| GET | `/api/jobs` | List all job postings |
-| POST | `/api/jobs` | Create a new job |
-| DELETE | `/api/jobs/{id}` | Delete job + all resumes |
-| POST | `/api/jobs/{id}/upload` | Upload + parse + score resumes |
-| GET | `/api/jobs/{id}/resumes` | Get ranked candidates |
-| GET | `/api/jobs/{id}/resumes/{rid}` | Candidate detail |
-| DELETE | `/api/jobs/{id}/resumes/{rid}` | Remove candidate + re-rank |
-| GET | `/api/analytics/overview` | Platform analytics |
-| GET | `/api/analytics/skills` | Top skills across pool |
-| GET | `/api/analytics/score-distribution` | Score histogram |
-| GET | `/api/storage/status` | S3 / local storage status |
-| GET | `/api/skill-taxonomy` | Full skill taxonomy |
+| `GET` | `/api/health` | Health check |
+| `GET` | `/api/jobs` | List all job postings |
+| `POST` | `/api/jobs` | Create a new job posting |
+| `DELETE` | `/api/jobs/{id}` | Delete job + all candidates |
+| `POST` | `/api/jobs/{id}/upload` | Upload + parse + rank resumes |
+| `GET` | `/api/jobs/{id}/resumes` | Get ranked candidates |
+| `DELETE` | `/api/jobs/{id}/resumes/{rid}` | Remove candidate + re-rank |
+| `GET` | `/api/jobs/{id}/heatmap` | Skill coverage heatmap data |
+| `GET` | `/api/jobs/{id}/compare` | Top-N radar comparison data |
+| `GET` | `/api/jobs/{id}/export/pdf` | Download PDF report |
+| `GET` | `/api/jobs/{id}/export/csv` | Download CSV export |
+| `GET` | `/api/analytics/overview` | Platform-wide analytics |
+
+Full interactive docs: **[/docs](https://cloud-resume-screener.onrender.com/docs)**
 
 ---
 
-## ☁️ Deployment Guide
+## ⚙️ Environment Variables
 
-### Deploy on AWS EC2 (Free Tier)
-```bash
-# 1. Launch EC2 t2.micro (Amazon Linux 2)
-# 2. SSH into instance
-ssh -i your-key.pem ec2-user@your-ec2-ip
-
-# 3. Install Python & dependencies
-sudo yum install python3-pip -y
-git clone your-repo
-cd resume-screener
-pip3 install -r requirements.txt
-
-# 4. Set environment variables
-export DATABASE_URL="postgresql://..."
-export AWS_ACCESS_KEY_ID="..."
-# ...
-
-# 5. Run with gunicorn for production
-pip install gunicorn
-cd backend && gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
-```
-
-### Deploy Frontend
-Upload `frontend/index.html` to S3 static website hosting, or serve via Nginx alongside the API.
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | ✅ Yes | PostgreSQL connection string (Neon recommended) |
+| `AWS_ACCESS_KEY_ID` | No | AWS credentials for S3 storage |
+| `AWS_SECRET_ACCESS_KEY` | No | AWS credentials for S3 storage |
+| `AWS_REGION` | No | AWS region (default: `us-east-1`) |
+| `S3_BUCKET_NAME` | No | S3 bucket name for resume storage |
 
 ---
 
@@ -214,12 +187,30 @@ Upload `frontend/index.html` to S3 static website hosting, or serve via Nginx al
 
 | Layer | Technology |
 |---|---|
-| API Framework | FastAPI 0.115 |
-| NLP | spaCy 3.8 (rule-based EntityRuler + sentencizer) |
-| ML Scoring | scikit-learn 1.5 (TfidfVectorizer + cosine_similarity) |
-| PDF Parsing | pdfplumber + PyPDF2 |
-| ORM | SQLAlchemy 2.0 |
-| Database | SQLite (dev) / PostgreSQL (prod) |
-| File Storage | AWS S3 (boto3) + local fallback |
-| Frontend | React 18 (CDN) + Chart.js 4 |
-| Server | Uvicorn (ASGI) |
+| **API Framework** | FastAPI 0.110+ |
+| **NLP** | spaCy 3.7+ (EntityRuler + sentencizer) |
+| **ML Scoring** | scikit-learn (TfidfVectorizer + cosine_similarity) |
+| **PDF Parsing** | pdfplumber + PyPDF2 |
+| **ORM** | SQLAlchemy 2.0 |
+| **Database** | Neon PostgreSQL (production) / SQLite (local) |
+| **File Storage** | AWS S3 via boto3 + local fallback |
+| **Frontend** | React 18 + Chart.js 4 |
+| **Server** | Uvicorn (ASGI) |
+| **Deployment** | Render (Web Service, always-on) |
+| **Testing** | pytest (32 tests) |
+| **PDF Export** | ReportLab |
+
+---
+
+## 📄 License
+
+MIT License — feel free to use this project as a reference or starting point.
+
+---
+
+<div align="center">
+Built with ❤️ by <a href="https://github.com/Jhil-Patel">Jhil Patel</a>
+<br/>
+<a href="https://cloud-resume-screener.onrender.com">🚀 Live Demo</a> •
+<a href="https://cloud-resume-screener.onrender.com/docs">📖 API Docs</a>
+</div>
