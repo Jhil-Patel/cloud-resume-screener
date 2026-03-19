@@ -4,7 +4,7 @@
 
 ### NLP-powered recruitment intelligence platform
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-cloud--resume--screener.onrender.com-6366f1?style=for-the-badge)](https://cloud-resume-screener.onrender.com)
+[![Live Demo](https://cloud-resume-screener.onrender.com)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
 [![spaCy](https://img.shields.io/badge/spaCy-3.7+-09a3d5?style=for-the-badge&logo=spacy)](https://spacy.io)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?style=for-the-badge&logo=postgresql)](https://neon.tech)
