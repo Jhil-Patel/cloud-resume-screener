@@ -1,6 +1,5 @@
 """
-database.py — SQLAlchemy ORM models
-SQLite for local dev, PostgreSQL (Neon) in production via DATABASE_URL env var
+database.py — SQLAlchemy ORM with User model for auth
 """
 import os
 from datetime import datetime, timezone
@@ -14,39 +13,43 @@ DATABASE_URL = os.getenv(
     "DATABASE_URL",
     "sqlite:///./resume_screener.db"
 )
-
-# Neon uses postgresql:// but SQLAlchemy needs postgresql+psycopg2://
+# Fix URL scheme for psycopg2
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
 if DATABASE_URL.startswith("postgresql://") and "+psycopg2" not in DATABASE_URL:
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
 
 connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
-
-engine = create_engine(
-    DATABASE_URL,
-    connect_args=connect_args,
-    pool_pre_ping=True,   # handles Neon's connection recycling
-    pool_recycle=300,
-)
+engine = create_engine(DATABASE_URL, connect_args=connect_args,
+                        pool_pre_ping=True, pool_recycle=300)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
-
 
 def _utcnow():
     return datetime.now(timezone.utc)
 
 
+class User(Base):
+    __tablename__ = "users"
+    id              = Column(Integer, primary_key=True, index=True)
+    name            = Column(String(200), nullable=False)
+    email           = Column(String(200), unique=True, index=True, nullable=False)
+    hashed_password = Column(String(500), nullable=False)
+    created_at      = Column(DateTime(timezone=True), default=_utcnow)
+    jobs            = relationship("JobPosting", back_populates="owner", cascade="all, delete-orphan")
+
+
 class JobPosting(Base):
     __tablename__ = "job_postings"
     id              = Column(Integer, primary_key=True, index=True)
+    owner_id        = Column(Integer, ForeignKey("users.id"), nullable=False)
     title           = Column(String(200), nullable=False)
     company         = Column(String(200), default="")
     description     = Column(Text, nullable=False)
-    required_skills = Column(JSON, default=list)
     min_experience  = Column(Integer, default=0)
     created_at      = Column(DateTime(timezone=True), default=_utcnow)
     is_active       = Column(Boolean, default=True)
+    owner           = relationship("User", back_populates="jobs")
     resumes         = relationship("Resume", back_populates="job", cascade="all, delete-orphan")
 
 
@@ -92,7 +95,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
 
 def init_db():
     Base.metadata.create_all(bind=engine)

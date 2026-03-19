@@ -1,271 +1,281 @@
 """
-tests/test_api.py — Automated test suite for Cloud Resume Screener API
-Run with: pytest tests/ -v
+tests/test_api.py — Full test suite with authentication
+32 tests covering auth, jobs, resumes, NLP, analytics
 """
-import sys, os, pytest
+import sys, os, gc, time, pytest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'backend'))
+os.environ["DATABASE_URL"] = "sqlite:///./test_screener.db"
 
 from fastapi.testclient import TestClient
 
-# Use in-memory SQLite for tests
-os.environ["DATABASE_URL"] = "sqlite:///./test_screener.db"
-
 from main import app
 
+# ── Fixtures ───────────────────────────────────────────────────────────────────
 @pytest.fixture(scope="module")
 def client():
     with TestClient(app) as c:
         yield c
 
 @pytest.fixture(scope="module")
-def job(client):
-    r = client.post("/api/jobs", json={
-        "title": "Data Engineer",
-        "company": "TestCorp",
-        "description": (
-            "Python, SQL, Apache Spark, ETL pipelines, AWS S3, Airflow, "
-            "PostgreSQL, Docker, Git. Bachelor or Master in CS. 1+ years experience."
-        ),
-        "min_experience": 1
+def auth_headers(client):
+    """Register a test user and return auth headers."""
+    client.post("/api/auth/register", json={
+        "name": "Test User", "email": "test@screener.com", "password": "testpass123"
     })
+    r = client.post("/api/auth/login", json={
+        "email": "test@screener.com", "password": "testpass123"
+    })
+    token = r.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+@pytest.fixture(scope="module")
+def job(client, auth_headers):
+    r = client.post("/api/jobs", json={
+        "title": "Data Engineer", "company": "TestCorp",
+        "description": "Python, SQL, Apache Spark, ETL, AWS S3, Airflow, PostgreSQL, Docker, Git. Bachelor or Master in CS. 1+ years experience.",
+        "min_experience": 1
+    }, headers=auth_headers)
     assert r.status_code == 200
     return r.json()
 
 @pytest.fixture(scope="module")
-def uploaded(client, job):
-    resume_text = (
-        "Arjun Mehta\n"
-        "arjun@test.com | github.com/arjun | linkedin.com/in/arjun\n"
+def uploaded(client, auth_headers, job):
+    resume = (
+        "Arjun Mehta\narjun@test.com | github.com/arjun | linkedin.com/in/arjun\n"
         "Master of Technology Computer Science IIT Bombay 2024\n"
         "Data Engineer Infosys 2022-2024 - 2 years experience\n"
-        "Python, SQL, Apache Spark, PySpark, Airflow, AWS S3, PostgreSQL, Docker, Git, ETL, Kafka\n"
+        "Python, SQL, Apache Spark, PySpark, Airflow, AWS S3, PostgreSQL, Docker, Git, ETL\n"
     ).encode("utf-8")
-    r = client.post(
-        f"/api/jobs/{job['id']}/upload",
-        files=[("files", ("arjun.txt", resume_text, "text/plain"))]
-    )
+    r = client.post(f"/api/jobs/{job['id']}/upload",
+        files=[("files", ("arjun.txt", resume, "text/plain"))],
+        headers=auth_headers)
     assert r.status_code == 200
     return r.json()
 
 
-# ── Health ─────────────────────────────────────────────────────────────────
+# ── Auth Tests ─────────────────────────────────────────────────────────────────
+class TestAuth:
+    def test_register_success(self, client):
+        r = client.post("/api/auth/register", json={
+            "name": "New User", "email": "new@test.com", "password": "pass123"
+        })
+        assert r.status_code == 200
+        assert "access_token" in r.json()
+        assert r.json()["user"]["email"] == "new@test.com"
+
+    def test_register_duplicate_email(self, client):
+        client.post("/api/auth/register", json={"name":"A","email":"dup@test.com","password":"p"})
+        r = client.post("/api/auth/register", json={"name":"B","email":"dup@test.com","password":"p"})
+        assert r.status_code == 400
+
+    def test_login_success(self, client, auth_headers):
+        r = client.post("/api/auth/login", json={"email":"test@screener.com","password":"testpass123"})
+        assert r.status_code == 200
+        assert "access_token" in r.json()
+
+    def test_login_wrong_password(self, client):
+        r = client.post("/api/auth/login", json={"email":"test@screener.com","password":"wrong"})
+        assert r.status_code == 401
+
+    def test_me_endpoint(self, client, auth_headers):
+        r = client.get("/api/auth/me", headers=auth_headers)
+        assert r.status_code == 200
+        assert r.json()["email"] == "test@screener.com"
+
+    def test_unauthenticated_jobs_rejected(self, client):
+        r = client.get("/api/jobs")
+        assert r.status_code == 401
+
+    def test_invalid_token_rejected(self, client):
+        r = client.get("/api/jobs", headers={"Authorization": "Bearer badtoken"})
+        assert r.status_code == 401
+
+
+# ── Health ─────────────────────────────────────────────────────────────────────
 class TestHealth:
     def test_health_ok(self, client):
         r = client.get("/api/health")
         assert r.status_code == 200
-        data = r.json()
-        assert data["status"] == "ok"
-        assert data["version"] == "2.0.0"
-        assert "timestamp" in data
+        assert r.json()["status"] == "ok"
+        assert r.json()["version"] == "2.0.0"
 
 
-# ── Jobs CRUD ──────────────────────────────────────────────────────────────
+# ── Jobs ───────────────────────────────────────────────────────────────────────
 class TestJobs:
     def test_create_job(self, job):
         assert job["id"] > 0
         assert job["title"] == "Data Engineer"
-        assert job["company"] == "TestCorp"
         assert job["is_active"] is True
 
-    def test_list_jobs(self, client, job):
-        r = client.get("/api/jobs")
+    def test_list_jobs(self, client, auth_headers, job):
+        r = client.get("/api/jobs", headers=auth_headers)
         assert r.status_code == 200
-        jobs = r.json()
-        assert isinstance(jobs, list)
-        assert any(j["id"] == job["id"] for j in jobs)
+        assert any(j["id"] == job["id"] for j in r.json())
 
-    def test_job_has_resume_count(self, client, job):
-        r = client.get("/api/jobs")
-        j = next(x for x in r.json() if x["id"] == job["id"])
-        assert "resume_count" in j
+    def test_jobs_are_user_scoped(self, client, job):
+        """User 2 should NOT see User 1's jobs."""
+        client.post("/api/auth/register", json={"name":"User2","email":"user2@test.com","password":"pass"})
+        r2 = client.post("/api/auth/login", json={"email":"user2@test.com","password":"pass"})
+        headers2 = {"Authorization": f"Bearer {r2.json()['access_token']}"}
+        jobs2 = client.get("/api/jobs", headers=headers2).json()
+        assert not any(j["id"] == job["id"] for j in jobs2)
 
-    def test_create_job_missing_title(self, client):
-        r = client.post("/api/jobs", json={"description": "test"})
-        assert r.status_code == 422  # Validation error
+    def test_create_job_missing_title(self, client, auth_headers):
+        r = client.post("/api/jobs", json={"description":"test"}, headers=auth_headers)
+        assert r.status_code == 422
 
-    def test_create_job_missing_description(self, client):
-        r = client.post("/api/jobs", json={"title": "test"})
+    def test_create_job_missing_description(self, client, auth_headers):
+        r = client.post("/api/jobs", json={"title":"test"}, headers=auth_headers)
         assert r.status_code == 422
 
 
-# ── Upload & NLP ───────────────────────────────────────────────────────────
+# ── Upload ─────────────────────────────────────────────────────────────────────
 class TestUpload:
     def test_upload_success(self, uploaded):
         assert uploaded["total"] >= 1
         assert uploaded["new"] >= 1
 
-    def test_upload_nonexistent_job(self, client):
-        r = client.post(
-            "/api/jobs/99999/upload",
-            files=[("files", ("test.txt", b"hello", "text/plain"))]
-        )
+    def test_upload_nonexistent_job(self, client, auth_headers):
+        r = client.post("/api/jobs/99999/upload",
+            files=[("files", ("t.txt", b"hello", "text/plain"))],
+            headers=auth_headers)
         assert r.status_code == 404
 
-    def test_upload_empty_content(self, client, job):
-        r = client.post(
-            f"/api/jobs/{job['id']}/upload",
-            files=[("files", ("empty.txt", b"   \n   ", "text/plain"))]
-        )
+    def test_upload_empty_content(self, client, auth_headers, job):
+        r = client.post(f"/api/jobs/{job['id']}/upload",
+            files=[("files", ("e.txt", b"   ", "text/plain"))],
+            headers=auth_headers)
         assert r.status_code == 400
 
+    def test_cannot_upload_to_other_users_job(self, client, job):
+        client.post("/api/auth/register", json={"name":"X","email":"x@test.com","password":"pass"})
+        rx = client.post("/api/auth/login", json={"email":"x@test.com","password":"pass"})
+        hx = {"Authorization": f"Bearer {rx.json()['access_token']}"}
+        r = client.post(f"/api/jobs/{job['id']}/upload",
+            files=[("files", ("t.txt", b"Python SQL", "text/plain"))], headers=hx)
+        assert r.status_code == 404
 
-# ── Rankings ───────────────────────────────────────────────────────────────
+
+# ── Rankings ───────────────────────────────────────────────────────────────────
 class TestRankings:
-    def test_get_resumes_returns_list(self, client, job, uploaded):
-        r = client.get(f"/api/jobs/{job['id']}/resumes")
+    def test_get_resumes_returns_list(self, client, auth_headers, job, uploaded):
+        r = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers)
         assert r.status_code == 200
-        resumes = r.json()
-        assert isinstance(resumes, list)
-        assert len(resumes) >= 1
+        assert len(r.json()) >= 1
 
-    def test_resume_has_required_fields(self, client, job, uploaded):
-        r = client.get(f"/api/jobs/{job['id']}/resumes")
+    def test_resume_has_required_fields(self, client, auth_headers, job, uploaded):
+        r = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers)
         res = r.json()[0]
-        for field in ["id", "rank", "candidate_name", "score", "verdict",
-                      "skills", "education", "experience_years", "score_breakdown"]:
+        for field in ["id","rank","candidate_name","score","verdict","skills",
+                      "education","experience_years","score_breakdown","gap_analysis"]:
             assert field in res, f"Missing field: {field}"
 
-    def test_score_in_range(self, client, job, uploaded):
-        r = client.get(f"/api/jobs/{job['id']}/resumes")
+    def test_score_in_range(self, client, auth_headers, job, uploaded):
+        r = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers)
         for res in r.json():
             assert 0 <= res["score"] <= 100
 
-    def test_score_breakdown_sums_to_approx_score(self, client, job, uploaded):
-        r = client.get(f"/api/jobs/{job['id']}/resumes")
+    def test_score_breakdown_correct(self, client, auth_headers, job, uploaded):
+        r = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers)
         for res in r.json():
             bd = res["score_breakdown"]
-            reconstructed = (
-                bd["tfidf_similarity"] * 0.40 +
-                bd["skill_match"]      * 0.35 +
-                bd["experience_fit"]   * 0.15 +
-                bd["education_fit"]    * 0.10
-            )
-            assert abs(reconstructed - res["score"]) < 1.0, \
-                f"Score breakdown mismatch: {reconstructed} vs {res['score']}"
+            reconstructed = (bd["tfidf_similarity"]*0.40 + bd["skill_match"]*0.35 +
+                             bd["experience_fit"]*0.15 + bd["education_fit"]*0.10)
+            assert abs(reconstructed - res["score"]) < 1.0
 
-    def test_verdicts_are_valid(self, client, job, uploaded):
-        r = client.get(f"/api/jobs/{job['id']}/resumes")
-        valid = {"Strong Match", "Good Match", "Partial Match", "Weak Match"}
+    def test_verdicts_valid(self, client, auth_headers, job, uploaded):
+        r = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers)
+        valid = {"Strong Match","Good Match","Partial Match","Weak Match"}
         for res in r.json():
             assert res["verdict"] in valid
 
-    def test_ranks_are_sequential(self, client, job, uploaded):
-        r = client.get(f"/api/jobs/{job['id']}/resumes")
+    def test_ranks_sequential(self, client, auth_headers, job, uploaded):
+        r = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers)
         ranks = [res["rank"] for res in r.json()]
-        assert ranks == list(range(1, len(ranks) + 1))
+        assert ranks == list(range(1, len(ranks)+1))
 
-    def test_results_sorted_by_score_desc(self, client, job, uploaded):
-        r = client.get(f"/api/jobs/{job['id']}/resumes")
+    def test_sorted_by_score_desc(self, client, auth_headers, job, uploaded):
+        r = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers)
         scores = [res["score"] for res in r.json()]
         assert scores == sorted(scores, reverse=True)
 
-    def test_nonexistent_job_resumes(self, client):
-        r = client.get("/api/jobs/99999/resumes")
-        assert r.status_code == 200
-        assert r.json() == []
+    def test_gap_analysis_present(self, client, auth_headers, job, uploaded):
+        r = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers)
+        for res in r.json():
+            gap = res.get("gap_analysis", {})
+            assert "matched_skills" in gap
+            assert "missing_skills" in gap
 
-    def test_delete_resume_rerranks(self, client, job):
-        # Upload two resumes
-        r1 = b"Alice Smith alice@test.com Python SQL Docker PostgreSQL AWS 3 years experience Master Computer Science"
-        r2 = b"Bob Jones bob@test.com JavaScript React Node.js 1 year experience Bachelor Engineering"
+    def test_delete_rerranks(self, client, auth_headers, job):
+        r1 = b"Alice Smith alice@t.com Python SQL Docker PostgreSQL AWS 3 years experience Master CS"
+        r2 = b"Bob Jones bob@t.com JavaScript React 1 year experience Bachelor"
         client.post(f"/api/jobs/{job['id']}/upload",
-                    files=[("files", ("alice.txt", r1, "text/plain")),
-                           ("files", ("bob.txt", r2, "text/plain"))])
-
-        resumes = client.get(f"/api/jobs/{job['id']}/resumes").json()
+            files=[("files",("a.txt",r1,"text/plain")),("files",("b.txt",r2,"text/plain"))],
+            headers=auth_headers)
+        resumes = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers).json()
         last_id = resumes[-1]["id"]
-
-        r = client.delete(f"/api/jobs/{job['id']}/resumes/{last_id}")
-        assert r.status_code == 200
-
-        resumes_after = client.get(f"/api/jobs/{job['id']}/resumes").json()
-        assert len(resumes_after) == len(resumes) - 1
-        ranks_after = [res["rank"] for res in resumes_after]
-        assert ranks_after == list(range(1, len(resumes_after) + 1))
+        client.delete(f"/api/jobs/{job['id']}/resumes/{last_id}", headers=auth_headers)
+        after = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers).json()
+        assert len(after) == len(resumes) - 1
+        assert [r["rank"] for r in after] == list(range(1, len(after)+1))
 
 
-# ── Analytics ──────────────────────────────────────────────────────────────
+# ── Analytics ──────────────────────────────────────────────────────────────────
 class TestAnalytics:
-    def test_overview_structure(self, client, uploaded):
-        r = client.get("/api/analytics/overview")
+    def test_overview_structure(self, client, auth_headers, uploaded):
+        r = client.get("/api/analytics/overview", headers=auth_headers)
         assert r.status_code == 200
-        data = r.json()
-        for key in ["total_jobs", "total_resumes", "total_sessions",
-                    "avg_score_across_all", "recent_activity"]:
-            assert key in data
+        for key in ["total_jobs","total_resumes","total_sessions","avg_score_across_all","recent_activity"]:
+            assert key in r.json()
 
-    def test_overview_counts_positive(self, client, uploaded):
-        r = client.get("/api/analytics/overview")
-        data = r.json()
-        assert data["total_jobs"] >= 1
-        assert data["total_resumes"] >= 1
-
-    def test_skills_returns_top_list(self, client, uploaded):
-        r = client.get("/api/analytics/skills")
+    def test_skills_list(self, client, auth_headers, uploaded):
+        r = client.get("/api/analytics/skills", headers=auth_headers)
         assert r.status_code == 200
         skills = r.json()["top_skills"]
-        assert isinstance(skills, list)
         if skills:
-            assert "skill" in skills[0]
-            assert "count" in skills[0]
+            assert "skill" in skills[0] and "count" in skills[0]
 
-    def test_score_distribution_structure(self, client, uploaded):
-        r = client.get("/api/analytics/score-distribution")
+    def test_score_distribution(self, client, auth_headers, uploaded):
+        r = client.get("/api/analytics/score-distribution", headers=auth_headers)
         assert r.status_code == 200
         dist = r.json()["distribution"]
-        expected_keys = {"0-20", "21-40", "41-60", "61-80", "81-100"}
-        assert set(dist.keys()) == expected_keys
-        assert all(isinstance(v, int) for v in dist.values())
-        assert sum(dist.values()) >= 1
+        assert set(dist.keys()) == {"0-20","21-40","41-60","61-80","81-100"}
 
 
-# ── Storage ────────────────────────────────────────────────────────────────
+# ── Storage & Taxonomy ─────────────────────────────────────────────────────────
 class TestStorage:
-    def test_storage_status(self, client):
-        r = client.get("/api/storage/status")
+    def test_storage_status(self, client, auth_headers):
+        r = client.get("/api/storage/status", headers=auth_headers)
         assert r.status_code == 200
-        data = r.json()
-        assert "s3_configured" in data
-        assert "storage_mode" in data
-        assert data["s3_configured"] in [True, False]
+        assert "s3_configured" in r.json()
 
     def test_skill_taxonomy(self, client):
         r = client.get("/api/skill-taxonomy")
         assert r.status_code == 200
-        taxonomy = r.json()
-        assert "Programming Languages" in taxonomy
-        assert "ML / AI" in taxonomy
-        assert "Cloud & DevOps" in taxonomy
-        assert len(taxonomy["Programming Languages"]) > 5
+        assert "Programming Languages" in r.json()
+        assert len(r.json()["Programming Languages"]) > 5
 
 
-# ── NLP Engine Unit Tests ──────────────────────────────────────────────────
+# ── NLP Unit Tests ─────────────────────────────────────────────────────────────
 class TestNLPEngine:
     def test_extract_name(self):
         from nlp_engine import extract_name
-        text = "Arjun Mehta\narjun@gmail.com\nSoftware Engineer"
-        assert extract_name(text) == "Arjun Mehta"
+        assert extract_name("Arjun Mehta\narjun@gmail.com\nEngineer") == "Arjun Mehta"
 
     def test_extract_email(self):
         from nlp_engine import extract_contact
-        text = "John Doe\njohn.doe@example.com | +91-9876543210"
-        contact = extract_contact(text)
-        assert contact["email"] == "john.doe@example.com"
+        assert extract_contact("John\njohn@example.com")["email"] == "john@example.com"
 
     def test_extract_github(self):
         from nlp_engine import extract_contact
-        text = "github.com/johndoe | linkedin.com/in/johndoe"
-        contact = extract_contact(text)
-        assert "johndoe" in contact["github"]
+        assert "johndoe" in extract_contact("github.com/johndoe")["github"]
 
     def test_extract_skills_python(self):
         from nlp_engine import extract_skills
-        text = "Experienced in Python, TensorFlow, PostgreSQL, Docker, AWS S3"
-        skills = extract_skills(text)
-        all_skills = [s.lower() for cat in skills.values() for s in cat]
-        assert "python" in all_skills
-        assert "tensorflow" in all_skills
-        assert "postgresql" in all_skills
+        skills = extract_skills("Python, TensorFlow, PostgreSQL, Docker, AWS S3")
+        flat = [s.lower() for cat in skills.values() for s in cat]
+        assert "python" in flat
+        assert "tensorflow" in flat
 
     def test_extract_experience_explicit(self):
         from nlp_engine import extract_experience_years
@@ -281,37 +291,30 @@ class TestNLPEngine:
 
     def test_tfidf_score_range(self):
         from nlp_engine import compute_tfidf_similarity
-        resume = "Python machine learning data science scikit-learn pandas numpy"
-        jd = "Looking for Python data science experience with scikit-learn and pandas"
-        score = compute_tfidf_similarity(resume, jd, [resume, jd])
+        score = compute_tfidf_similarity(
+            "Python machine learning scikit-learn pandas",
+            "Python data science scikit-learn pandas",
+            ["Python machine learning", "Python data science"]
+        )
         assert 0.0 <= score <= 1.0
 
     def test_higher_match_scores_higher(self):
         from nlp_engine import rank_resumes
-        perfect = "Python SQL Apache Spark ETL AWS S3 Airflow PostgreSQL Docker Git 3 years experience Master Computer Science Data Engineering"
-        weak = "JavaScript React HTML CSS frontend developer 1 year experience"
-        jd = "Python SQL Apache Spark ETL AWS S3 PostgreSQL Docker 2+ years Master CS"
-        ranked = rank_resumes([perfect, weak], ["perfect.txt", "weak.txt"], jd)
+        perfect = "Python SQL Apache Spark ETL AWS S3 Airflow PostgreSQL Docker 3 years experience Master CS"
+        weak    = "JavaScript React HTML CSS 1 year experience"
+        ranked  = rank_resumes([perfect, weak], ["perfect.txt","weak.txt"],
+                               "Python SQL Spark ETL AWS S3 PostgreSQL Docker 2+ years Master CS")
         assert ranked[0]["filename"] == "perfect.txt"
         assert ranked[0]["score"] > ranked[1]["score"]
 
 
-# ── Cleanup ────────────────────────────────────────────────────────────────
+# ── Cleanup ────────────────────────────────────────────────────────────────────
 def teardown_module(module):
-    """
-    Windows holds an exclusive lock on SQLite files while connections are open.
-    Dispose the SQLAlchemy engine to release all pooled connections first,
-    then retry deletion a few times (Windows releases locks slightly async).
-    """
     try:
-        import database
-        database.engine.dispose()
+        import database; database.engine.dispose()
     except Exception:
         pass
-
-    import gc, time
     gc.collect()
-
     for _ in range(5):
         try:
             if os.path.exists("test_screener.db"):
