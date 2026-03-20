@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>CloudScreen — Resume Intelligence Platform</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNjM2NmYxIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2E3OGJmYSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0idXJsKCNnKSIvPgogIDxwYXRoIGQ9Ik0yMiAxMy41YzAtMy0yLjUtNS41LTUuNS01LjUtMi41IDAtNC42IDEuNy01LjMgNEM5LjQgMTIuMiA4IDEzLjcgOCAxNS41IDggMTcuNCA5LjYgMTkgMTEuNSAxOUgyMmMxLjcgMCAzLTEuMyAzLTNzLTEuMy0zLTMtM3oiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjk1Ii8+CiAgPHBvbHlnb24gcG9pbnRzPSIxNywxOSAxNCwyNSAxNi41LDIyIDEzLjUsMjIgMTcsMTYgMTkuNSwxOSIgZmlsbD0iI2ZiYmYyNCIvPgo8L3N2Zz4="/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNjM2NmYxIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojYTc4YmZhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0idXJsKCNnKSIvPjxwYXRoIGQ9Ik0yMiAxMy41YzAtMy0yLjUtNS41LTUuNS01LjUtMi41IDAtNC42IDEuNy01LjMgNEM5LjQgMTIuMiA4IDEzLjcgOCAxNS41IDggMTcuNCA5LjYgMTkgMTEuNSAxOUgyMmMxLjcgMCAzLTEuMyAzLTNzLTEuMy0zLTMtM3oiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjk1Ii8+PHBvbHlnb24gcG9pbnRzPSIxNywxOSAxNCwyNSAxNi41LDIyIDEzLjUsMjIgMTcsMTYgMTkuNSwxOSIgZmlsbD0iI2ZiYmYyNCIvPjwvc3ZnPg=="/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap"/>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -12,319 +12,316 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <style>
-:root{--bg:#07080f;--bg2:#0d0f1a;--bg3:#111422;--bg4:#161928;--border:rgba(99,120,255,0.12);--border2:rgba(99,120,255,0.22);--accent:#6366f1;--accent2:#818cf8;--green:#34d399;--amber:#fbbf24;--red:#f87171;--text:#e8eaf5;--text2:#8b93b8;--text3:#485077;--mono:'DM Mono',monospace;--serif:'DM Serif Display',serif;--sans:'Outfit',sans-serif;--radius:14px;--radius-sm:8px}
+:root{--bg:#07080f;--bg2:#0d0f1a;--bg3:#111422;--bg4:#161928;--border:rgba(99,120,255,0.12);--border2:rgba(99,120,255,0.22);--accent:#6366f1;--accent2:#818cf8;--green:#34d399;--amber:#fbbf24;--red:#f87171;--text:#e8eaf5;--text2:#8b93b8;--text3:#485077;--mono:'DM Mono',monospace;--serif:'DM Serif Display',serif;--sans:'Outfit',sans-serif;--r:14px;--rs:8px}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 .app{display:flex;min-height:100vh}
-.sidebar{width:240px;min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100}
+.sidebar{width:240px;min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;overflow-y:auto}
 .main{margin-left:240px;flex:1;min-height:100vh}
-.logo{padding:24px 20px 20px;border-bottom:1px solid var(--border)}
-.logo-mark{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent) 0%,#a78bfa 100%);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.logo-name{font-family:var(--serif);font-size:20px;color:var(--text)}
+.logo{padding:22px 20px 18px;border-bottom:1px solid var(--border);flex-shrink:0}
+.logo-mark{display:flex;align-items:center;gap:10px;margin-bottom:3px}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#a78bfa);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.logo-name{font-family:var(--serif);font-size:20px}
 .logo-tag{font-size:10px;color:var(--text3);letter-spacing:2px;text-transform:uppercase}
-.nav{padding:16px 12px;flex:1}
-.nav-section{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);padding:0 8px;margin:16px 0 8px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:13.5px;color:var(--text2);transition:all 0.15s;margin-bottom:2px;border:1px solid transparent;user-select:none}
+.nav{padding:12px;flex:1}
+.nav-sec{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);padding:0 8px;margin:14px 0 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--rs);cursor:pointer;font-size:13px;color:var(--text2);transition:all 0.15s;margin-bottom:2px;border:1px solid transparent;user-select:none}
 .nav-item:hover{background:var(--bg3);color:var(--text)}
 .nav-item.active{background:rgba(99,102,241,0.15);color:var(--accent2);border-color:rgba(99,102,241,0.2)}
-.nav-item .icon{font-size:15px;width:18px;text-align:center;flex-shrink:0}
-.sidebar-footer{padding:16px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
-.user-pill{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 12px;margin-bottom:8px}
-.user-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#a78bfa);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0}
-.topbar{padding:16px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:50}
-.page-title{font-family:var(--serif);font-size:22px}
-.page-sub{font-size:12px;color:var(--text3);margin-top:2px}
-.content{padding:28px 32px}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
-.card-sm{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px}
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
-.kpi-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
-.kpi-value{font-family:var(--mono);font-size:28px;font-weight:500}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text);font-family:var(--sans);font-size:13.5px;outline:none;transition:border-color 0.15s}
+.nav-item .icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.sidebar-bottom{padding:12px;border-top:1px solid var(--border);flex-shrink:0}
+.user-pill{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 10px;margin-bottom:8px}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#a78bfa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;color:#fff}
+.topbar{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:50;backdrop-filter:blur(12px)}
+.page-title{font-family:var(--serif);font-size:21px}
+.page-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.content{padding:24px 28px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.card-sm{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:14px}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.kpi-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.kpi-value{font-family:var(--mono);font-size:26px;font-weight:500}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:10px 14px;color:var(--text);font-family:var(--sans);font-size:13.5px;outline:none;transition:border-color 0.15s}
 .input:focus{border-color:var(--accent)}
 .input::placeholder{color:var(--text3)}
-textarea.input{resize:vertical;min-height:120px;line-height:1.6}
+.input.error-field{border-color:var(--red)}
+textarea.input{resize:vertical;min-height:130px;line-height:1.6}
 select.input{cursor:pointer}
-.label{font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block}
-.form-group{margin-bottom:16px}
-.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius-sm);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;user-select:none;white-space:nowrap;text-decoration:none}
+.label{font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;display:block}
+.form-group{margin-bottom:14px}
+.field-err{font-size:11px;color:var(--red);margin-top:4px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--rs);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;user-select:none;white-space:nowrap;text-decoration:none}
 .btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{background:#5254d0;transform:translateY(-1px)}
+.btn-primary:hover:not(:disabled){background:#4f51cc;transform:translateY(-1px)}
 .btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
-.btn-ghost:hover{border-color:var(--border2);color:var(--text)}
-.btn-danger{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
-.btn-danger:hover{background:rgba(248,113,113,0.2)}
+.btn-ghost:hover:not(:disabled){border-color:var(--border2);color:var(--text)}
+.btn-danger{background:rgba(248,113,113,0.1);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
+.btn-danger:hover:not(:disabled){background:rgba(248,113,113,0.2)}
 .btn-sm{padding:6px 12px;font-size:12px}
-.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}
-.upload-zone{border:2px dashed var(--border2);border-radius:var(--radius);padding:40px 20px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--bg3)}
-.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(99,102,241,0.05)}
-.rank-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;margin-bottom:10px;display:flex;align-items:center;gap:20px;cursor:pointer;transition:all 0.2s}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.upload-zone{border:2px dashed var(--border2);border-radius:var(--r);padding:36px 20px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--bg3)}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(99,102,241,0.06)}
+.rank-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;gap:18px;cursor:pointer;transition:all 0.2s}
 .rank-card:hover{border-color:var(--border2);transform:translateY(-1px)}
 .rank-bar-bg{background:var(--bg3);border-radius:4px;height:6px;overflow:hidden}
-.rank-bar{height:6px;border-radius:4px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
-.verdict{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
-.verdict.strong{background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.2)}
-.verdict.good{background:rgba(99,102,241,0.12);color:var(--accent2);border:1px solid rgba(99,102,241,0.2)}
-.verdict.partial{background:rgba(251,191,36,0.12);color:var(--amber);border:1px solid rgba(251,191,36,0.2)}
-.verdict.weak{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
-.tag{display:inline-flex;align-items:center;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.18);color:var(--accent2);border-radius:20px;padding:3px 10px;font-size:11px;margin:2px}
-.section-head{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);border-left:3px solid var(--accent);padding-left:10px;margin:24px 0 14px}
-.chart-wrap{position:relative;height:240px}
-.toast-wrap{position:fixed;bottom:24px;right:24px;z-index:9999}
-.toast{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:12px 18px;margin-top:8px;font-size:13px;display:flex;align-items:center;gap:8px;animation:slideIn 0.2s ease;box-shadow:0 8px 32px rgba(0,0,0,0.4);max-width:340px}
-@keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.rank-bar{height:6px;border-radius:4px;transition:width 0.7s cubic-bezier(0.4,0,0.2,1)}
+.vbadge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
+.vbadge.strong{background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.2)}
+.vbadge.good{background:rgba(99,102,241,0.12);color:var(--accent2);border:1px solid rgba(99,102,241,0.2)}
+.vbadge.partial{background:rgba(251,191,36,0.12);color:var(--amber);border:1px solid rgba(251,191,36,0.2)}
+.vbadge.weak{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
+.tag{display:inline-flex;align-items:center;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.18);color:var(--accent2);border-radius:20px;padding:3px 9px;font-size:11px;margin:2px}
+.sec-head{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);border-left:3px solid var(--accent);padding-left:10px;margin:22px 0 12px}
+.toast-wrap{position:fixed;bottom:24px;right:24px;z-index:9999;max-width:360px}
+.toast{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rs);padding:12px 16px;margin-top:8px;font-size:13px;display:flex;align-items:flex-start;gap:8px;animation:slideIn 0.25s ease;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
 .toast.success{border-left:3px solid var(--green)}
 .toast.error{border-left:3px solid var(--red)}
 .toast.info{border-left:3px solid var(--accent)}
-.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0}
+@keyframes slideIn{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+.spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0}
+.spinner-lg{width:32px;height:32px;border-width:3px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.15s}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.15s}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:28px;width:90%;max-width:680px;max-height:85vh;overflow-y:auto;animation:scaleIn 0.2s cubic-bezier(0.34,1.56,0.64,1)}
-@keyframes scaleIn{from{transform:scale(0.92);opacity:0}to{transform:scale(1);opacity:1}}
-.empty{text-align:center;padding:60px 20px;color:var(--text3)}
-.empty-icon{font-size:48px;margin-bottom:12px;opacity:0.4}
-.empty-text{font-size:15px;color:var(--text2);margin-bottom:6px}
-.progress-bar{height:3px;background:var(--accent);border-radius:2px;transition:width 0.3s}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:28px;width:100%;max-width:680px;max-height:88vh;overflow-y:auto;animation:scaleIn 0.2s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes scaleIn{from{transform:scale(0.93);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-sm{max-width:460px}
+.empty{text-align:center;padding:56px 20px;color:var(--text3)}
+.empty-icon{font-size:44px;margin-bottom:12px;opacity:0.35}
+.empty-title{font-size:15px;color:var(--text2);margin-bottom:6px;font-weight:500}
+.empty-sub{font-size:13px;line-height:1.6}
+.progress-bar{height:3px;background:var(--accent);border-radius:2px}
 .progress-track{background:var(--bg3);border-radius:2px;overflow:hidden}
-.job-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:all 0.15s;border:1px solid var(--border);margin:3px;background:var(--bg3);color:var(--text2)}
+.job-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:20px;font-size:12px;cursor:pointer;transition:all 0.15s;border:1px solid var(--border);margin:3px;background:var(--bg3);color:var(--text2)}
+.job-chip:hover{border-color:var(--border2)}
 .job-chip.active{background:rgba(99,102,241,0.15);border-color:var(--accent);color:var(--accent2)}
 .stat-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
 .stat-row:last-child{border-bottom:none}
-.breakdown-item{margin-bottom:12px}
-.breakdown-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px}
-.breakdown-track{background:var(--bg3);border-radius:3px;height:5px;overflow:hidden}
-.breakdown-fill{height:5px;border-radius:3px}
-
-/* Auth page */
+.bd-item{margin-bottom:11px}
+.bd-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px}
+.bd-track{background:var(--bg3);border-radius:3px;height:5px;overflow:hidden}
+.bd-fill{height:5px;border-radius:3px}
+/* Auth */
 .auth-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px}
-.auth-card{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:40px;width:100%;max-width:420px}
-.auth-logo{text-align:center;margin-bottom:32px}
-.auth-tabs{display:flex;gap:0;background:var(--bg3);border-radius:var(--radius-sm);padding:4px;margin-bottom:28px}
+.auth-card{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:38px;width:100%;max-width:420px}
+.auth-tabs{display:flex;background:var(--bg3);border-radius:var(--rs);padding:4px;margin-bottom:26px}
 .auth-tab{flex:1;padding:8px;border-radius:6px;text-align:center;cursor:pointer;font-size:13px;color:var(--text3);transition:all 0.2s;border:none;background:none;font-family:var(--sans)}
 .auth-tab.active{background:var(--accent);color:#fff;font-weight:500}
-.auth-divider{text-align:center;color:var(--text3);font-size:12px;margin:16px 0}
-.error-msg{background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25);color:var(--red);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;margin-bottom:14px}
+.err-box{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);color:var(--red);border-radius:var(--rs);padding:10px 14px;font-size:12.5px;margin-bottom:14px;line-height:1.5}
+.api-banner{background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.2);border-radius:var(--rs);padding:11px 16px;margin-bottom:20px;font-size:12.5px;color:var(--amber);display:flex;align-items:center;gap:10px}
+/* Char counter */
+.char-count{font-size:10px;color:var(--text3);text-align:right;margin-top:3px}
+.char-count.warn{color:var(--amber)}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const { useState, useEffect, useRef, useCallback } = React;
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const API = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-  ? "http://localhost:8000/api"
-  : "/api";
+const API = (window.location.hostname==="localhost"||window.location.hostname==="127.0.0.1")
+  ? "http://localhost:8000/api" : "/api";
 
-// ── Token storage ──────────────────────────────────────────────────────────
+// ── Auth helpers ───────────────────────────────────────────────────────────
 const getToken  = () => localStorage.getItem("cs_token");
-const getUser   = () => { try { return JSON.parse(localStorage.getItem("cs_user")||"null"); } catch { return null; } };
-const setAuth   = (token, user) => { localStorage.setItem("cs_token", token); localStorage.setItem("cs_user", JSON.stringify(user)); };
+const getUser   = () => { try{return JSON.parse(localStorage.getItem("cs_user")||"null")}catch{return null} };
+const setAuth   = (t,u) => { localStorage.setItem("cs_token",t); localStorage.setItem("cs_user",JSON.stringify(u)); };
 const clearAuth = () => { localStorage.removeItem("cs_token"); localStorage.removeItem("cs_user"); };
 
-const authFetch = (url, opts={}) => {
+// Single fetch wrapper — always attaches token, always throws on non-OK
+async function api(path, opts={}) {
   const token = getToken();
-  return fetch(url, {
-    ...opts,
-    headers: { "Content-Type":"application/json", ...(token?{"Authorization":`Bearer ${token}`}:{}), ...(opts.headers||{}) }
-  });
-};
-
-// ── Utilities ──────────────────────────────────────────────────────────────
-function scoreColor(s){if(s>=75)return"var(--green)";if(s>=55)return"var(--accent2)";if(s>=35)return"var(--amber)";return"var(--red)"}
-function verdictClass(v){if(!v)return"";if(v.includes("Strong"))return"strong";if(v.includes("Good"))return"good";if(v.includes("Partial"))return"partial";return"weak"}
-
-function useToasts(){
-  const[toasts,setToasts]=useState([]);
-  const add=useCallback((msg,type="info")=>{const id=Date.now();setToasts(t=>[...t,{id,msg,type}]);setTimeout(()=>setToasts(t=>t.filter(x=>x.id!==id)),4000);},[]);
-  return{toasts,add};
-}
-function ToastContainer({toasts}){
-  return <div className="toast-wrap">{toasts.map(t=><div key={t.id} className={`toast ${t.type}`}>{t.type==="success"?"✓":t.type==="error"?"✕":"•"}<span>{t.msg}</span></div>)}</div>;
-}
-
-// ── Auth Page ──────────────────────────────────────────────────────────────
-function AuthPage({ onAuth, toast }) {
-  const [tab, setTab]       = useState("login");
-  const [loading, setLoading] = useState(false);
-  const [error, setError]   = useState("");
-  const [form, setForm]     = useState({ name:"", email:"", password:"" });
-
-  async function submit() {
-    setError(""); setLoading(true);
-    try {
-      const endpoint = tab === "login" ? "/auth/login" : "/auth/register";
-      const body     = tab === "login"
-        ? { email: form.email, password: form.password }
-        : { name: form.name, email: form.email, password: form.password };
-      const r = await fetch(`${API}${endpoint}`, {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify(body)
-      });
-      const data = await r.json();
-      if (!r.ok) { setError(data.detail || "Something went wrong"); return; }
-      setAuth(data.access_token, data.user);
-      toast(`Welcome, ${data.user.name}! 👋`, "success");
-      onAuth(data.user);
-    } catch { setError("Connection failed. Is the server running?"); }
-    finally { setLoading(false); }
+  const isFormData = opts.body instanceof FormData;
+  const headers = {
+    ...(token ? {"Authorization":`Bearer ${token}`} : {}),
+    ...(isFormData ? {} : {"Content-Type":"application/json"}),
+    ...(opts.headers||{}),
+  };
+  const res = await fetch(`${API}${path}`, {...opts, headers});
+  if (!res.ok) {
+    let msg = `Request failed (${res.status})`;
+    try { const j=await res.json(); msg = j.detail||j.message||msg; } catch {}
+    throw new Error(msg);
   }
+  // For responses that may have no body (204)
+  const ct = res.headers.get("content-type")||"";
+  if (ct.includes("application/json")) return res.json();
+  if (ct.includes("text/")) return res.text();
+  return res;
+}
 
-  function handleKey(e) { if (e.key === "Enter") submit(); }
-
-  return (
-    <div className="auth-page">
-      <div className="auth-card">
-        <div className="auth-logo">
-          <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10,marginBottom:8}}>
-            <div className="logo-icon">⚡</div>
-            <div style={{fontFamily:"var(--serif)",fontSize:24}}>CloudScreen</div>
-          </div>
-          <div style={{fontSize:12,color:"var(--text3)"}}>Resume Intelligence Platform</div>
+// ── Toasts ─────────────────────────────────────────────────────────────────
+function useToasts(){
+  const [toasts,setToasts]=useState([]);
+  const add=useCallback((msg,type="info")=>{
+    const id=Date.now();
+    setToasts(t=>[...t,{id,msg,type}]);
+    setTimeout(()=>setToasts(t=>t.filter(x=>x.id!==id)), type==="error"?6000:4000);
+  },[]);
+  return {toasts,add};
+}
+function Toasts({toasts}){
+  return(
+    <div className="toast-wrap">
+      {toasts.map(t=>(
+        <div key={t.id} className={`toast ${t.type}`}>
+          <span style={{fontSize:14,flexShrink:0}}>{t.type==="success"?"✓":t.type==="error"?"⚠":"•"}</span>
+          <span>{t.msg}</span>
         </div>
-
-        <div className="auth-tabs">
-          <button className={`auth-tab ${tab==="login"?"active":""}`} onClick={()=>{setTab("login");setError("")}}>Sign In</button>
-          <button className={`auth-tab ${tab==="register"?"active":""}`} onClick={()=>{setTab("register");setError("")}}>Create Account</button>
-        </div>
-
-        {error && <div className="error-msg">⚠ {error}</div>}
-
-        {tab === "register" && (
-          <div className="form-group">
-            <label className="label">Full Name</label>
-            <input className="input" placeholder="Jhil Patel" value={form.name}
-              onChange={e=>setForm(f=>({...f,name:e.target.value}))} onKeyDown={handleKey}/>
-          </div>
-        )}
-        <div className="form-group">
-          <label className="label">Email</label>
-          <input className="input" type="email" placeholder="you@example.com" value={form.email}
-            onChange={e=>setForm(f=>({...f,email:e.target.value}))} onKeyDown={handleKey}/>
-        </div>
-        <div className="form-group">
-          <label className="label">Password</label>
-          <input className="input" type="password" placeholder="••••••••" value={form.password}
-            onChange={e=>setForm(f=>({...f,password:e.target.value}))} onKeyDown={handleKey}/>
-        </div>
-
-        <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",marginTop:4}}
-          onClick={submit} disabled={loading}>
-          {loading ? <><div className="spinner"/> &nbsp;{tab==="login"?"Signing in...":"Creating account..."}</>
-                   : tab==="login" ? "Sign In →" : "Create Account →"}
-        </button>
-
-        <div className="auth-divider">
-          {tab==="login" ? "Don't have an account? " : "Already have an account? "}
-          <span style={{color:"var(--accent2)",cursor:"pointer"}}
-            onClick={()=>{setTab(tab==="login"?"register":"login");setError("")}}>
-            {tab==="login" ? "Create one" : "Sign in"}
-          </span>
-        </div>
-
-        <div style={{fontSize:11,color:"var(--text3)",textAlign:"center",lineHeight:1.7}}>
-          🔒 Your jobs and resumes are private — only visible to you
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
 
+// ── Utility ────────────────────────────────────────────────────────────────
+const scoreColor = s => s>=75?"var(--green)":s>=55?"var(--accent2)":s>=35?"var(--amber)":"var(--red)";
+const verdictCls = v => {
+  if(!v) return "";
+  if(v.includes("Strong")) return "strong";
+  if(v.includes("Good"))   return "good";
+  if(v.includes("Partial"))return "partial";
+  return "weak";
+};
+
 // ── Charts ─────────────────────────────────────────────────────────────────
 function RadarChart({data}){
-  const ref=useRef(null);const chartRef=useRef(null);
-  useEffect(()=>{if(!ref.current||!data)return;if(chartRef.current)chartRef.current.destroy();
+  const ref=useRef(null), cRef=useRef(null);
+  useEffect(()=>{
+    if(!ref.current||!data) return;
+    cRef.current?.destroy();
     const bd=data.score_breakdown||{};
-    chartRef.current=new Chart(ref.current,{type:"radar",data:{labels:["TF-IDF","Skills","Experience","Education"],datasets:[{data:[bd.tfidf_similarity||0,bd.skill_match||0,bd.experience_fit||0,bd.education_fit||0],backgroundColor:"rgba(99,102,241,0.15)",borderColor:"#6366f1",pointBackgroundColor:"#818cf8",borderWidth:1.5,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,grid:{color:"rgba(99,120,255,0.1)"},ticks:{display:false},pointLabels:{color:"#8b93b8",font:{size:10,family:"Outfit"}}}},plugins:{legend:{display:false}},animation:{duration:400}}});
-    return()=>chartRef.current?.destroy();
+    cRef.current=new Chart(ref.current,{
+      type:"radar",
+      data:{labels:["TF-IDF","Skills","Experience","Education"],
+        datasets:[{data:[bd.tfidf_similarity||0,bd.skill_match||0,bd.experience_fit||0,bd.education_fit||0],
+          backgroundColor:"rgba(99,102,241,0.15)",borderColor:"#6366f1",
+          pointBackgroundColor:"#818cf8",borderWidth:1.5,pointRadius:3}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        scales:{r:{min:0,max:100,grid:{color:"rgba(99,120,255,0.1)"},ticks:{display:false},
+          pointLabels:{color:"#8b93b8",font:{size:10,family:"Outfit"}}}},
+        plugins:{legend:{display:false}},animation:{duration:400}}
+    });
+    return()=>cRef.current?.destroy();
   },[data]);
   return <canvas ref={ref}/>;
 }
 
 function BarChart({resumes}){
-  const ref=useRef(null);const chartRef=useRef(null);
-  useEffect(()=>{if(!ref.current||!resumes?.length)return;if(chartRef.current)chartRef.current.destroy();
-    const labels=resumes.slice(0,10).map(r=>r.candidate_name?.split(" ")[0]||"?");
-    const scores=resumes.slice(0,10).map(r=>r.score||0);
-    const bcolors=scores.map(s=>s>=75?"rgba(52,211,153,0.7)":s>=55?"rgba(129,140,248,0.7)":s>=35?"rgba(251,191,36,0.7)":"rgba(248,113,113,0.7)");
-    const bcolors2=scores.map(s=>s>=75?"#34d399":s>=55?"#818cf8":s>=35?"#fbbf24":"#f87171");
-    chartRef.current=new Chart(ref.current,{type:"bar",data:{labels,datasets:[{label:"Match Score",data:scores,backgroundColor:bcolors,borderColor:bcolors2,borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:0,max:100,grid:{color:"rgba(99,120,255,0.06)"},ticks:{color:"#485077",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#8b93b8",font:{size:11}}}},plugins:{legend:{display:false}},animation:{duration:500}}});
-    return()=>chartRef.current?.destroy();
+  const ref=useRef(null), cRef=useRef(null);
+  useEffect(()=>{
+    if(!ref.current||!resumes?.length) return;
+    cRef.current?.destroy();
+    const labels=resumes.slice(0,10).map(r=>(r.candidate_name||"?").split(" ")[0]);
+    const scores=resumes.slice(0,10).map(r=>+(r.score||0).toFixed(1));
+    const bg=scores.map(s=>s>=75?"rgba(52,211,153,0.75)":s>=55?"rgba(129,140,248,0.75)":s>=35?"rgba(251,191,36,0.75)":"rgba(248,113,113,0.75)");
+    const bc=scores.map(s=>s>=75?"#34d399":s>=55?"#818cf8":s>=35?"#fbbf24":"#f87171");
+    cRef.current=new Chart(ref.current,{
+      type:"bar",
+      data:{labels,datasets:[{label:"Match %",data:scores,backgroundColor:bg,borderColor:bc,borderWidth:1,borderRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        scales:{y:{min:0,max:100,grid:{color:"rgba(99,120,255,0.06)"},ticks:{color:"#485077",font:{size:10}}},
+                x:{grid:{display:false},ticks:{color:"#8b93b8",font:{size:11}}}},
+        plugins:{legend:{display:false}},animation:{duration:500}}
+    });
+    return()=>cRef.current?.destroy();
   },[resumes]);
   return <canvas ref={ref}/>;
 }
 
 function DonutChart({distribution}){
-  const ref=useRef(null);const chartRef=useRef(null);
-  useEffect(()=>{if(!ref.current||!distribution)return;if(chartRef.current)chartRef.current.destroy();
-    chartRef.current=new Chart(ref.current,{type:"doughnut",data:{labels:Object.keys(distribution),datasets:[{data:Object.values(distribution),backgroundColor:["rgba(248,113,113,0.7)","rgba(251,191,36,0.7)","rgba(99,102,241,0.7)","rgba(129,140,248,0.7)","rgba(52,211,153,0.7)"],borderColor:"transparent",borderWidth:2,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:"68%",plugins:{legend:{position:"right",labels:{color:"#8b93b8",font:{size:10,family:"Outfit"},boxWidth:10,padding:8}}},animation:{duration:400}}});
-    return()=>chartRef.current?.destroy();
+  const ref=useRef(null), cRef=useRef(null);
+  useEffect(()=>{
+    if(!ref.current||!distribution) return;
+    cRef.current?.destroy();
+    cRef.current=new Chart(ref.current,{
+      type:"doughnut",
+      data:{labels:Object.keys(distribution),
+        datasets:[{data:Object.values(distribution),
+          backgroundColor:["rgba(248,113,113,0.75)","rgba(251,191,36,0.75)","rgba(99,102,241,0.75)","rgba(129,140,248,0.75)","rgba(52,211,153,0.75)"],
+          borderColor:"transparent",borderWidth:2,hoverOffset:4}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:"68%",
+        plugins:{legend:{position:"right",labels:{color:"#8b93b8",font:{size:10,family:"Outfit"},boxWidth:10,padding:8}}},
+        animation:{duration:400}}
+    });
+    return()=>cRef.current?.destroy();
   },[distribution]);
   return <canvas ref={ref}/>;
 }
 
-function BatchCompareChart({jobId}){
-  const ref=useRef(null);const chartRef=useRef(null);
-  const[candidates,setCandidates]=useState([]);
-  useEffect(()=>{if(!jobId)return;authFetch(`${API}/jobs/${jobId}/compare?top=3`).then(r=>r.json()).then(setCandidates).catch(()=>{});},[jobId]);
+function BatchRadar({jobId}){
+  const ref=useRef(null), cRef=useRef(null);
+  const [candidates,setCandidates]=useState([]);
   useEffect(()=>{
-    if(!ref.current||!candidates.length)return;if(chartRef.current)chartRef.current.destroy();
-    const colors2=["#6366f1","#34d399","#fbbf24"];
-    chartRef.current=new Chart(ref.current,{type:"radar",data:{labels:["TF-IDF Sim","Skill Match","Exp Fit","Edu Fit"],datasets:candidates.map((c,i)=>({label:`#${c.rank} ${c.name?.split(" ")[0]}`,data:[c.breakdown?.tfidf_similarity||0,c.breakdown?.skill_match||0,c.breakdown?.experience_fit||0,c.breakdown?.education_fit||0],backgroundColor:colors2[i]+"26",borderColor:colors2[i],pointBackgroundColor:colors2[i],borderWidth:2,pointRadius:4}))},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,grid:{color:"rgba(99,120,255,0.1)"},ticks:{display:false},pointLabels:{color:"#8b93b8",font:{size:10,family:"Outfit"}}}},plugins:{legend:{position:"bottom",labels:{color:"#8b93b8",font:{size:10,family:"Outfit"},boxWidth:10,padding:8}}},animation:{duration:400}}});
-    return()=>chartRef.current?.destroy();
+    if(!jobId) return;
+    api(`/jobs/${jobId}/compare?top=3`).then(setCandidates).catch(()=>{});
+  },[jobId]);
+  useEffect(()=>{
+    if(!ref.current||!candidates.length) return;
+    cRef.current?.destroy();
+    const cols=["#6366f1","#34d399","#fbbf24"];
+    cRef.current=new Chart(ref.current,{
+      type:"radar",
+      data:{labels:["TF-IDF","Skill Match","Exp Fit","Edu Fit"],
+        datasets:candidates.map((c,i)=>({
+          label:`#${c.rank} ${(c.name||"?").split(" ")[0]}`,
+          data:[c.breakdown?.tfidf_similarity||0,c.breakdown?.skill_match||0,c.breakdown?.experience_fit||0,c.breakdown?.education_fit||0],
+          backgroundColor:cols[i]+"28",borderColor:cols[i],pointBackgroundColor:cols[i],borderWidth:2,pointRadius:4
+        }))},
+      options:{responsive:true,maintainAspectRatio:false,
+        scales:{r:{min:0,max:100,grid:{color:"rgba(99,120,255,0.1)"},ticks:{display:false},
+          pointLabels:{color:"#8b93b8",font:{size:10,family:"Outfit"}}}},
+        plugins:{legend:{position:"bottom",labels:{color:"#8b93b8",font:{size:10,family:"Outfit"},boxWidth:10,padding:8}}},
+        animation:{duration:400}}
+    });
+    return()=>cRef.current?.destroy();
   },[candidates]);
-  if(!candidates.length)return null;
-  return(<div className="card" style={{marginTop:20}}><div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:4}}>Top {candidates.length} — Side-by-Side Comparison</div><div style={{fontSize:11,color:"var(--text3)",marginBottom:14}}>Radar chart across all 4 scoring dimensions</div><div style={{height:280}}><canvas ref={ref}/></div></div>);
-}
-
-// ── Gap Analysis ───────────────────────────────────────────────────────────
-function GapAnalysisPanel({resume}){
-  const gap=resume?.gap_analysis;
-  if(!gap||!gap.total_required)return<div style={{fontSize:12,color:"var(--text3)",padding:"12px 0"}}>No required skills detected in job description.</div>;
+  if(!candidates.length) return null;
   return(
-    <div>
-      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:14}}>
-        <div style={{fontFamily:"var(--mono)",fontSize:28,color:gap.match_percentage>=70?"var(--green)":gap.match_percentage>=40?"var(--amber)":"var(--red)"}}>{gap.match_percentage}%</div>
-        <div><div style={{fontSize:13,fontWeight:500}}>Skill Coverage</div><div style={{fontSize:11,color:"var(--text3)"}}>{gap.total_matched} of {gap.total_required} required skills matched</div></div>
-      </div>
-      <div style={{marginBottom:10}}>
-        <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--green)",marginBottom:6}}>✓ Matched ({gap.total_matched})</div>
-        <div>{(gap.matched_skills||[]).map(s=><span key={s} style={{background:"rgba(52,211,153,0.1)",border:"1px solid rgba(52,211,153,0.25)",color:"var(--green)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}}>{s}</span>)}</div>
-      </div>
-      {gap.missing_skills?.length>0&&<div>
-        <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--red)",marginBottom:6}}>✗ Missing ({gap.total_missing})</div>
-        <div>{gap.missing_skills.map(s=><span key={s} style={{background:"rgba(248,113,113,0.1)",border:"1px solid rgba(248,113,113,0.25)",color:"var(--red)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}}>{s}</span>)}</div>
-      </div>}
+    <div className="card" style={{marginTop:18}}>
+      <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:3}}>Top {candidates.length} — Side-by-Side Comparison</div>
+      <div style={{fontSize:11,color:"var(--text3)",marginBottom:14}}>Radar chart across all 4 scoring dimensions</div>
+      <div style={{height:280}}><canvas ref={ref}/></div>
     </div>
   );
 }
 
 // ── Skill Heatmap ──────────────────────────────────────────────────────────
 function SkillHeatmap({jobId}){
-  const[data,setData]=useState(null);
-  useEffect(()=>{if(!jobId)return;authFetch(`${API}/jobs/${jobId}/heatmap`).then(r=>r.json()).then(setData).catch(()=>{});},[jobId]);
-  if(!data||!data.matrix?.length)return null;
-  const maxVal=Math.max(...data.matrix.flatMap(row=>data.categories.map(cat=>row[cat]||0)),1);
+  const [data,setData]=useState(null);
+  useEffect(()=>{
+    if(!jobId) return;
+    api(`/jobs/${jobId}/heatmap`).then(setData).catch(()=>{});
+  },[jobId]);
+  if(!data?.matrix?.length) return null;
+  const maxVal=Math.max(...data.matrix.flatMap(r=>data.categories.map(c=>r[c]||0)),1);
   return(
-    <div className="card" style={{marginTop:20,overflowX:"auto"}}>
+    <div className="card" style={{marginTop:18,overflowX:"auto"}}>
       <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:14}}>Skill Coverage Heatmap</div>
       <table style={{borderCollapse:"collapse",width:"100%",fontSize:11}}>
         <thead><tr>
-          <th style={{padding:"6px 10px",color:"var(--text3)",textAlign:"left",fontWeight:400,minWidth:120}}>Candidate</th>
-          {data.categories.map(cat=><th key={cat} style={{padding:"6px 4px",color:"var(--text3)",fontWeight:400,fontSize:9,textAlign:"center",writingMode:"vertical-lr",transform:"rotate(180deg)",height:80,minWidth:32}}>{cat}</th>)}
+          <th style={{padding:"6px 10px",color:"var(--text3)",textAlign:"left",fontWeight:400,minWidth:130}}>Candidate</th>
+          {data.categories.map(c=>(
+            <th key={c} style={{padding:"4px",color:"var(--text3)",fontWeight:400,fontSize:9,textAlign:"center",
+              writingMode:"vertical-lr",transform:"rotate(180deg)",height:80,minWidth:30}}>{c}</th>
+          ))}
         </tr></thead>
         <tbody>{data.matrix.map((row,i)=>(
           <tr key={i} style={{borderTop:"1px solid var(--border)"}}>
             <td style={{padding:"8px 10px",color:"var(--text2)",fontSize:12,whiteSpace:"nowrap"}}>#{row.rank} {row.name}</td>
-            {data.categories.map(cat=>{const val=row[cat]||0;const bg=val===0?"var(--bg3)":`rgba(99,102,241,${0.12+(val/maxVal)*0.7})`;return(
-              <td key={cat} style={{textAlign:"center",padding:"6px 3px"}}>
-                <div style={{background:bg,borderRadius:4,padding:"3px 2px",color:val===0?"var(--text3)":"var(--accent2)",fontFamily:"var(--mono)",fontSize:11,minWidth:26}}>{val||"—"}</div>
-              </td>
-            );})}
+            {data.categories.map(cat=>{
+              const v=row[cat]||0;
+              const bg=v===0?"var(--bg3)":`rgba(99,102,241,${0.12+(v/maxVal)*0.7})`;
+              return(
+                <td key={cat} style={{textAlign:"center",padding:"5px 3px"}}>
+                  <div style={{background:bg,borderRadius:4,padding:"3px 2px",
+                    color:v===0?"var(--text3)":"var(--accent2)",fontFamily:"var(--mono)",
+                    fontSize:11,minWidth:24}}>{v||"—"}</div>
+                </td>
+              );
+            })}
           </tr>
         ))}</tbody>
       </table>
@@ -332,82 +329,287 @@ function SkillHeatmap({jobId}){
   );
 }
 
+// ── Gap Analysis ───────────────────────────────────────────────────────────
+function GapPanel({resume}){
+  const gap=resume?.gap_analysis;
+  if(!gap?.total_required) return(
+    <div style={{fontSize:12,color:"var(--text3)",padding:"10px 0"}}>
+      No required skills found in job description to analyse.
+    </div>
+  );
+  const pct=gap.match_percentage||0;
+  const barColor=pct>=70?"var(--green)":pct>=40?"var(--amber)":"var(--red)";
+  return(
+    <div>
+      <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:14}}>
+        <div style={{fontFamily:"var(--mono)",fontSize:32,color:barColor,fontWeight:500}}>{pct}%</div>
+        <div>
+          <div style={{fontSize:13,fontWeight:500}}>Skill Coverage</div>
+          <div style={{fontSize:11,color:"var(--text3)",marginTop:2}}>
+            {gap.total_matched}/{gap.total_required} required skills matched
+          </div>
+        </div>
+      </div>
+      {gap.matched_skills?.length>0&&(
+        <div style={{marginBottom:12}}>
+          <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--green)",marginBottom:7}}>
+            ✓ Has ({gap.total_matched})
+          </div>
+          <div>{gap.matched_skills.map(s=>(
+            <span key={s} style={{background:"rgba(52,211,153,0.1)",border:"1px solid rgba(52,211,153,0.25)",
+              color:"var(--green)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}}>{s}</span>
+          ))}</div>
+        </div>
+      )}
+      {gap.missing_skills?.length>0&&(
+        <div>
+          <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--red)",marginBottom:7}}>
+            ✗ Missing ({gap.total_missing})
+          </div>
+          <div>{gap.missing_skills.map(s=>(
+            <span key={s} style={{background:"rgba(248,113,113,0.1)",border:"1px solid rgba(248,113,113,0.25)",
+              color:"var(--red)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}}>{s}</span>
+          ))}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Candidate Detail Modal ─────────────────────────────────────────────────
-function CandidateModal({resume,onClose}){
-  if(!resume)return null;
-  const bd=resume.score_breakdown||{};const scoreC=scoreColor(resume.score||0);
+function CandidateModal({resume, onClose}){
+  if(!resume) return null;
+  const bd=resume.score_breakdown||{};
+  const sc=scoreColor(resume.score||0);
   return(
     <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
       <div className="modal">
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:24}}>
+        {/* Header */}
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:22}}>
           <div>
             <div style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:4}}>{resume.candidate_name}</div>
-            <div style={{fontSize:12,color:"var(--text3)"}}>{resume.filename}</div>
-            <div style={{marginTop:8}}><span className={`verdict ${verdictClass(resume.verdict)}`}>{resume.verdict}</span></div>
+            <div style={{fontSize:11,color:"var(--text3)",marginBottom:8}}>{resume.filename}</div>
+            <span className={`vbadge ${verdictCls(resume.verdict)}`}>{resume.verdict}</span>
           </div>
           <div style={{textAlign:"right"}}>
-            <div style={{fontFamily:"var(--mono)",fontSize:36,color:scoreC,fontWeight:500}}>{(resume.score||0).toFixed(1)}</div>
+            <div style={{fontFamily:"var(--mono)",fontSize:40,color:sc,lineHeight:1}}>{(resume.score||0).toFixed(1)}</div>
             <div style={{fontSize:11,color:"var(--text3)"}}>match score</div>
           </div>
         </div>
-        <div className="grid-2" style={{gap:20,marginBottom:20}}>
+
+        <div className="grid-2" style={{gap:16,marginBottom:18}}>
+          {/* Contact */}
           <div className="card-sm">
-            <div style={{fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--text3)",marginBottom:12}}>Contact</div>
-            {[["📧",resume.email],["📞",resume.phone],["💻",resume.github],["🔗",resume.linkedin]].map(([icon,val])=>val&&<div key={icon} style={{fontSize:12,color:"var(--text2)",marginBottom:5}}>{icon} {val}</div>)}
-            <div style={{marginTop:10,fontSize:12,color:"var(--text2)"}}>🎓 {resume.experience_years}+ years exp</div>
+            <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--text3)",marginBottom:10}}>Contact</div>
+            {[["📧",resume.email],["📞",resume.phone],["💻",resume.github],["🔗",resume.linkedin]]
+              .filter(([,v])=>v)
+              .map(([icon,val])=>(
+                <div key={icon} style={{fontSize:12,color:"var(--text2)",marginBottom:5,wordBreak:"break-all"}}>
+                  {icon} {val}
+                </div>
+              ))}
+            <div style={{marginTop:8,fontSize:12,color:"var(--text2)"}}>
+              ⏱ {resume.experience_years||0}+ yrs experience
+            </div>
           </div>
-          <div className="card-sm" style={{height:160}}><RadarChart data={resume}/></div>
+          {/* Radar */}
+          <div className="card-sm" style={{height:165}}><RadarChart data={resume}/></div>
         </div>
-        <div className="section-head">Score Breakdown</div>
-        {[["TF-IDF Similarity",bd.tfidf_similarity||0,"#6366f1"],["Skill Match",bd.skill_match||0,"#34d399"],["Experience Fit",bd.experience_fit||0,"#fbbf24"],["Education Fit",bd.education_fit||0,"#818cf8"]].map(([label,val,color])=>(
-          <div className="breakdown-item" key={label}>
-            <div className="breakdown-row"><span style={{color:"var(--text2)"}}>{label}</span><span style={{fontFamily:"var(--mono)",color}}>{val.toFixed(1)}%</span></div>
-            <div className="breakdown-track"><div className="breakdown-fill" style={{width:`${val}%`,background:color}}/></div>
+
+        {/* Score breakdown */}
+        <div className="sec-head">Score Breakdown</div>
+        {[
+          ["TF-IDF Similarity", bd.tfidf_similarity||0, "#6366f1"],
+          ["Skill Match",       bd.skill_match||0,      "#34d399"],
+          ["Experience Fit",    bd.experience_fit||0,   "#fbbf24"],
+          ["Education Fit",     bd.education_fit||0,    "#818cf8"],
+        ].map(([label,val,color])=>(
+          <div className="bd-item" key={label}>
+            <div className="bd-row">
+              <span style={{color:"var(--text2)"}}>{label}</span>
+              <span style={{fontFamily:"var(--mono)",color}}>{val.toFixed(1)}%</span>
+            </div>
+            <div className="bd-track"><div className="bd-fill" style={{width:`${val}%`,background:color}}/></div>
           </div>
         ))}
-        <div className="section-head">Gap Analysis vs Job Description</div>
-        <GapAnalysisPanel resume={resume}/>
-        {resume.matched_keywords?.length>0&&<><div className="section-head">JD Keywords Found in Resume</div>
-        <div>{resume.matched_keywords.slice(0,25).map(kw=><span key={kw} style={{background:"rgba(251,191,36,0.1)",border:"1px solid rgba(251,191,36,0.25)",color:"var(--amber)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}}>{kw}</span>)}</div></>}
-        {resume.skills&&Object.keys(resume.skills).length>0&&<>
-          <div className="section-head">Skills Detected</div>
-          {Object.entries(resume.skills).map(([cat,skills])=>skills.length>0&&<div key={cat} style={{marginBottom:12}}><div style={{fontSize:11,color:"var(--text3)",marginBottom:6}}>{cat}</div><div>{skills.map(s=><span key={s} className="tag">{s}</span>)}</div></div>)}
-        </>}
-        {resume.education?.length>0&&<><div className="section-head">Education</div>{resume.education.map((e,i)=><div key={i} className="card-sm" style={{marginBottom:8,fontSize:13,color:"var(--text2)"}}>🎓 {e}</div>)}</>}
-        <div style={{marginTop:24,display:"flex",justifyContent:"flex-end"}}><button className="btn btn-ghost" onClick={onClose}>Close</button></div>
+
+        {/* Gap Analysis */}
+        <div className="sec-head">Gap Analysis vs Job Description</div>
+        <GapPanel resume={resume}/>
+
+        {/* Keywords */}
+        {resume.matched_keywords?.length>0&&(
+          <>
+            <div className="sec-head">JD Keywords Found in Resume</div>
+            <div>{resume.matched_keywords.slice(0,25).map(kw=>(
+              <span key={kw} style={{background:"rgba(251,191,36,0.1)",border:"1px solid rgba(251,191,36,0.25)",
+                color:"var(--amber)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}}>{kw}</span>
+            ))}</div>
+          </>
+        )}
+
+        {/* Skills */}
+        {resume.skills&&Object.keys(resume.skills).length>0&&(
+          <>
+            <div className="sec-head">Skills Detected by spaCy</div>
+            {Object.entries(resume.skills).map(([cat,skills])=>
+              skills.length>0&&(
+                <div key={cat} style={{marginBottom:10}}>
+                  <div style={{fontSize:11,color:"var(--text3)",marginBottom:5}}>{cat}</div>
+                  <div>{skills.map(s=><span key={s} className="tag">{s}</span>)}</div>
+                </div>
+              )
+            )}
+          </>
+        )}
+
+        {/* Education */}
+        {resume.education?.length>0&&(
+          <>
+            <div className="sec-head">Education</div>
+            {resume.education.map((e,i)=>(
+              <div key={i} className="card-sm" style={{marginBottom:7,fontSize:13,color:"var(--text2)"}}>🎓 {e}</div>
+            ))}
+          </>
+        )}
+
+        <div style={{marginTop:22,display:"flex",justifyContent:"flex-end"}}>
+          <button className="btn btn-ghost" onClick={onClose}>Close</button>
+        </div>
       </div>
     </div>
   );
 }
 
 // ── Create Job Modal ────────────────────────────────────────────────────────
-function CreateJobModal({onClose,onCreate}){
-  const[form,setForm]=useState({title:"",company:"",description:"",min_experience:0});
-  const[loading,setLoading]=useState(false);
-  const SAMPLE_JDS={"Data Engineer":"We are seeking a Data Engineer with experience in Python, SQL, and cloud platforms.\nRequired Skills: Python, SQL, Apache Spark, ETL, AWS S3, Airflow, PostgreSQL, Docker, Git.\nEducation: Bachelor or Master in Computer Science or Data Science.\nExperience: 1-3 years.","ML Engineer":"Looking for a Machine Learning Engineer.\nRequired: Python, TensorFlow or PyTorch, scikit-learn, NLP, REST APIs, Git, Docker, AWS.\nEducation: Master in CS or Data Science preferred.\nExperience: 2+ years.","Full Stack Developer":"Full Stack Developer needed.\nRequired: JavaScript, React, Node.js, REST APIs, SQL, Git, Docker.\nNice to have: TypeScript, AWS, MongoDB.\nEducation: Bachelor in CS.\nExperience: 2+ years."};
-  async function submit(){
-    if(!form.title||!form.description)return;setLoading(true);
-    try{const r=await authFetch(`${API}/jobs`,{method:"POST",body:JSON.stringify(form)});
-      const data=await r.json();onCreate(data);onClose();}
-    finally{setLoading(false);}
+const SAMPLE_JDS = {
+  "Data Engineer": `We are seeking a Data Engineer with experience in Python, SQL, and cloud platforms.
+Required Skills: Python, SQL, Apache Spark, ETL, AWS S3, Airflow, PostgreSQL, Docker, Git.
+Responsibilities: Build scalable data pipelines, work with cloud infrastructure, design data warehouse schemas.
+Education: Bachelor or Master in Computer Science or Data Science.
+Experience: 1-3 years in data engineering.`,
+  "ML Engineer": `Looking for a Machine Learning Engineer to build and deploy ML models at scale.
+Required: Python, TensorFlow or PyTorch, scikit-learn, NLP, REST APIs, Git, Docker, AWS.
+Education: Master in Computer Science or Data Science preferred.
+Experience: 2+ years building production ML systems.`,
+  "Full Stack Developer": `Full Stack Developer to build modern web applications.
+Required: JavaScript, React, Node.js, REST APIs, SQL, Git, Docker.
+Nice to have: TypeScript, AWS, MongoDB, Redis, Next.js.
+Education: Bachelor in Computer Science or Engineering.
+Experience: 2+ years of full-stack development.`,
+  "DevOps / Cloud Engineer": `DevOps Engineer to manage and scale cloud infrastructure.
+Required: AWS or Azure, Kubernetes, Docker, Terraform, CI/CD pipelines, Linux, Python.
+Responsibilities: Infrastructure automation, deployment pipelines, monitoring, security.
+Education: Bachelor in Computer Science or related field.
+Experience: 2+ years in DevOps or cloud engineering.`,
+};
+
+function CreateJobModal({onClose, onCreate, toast}){
+  const [form,setForm]=useState({title:"",company:"",description:"",min_experience:0});
+  const [errors,setErrors]=useState({});
+  const [loading,setLoading]=useState(false);
+
+  function validate(){
+    const e={};
+    if(!form.title.trim()) e.title="Job title is required";
+    if(!form.description.trim()) e.description="Job description is required";
+    else if(form.description.trim().length<30) e.description="Description is too short (min 30 characters)";
+    setErrors(e);
+    return Object.keys(e).length===0;
   }
+
+  async function submit(){
+    if(!validate()) return;
+    setLoading(true);
+    try{
+      const data = await api("/jobs", {
+        method:"POST",
+        body: JSON.stringify({
+          title:       form.title.trim(),
+          company:     form.company.trim(),
+          description: form.description.trim(),
+          min_experience: parseInt(form.min_experience)||0,
+        })
+      });
+      toast(`✅ Job "${data.title}" created!`, "success");
+      onCreate(data);
+      onClose();
+    } catch(e){
+      toast(e.message, "error");
+    } finally{
+      setLoading(false);
+    }
+  }
+
+  function loadSample(key){
+    if(!key) return;
+    setForm(f=>({...f, description:SAMPLE_JDS[key], title:f.title||key}));
+    setErrors(e=>({...e,description:undefined,title:undefined}));
+  }
+
   return(
     <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
       <div className="modal">
-        <div style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:6}}>Create Job Posting</div>
-        <div style={{fontSize:12,color:"var(--text3)",marginBottom:24}}>Define the role to screen candidates against</div>
-        <div className="form-group"><label className="label">Job Title *</label><input className="input" placeholder="e.g. Senior Data Engineer" value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))}/></div>
-        <div className="form-group"><label className="label">Company</label><input className="input" placeholder="e.g. TechCorp" value={form.company} onChange={e=>setForm(f=>({...f,company:e.target.value}))}/></div>
-        <div className="form-group"><label className="label">Load Sample JD</label>
-          <select className="input" onChange={e=>e.target.value&&setForm(f=>({...f,description:SAMPLE_JDS[e.target.value],title:f.title||e.target.value}))}>
-            <option value="">— Choose a template —</option>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:22}}>
+          <div>
+            <div style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:4}}>Create Job Posting</div>
+            <div style={{fontSize:12,color:"var(--text3)"}}>Define the role to screen candidates against</div>
+          </div>
+          <button style={{background:"none",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:20,lineHeight:1,padding:4}} onClick={onClose}>✕</button>
+        </div>
+
+        {/* Sample JD loader */}
+        <div className="form-group">
+          <label className="label">Quick Start — Load a Sample JD</label>
+          <select className="input" defaultValue="" onChange={e=>loadSample(e.target.value)}>
+            <option value="">— Choose a template to auto-fill —</option>
             {Object.keys(SAMPLE_JDS).map(k=><option key={k} value={k}>{k}</option>)}
           </select>
         </div>
-        <div className="form-group"><label className="label">Job Description *</label><textarea className="input" style={{minHeight:160}} placeholder="Paste full job description with required skills, experience, and education..." value={form.description} onChange={e=>setForm(f=>({...f,description:e.target.value}))}/></div>
-        <div style={{display:"flex",gap:10,justifyContent:"flex-end",marginTop:8}}>
-          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button className="btn btn-primary" onClick={submit} disabled={loading||!form.title||!form.description}>{loading?<><div className="spinner"/> Creating...</>:"Create Job"}</button>
+
+        <div className="grid-2" style={{gap:12}}>
+          <div className="form-group">
+            <label className="label">Job Title *</label>
+            <input className={`input ${errors.title?"error-field":""}`}
+              placeholder="e.g. Senior Data Engineer"
+              value={form.title}
+              onChange={e=>{setForm(f=>({...f,title:e.target.value}));setErrors(er=>({...er,title:undefined}));}}/>
+            {errors.title&&<div className="field-err">{errors.title}</div>}
+          </div>
+          <div className="form-group">
+            <label className="label">Company</label>
+            <input className="input" placeholder="e.g. TechCorp India"
+              value={form.company}
+              onChange={e=>setForm(f=>({...f,company:e.target.value}))}/>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label className="label">Job Description *</label>
+          <textarea className={`input ${errors.description?"error-field":""}`}
+            style={{minHeight:180}}
+            placeholder="Paste the full job description here. Include required skills, years of experience, and education requirements for best results..."
+            value={form.description}
+            onChange={e=>{setForm(f=>({...f,description:e.target.value}));setErrors(er=>({...er,description:undefined}));}}/>
+          <div className={`char-count ${form.description.length<30&&form.description.length>0?"warn":""}`}>
+            {form.description.length} characters{form.description.length<30&&form.description.length>0?" (need at least 30)":""}
+          </div>
+          {errors.description&&<div className="field-err">{errors.description}</div>}
+        </div>
+
+        <div className="form-group">
+          <label className="label">Minimum Experience (years)</label>
+          <input className="input" type="number" min="0" max="20"
+            value={form.min_experience}
+            onChange={e=>setForm(f=>({...f,min_experience:parseInt(e.target.value)||0}))}
+            style={{maxWidth:120}}/>
+        </div>
+
+        <div style={{display:"flex",gap:10,justifyContent:"flex-end",marginTop:8,paddingTop:16,borderTop:"1px solid var(--border)"}}>
+          <button className="btn btn-ghost" onClick={onClose} disabled={loading}>Cancel</button>
+          <button className="btn btn-primary" onClick={submit} disabled={loading}>
+            {loading?<><div className="spinner"/> Creating...</>:"✓ Create Job Posting"}
+          </button>
         </div>
       </div>
     </div>
@@ -415,208 +617,598 @@ function CreateJobModal({onClose,onCreate}){
 }
 
 // ── Upload Panel ───────────────────────────────────────────────────────────
-function UploadPanel({job,onUploaded,toast}){
-  const[files,setFiles]=useState([]);const[drag,setDrag]=useState(false);const[loading,setLoading]=useState(false);const inputRef=useRef(null);
-  function addFiles(newFiles){const valid=[...newFiles].filter(f=>f.type==="application/pdf"||f.name.endsWith(".txt"));setFiles(prev=>{const names=new Set(prev.map(f=>f.name));return[...prev,...valid.filter(f=>!names.has(f.name))];});}
-  async function upload(){
-    if(!files.length||!job)return;setLoading(true);
-    try{const fd=new FormData();files.forEach(f=>fd.append("files",f));
-      const r=await fetch(`${API}/jobs/${job.id}/upload`,{method:"POST",headers:{"Authorization":`Bearer ${getToken()}`},body:fd});
-      if(!r.ok)throw new Error((await r.json()).detail||"Upload failed");
-      const data=await r.json();toast(`✅ ${data.message}`,"success");setFiles([]);onUploaded();}
-    catch(e){toast(e.message,"error");}finally{setLoading(false);}
+function UploadPanel({job, onUploaded, toast}){
+  const [files,setFiles]=useState([]);
+  const [drag,setDrag]=useState(false);
+  const [loading,setLoading]=useState(false);
+  const [progress,setProgress]=useState("");
+  const inputRef=useRef(null);
+
+  function addFiles(newFiles){
+    const valid=[...newFiles].filter(f=>f.type==="application/pdf"||f.name.endsWith(".txt")||f.name.endsWith(".pdf"));
+    const invalid=[...newFiles].filter(f=>!valid.includes(f));
+    if(invalid.length) toast(`⚠ ${invalid.length} file(s) skipped — only PDF and TXT supported`, "info");
+    setFiles(prev=>{
+      const names=new Set(prev.map(f=>f.name));
+      const added=valid.filter(f=>!names.has(f.name));
+      if(added.length<valid.length) toast(`${valid.length-added.length} duplicate file(s) skipped`, "info");
+      return [...prev,...added];
+    });
   }
+
+  async function upload(){
+    if(!files.length||!job) return;
+    setLoading(true);
+    setProgress("Uploading and processing...");
+    try{
+      const fd=new FormData();
+      files.forEach(f=>fd.append("files",f));
+      const data=await api(`/jobs/${job.id}/upload`,{method:"POST",body:fd});
+      toast(`✅ ${data.message}`, "success");
+      setFiles([]);
+      onUploaded();
+    } catch(e){
+      toast(`Upload failed: ${e.message}`, "error");
+    } finally{
+      setLoading(false);
+      setProgress("");
+    }
+  }
+
+  const totalSize=(files.reduce((s,f)=>s+f.size,0)/1024/1024).toFixed(1);
+
   return(
     <div className="card">
-      <div style={{fontFamily:"var(--serif)",fontSize:18,marginBottom:16}}>Upload Resumes</div>
-      <div className={`upload-zone ${drag?"drag":""}`} onClick={()=>inputRef.current?.click()} onDragOver={e=>{e.preventDefault();setDrag(true)}} onDragLeave={()=>setDrag(false)} onDrop={e=>{e.preventDefault();setDrag(false);addFiles(e.dataTransfer.files)}}>
-        <div style={{fontSize:36,marginBottom:12}}>📂</div>
-        <div style={{fontSize:14,color:"var(--text2)"}}>Drop PDF/TXT resumes here or click to browse</div>
-        <div style={{fontSize:11,color:"var(--text3)",marginTop:5}}>Multiple files supported</div>
-        <input ref={inputRef} type="file" multiple accept=".pdf,.txt" style={{display:"none"}} onChange={e=>addFiles(e.target.files)}/>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+        <div style={{fontFamily:"var(--serif)",fontSize:18}}>Upload Resumes</div>
+        <div style={{fontSize:11,color:"var(--text3)"}}>PDF and TXT supported</div>
       </div>
-      {files.length>0&&<div style={{marginTop:14}}>
-        {files.map((f,i)=><div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 12px",marginBottom:6,fontSize:12}}>
-          <span style={{color:"var(--text2)"}}>📄 {f.name}</span>
-          <span style={{display:"flex",alignItems:"center",gap:10}}><span style={{color:"var(--text3)"}}>{(f.size/1024).toFixed(0)} KB</span><button style={{background:"none",border:"none",cursor:"pointer",color:"var(--text3)",fontSize:14}} onClick={()=>setFiles(prev=>prev.filter((_,j)=>j!==i))}>✕</button></span>
-        </div>)}
-        <div style={{marginTop:12,display:"flex",gap:10}}>
-          <button className="btn btn-primary" onClick={upload} disabled={loading}>{loading?<><div className="spinner"/> Analyzing...</>:`🚀 Screen ${files.length} Resume${files.length>1?"s":""}`}</button>
-          <button className="btn btn-ghost" onClick={()=>setFiles([])}>Clear</button>
+
+      <div
+        className={`upload-zone ${drag?"drag":""}`}
+        onClick={()=>inputRef.current?.click()}
+        onDragOver={e=>{e.preventDefault();setDrag(true)}}
+        onDragLeave={()=>setDrag(false)}
+        onDrop={e=>{e.preventDefault();setDrag(false);addFiles(e.dataTransfer.files)}}
+      >
+        <div style={{fontSize:38,marginBottom:10}}>📂</div>
+        <div style={{fontSize:14,color:"var(--text2)",fontWeight:500}}>Drop PDF or TXT resumes here</div>
+        <div style={{fontSize:12,color:"var(--text3)",marginTop:5}}>or click to browse · multiple files supported</div>
+        <input ref={inputRef} type="file" multiple accept=".pdf,.txt"
+          style={{display:"none"}} onChange={e=>addFiles(e.target.files)}/>
+      </div>
+
+      {files.length>0&&(
+        <div style={{marginTop:14}}>
+          <div style={{fontSize:11,color:"var(--text3)",marginBottom:8}}>
+            {files.length} file{files.length>1?"s":""} selected · {totalSize} MB total
+          </div>
+          {files.map((f,i)=>(
+            <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",
+              background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,
+              padding:"8px 12px",marginBottom:6,fontSize:12}}>
+              <div style={{display:"flex",alignItems:"center",gap:8}}>
+                <span>{f.name.endsWith(".pdf")?"📄":"📝"}</span>
+                <span style={{color:"var(--text2)"}}>{f.name}</span>
+              </div>
+              <div style={{display:"flex",alignItems:"center",gap:10}}>
+                <span style={{color:"var(--text3)"}}>{(f.size/1024).toFixed(0)} KB</span>
+                <button style={{background:"none",border:"none",cursor:"pointer",
+                  color:"var(--text3)",fontSize:14,lineHeight:1,padding:2}}
+                  onClick={()=>setFiles(prev=>prev.filter((_,j)=>j!==i))}>✕</button>
+              </div>
+            </div>
+          ))}
+
+          {loading&&<div style={{fontSize:12,color:"var(--text3)",margin:"10px 0",display:"flex",alignItems:"center",gap:8}}>
+            <div className="spinner"/> {progress}
+          </div>}
+
+          <div style={{marginTop:14,display:"flex",gap:10,alignItems:"center"}}>
+            <button className="btn btn-primary" onClick={upload} disabled={loading}>
+              {loading?<><div className="spinner"/> Analysing...</>:`🚀 Screen ${files.length} Resume${files.length>1?"s":""}`}
+            </button>
+            <button className="btn btn-ghost" onClick={()=>setFiles([])} disabled={loading}>Clear All</button>
+          </div>
         </div>
-      </div>}
+      )}
     </div>
   );
 }
 
 // ── Rankings Panel ─────────────────────────────────────────────────────────
-function RankingsPanel({resumes,jobId,onDeleted,toast}){
-  const[selected,setSelected]=useState(null);const[deleting,setDeleting]=useState(null);
-  async function deleteResume(r,e){e.stopPropagation();setDeleting(r.id);try{await authFetch(`${API}/jobs/${jobId}/resumes/${r.id}`,{method:"DELETE"});toast(`Removed ${r.candidate_name}`,"info");onDeleted();}finally{setDeleting(null);}}
-  if(!resumes?.length)return<div className="empty"><div className="empty-icon">📋</div><div className="empty-text">No resumes screened yet</div><div className="empty-sub">Upload resumes above to see rankings</div></div>;
-  return(<>
-    {resumes.map(r=>{const sc=scoreColor(r.score||0);return(
-      <div key={r.id} className="rank-card" onClick={()=>setSelected(r)}>
-        <div style={{fontFamily:"var(--mono)",fontSize:20,fontWeight:500,color:sc,minWidth:36}}>#{r.rank}</div>
-        <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:15,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{r.candidate_name}</div>
-          <div style={{fontSize:11,color:"var(--text3)",marginTop:2}}>{r.filename}</div>
-          <div style={{marginTop:6}}><span className={`verdict ${verdictClass(r.verdict)}`}>{r.verdict}</span></div>
-        </div>
-        <div style={{minWidth:200}}>
-          <div style={{display:"flex",justifyContent:"space-between",marginBottom:5,fontSize:12,color:"var(--text3)"}}>
-            <span>Match</span><span style={{fontFamily:"var(--mono)",fontWeight:500,color:sc}}>{(r.score||0).toFixed(1)}%</span>
+function RankingsPanel({resumes, jobId, onDeleted, toast}){
+  const [selected,setSelected]=useState(null);
+  const [deleting,setDeleting]=useState(null);
+
+  async function deleteResume(r,e){
+    e.stopPropagation();
+    if(!confirm(`Remove ${r.candidate_name} from rankings?`)) return;
+    setDeleting(r.id);
+    try{
+      await api(`/jobs/${jobId}/resumes/${r.id}`,{method:"DELETE"});
+      toast(`Removed ${r.candidate_name}`, "info");
+      onDeleted();
+    } catch(e){
+      toast(`Delete failed: ${e.message}`, "error");
+    } finally{
+      setDeleting(null);
+    }
+  }
+
+  if(!resumes?.length) return(
+    <div className="empty">
+      <div className="empty-icon">📋</div>
+      <div className="empty-title">No resumes screened yet</div>
+      <div className="empty-sub">Upload PDF or TXT resumes above to see the ranked leaderboard</div>
+    </div>
+  );
+
+  return(
+    <>
+      {resumes.map(r=>{
+        const sc=scoreColor(r.score||0);
+        return(
+          <div key={r.id} className="rank-card" onClick={()=>setSelected(r)}>
+            <div style={{fontFamily:"var(--mono)",fontSize:22,fontWeight:500,color:sc,minWidth:38}}>#{r.rank}</div>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{fontSize:15,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{r.candidate_name}</div>
+              <div style={{fontSize:11,color:"var(--text3)",marginTop:2}}>{r.filename}</div>
+              <div style={{marginTop:7}}><span className={`vbadge ${verdictCls(r.verdict)}`}>{r.verdict}</span></div>
+            </div>
+            <div style={{minWidth:190}}>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:5,fontSize:12}}>
+                <span style={{color:"var(--text3)"}}>Match Score</span>
+                <span style={{fontFamily:"var(--mono)",fontWeight:500,color:sc}}>{(r.score||0).toFixed(1)}%</span>
+              </div>
+              <div className="rank-bar-bg"><div className="rank-bar" style={{width:`${r.score||0}%`,background:sc}}/></div>
+            </div>
+            <div style={{fontSize:11,color:"var(--text3)",minWidth:100,textAlign:"right",lineHeight:1.8}}>
+              🛠 {r.total_skills||0} skills<br/>⏱ {r.experience_years||0}+ yrs
+            </div>
+            <button className="btn btn-danger btn-sm"
+              onClick={e=>deleteResume(r,e)} disabled={deleting===r.id}
+              style={{flexShrink:0}}>
+              {deleting===r.id?"…":"✕"}
+            </button>
           </div>
-          <div className="rank-bar-bg"><div className="rank-bar" style={{width:`${r.score||0}%`,background:sc}}/></div>
-        </div>
-        <div style={{fontSize:11,color:"var(--text3)",minWidth:110,textAlign:"right"}}>🛠 {r.total_skills||0} skills<br/>⏱ {r.experience_years||0}+ yrs</div>
-        <button className="btn btn-danger btn-sm" onClick={e=>deleteResume(r,e)} disabled={deleting===r.id}>{deleting===r.id?"…":"✕"}</button>
-      </div>
-    );})}
-    {selected&&<CandidateModal resume={selected} onClose={()=>setSelected(null)}/>}
-  </>);
+        );
+      })}
+      {selected&&<CandidateModal resume={selected} onClose={()=>setSelected(null)}/>}
+    </>
+  );
 }
 
 // ── Analytics Page ─────────────────────────────────────────────────────────
 function AnalyticsPage({toast}){
-  const[overview,setOverview]=useState(null);const[skills,setSkills]=useState([]);const[dist,setDist]=useState(null);const[loading,setLoading]=useState(true);
-  async function load(){setLoading(true);try{const[ov,sk,di]=await Promise.all([authFetch(`${API}/analytics/overview`).then(r=>r.json()),authFetch(`${API}/analytics/skills`).then(r=>r.json()),authFetch(`${API}/analytics/score-distribution`).then(r=>r.json())]);setOverview(ov);setSkills(sk.top_skills||[]);setDist(di.distribution);}catch(e){toast("Failed to load analytics","error");}finally{setLoading(false);}}
-  useEffect(()=>{load();},[]);
-  if(loading)return<div style={{display:"flex",justifyContent:"center",padding:80}}><div className="spinner" style={{width:32,height:32}}/></div>;
-  return(<div>
-    <div className="kpi-grid">
-      {[["Total Jobs",overview?.total_jobs||0,"var(--accent2)"],["Resumes Screened",overview?.total_resumes||0,"var(--green)"],["Screening Sessions",overview?.total_sessions||0,"var(--amber)"],["Avg Score",`${overview?.avg_score_across_all||0}%`,"#fb7185"]].map(([l,v,c])=>(
-        <div key={l} className="kpi"><div className="kpi-label">{l}</div><div className="kpi-value" style={{color:c}}>{v}</div></div>
-      ))}
+  const [overview,setOverview]=useState(null);
+  const [skills,setSkills]=useState([]);
+  const [dist,setDist]=useState(null);
+  const [loading,setLoading]=useState(true);
+
+  useEffect(()=>{
+    setLoading(true);
+    Promise.all([
+      api("/analytics/overview"),
+      api("/analytics/skills"),
+      api("/analytics/score-distribution"),
+    ]).then(([ov,sk,di])=>{
+      setOverview(ov); setSkills(sk.top_skills||[]); setDist(di.distribution);
+    }).catch(e=>toast(`Failed to load analytics: ${e.message}`,"error"))
+      .finally(()=>setLoading(false));
+  },[]);
+
+  if(loading) return(
+    <div style={{display:"flex",justifyContent:"center",padding:80}}>
+      <div className="spinner spinner-lg"/>
     </div>
-    <div className="grid-2" style={{marginBottom:20}}>
-      <div className="card"><div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:16}}>Score Distribution</div><div className="chart-wrap" style={{height:200}}>{dist&&<DonutChart distribution={dist}/>}</div></div>
-      <div className="card"><div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:16}}>Top Skills in Pool</div>{skills.slice(0,8).map(({skill,count})=>(<div key={skill} style={{marginBottom:8}}><div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:3,color:"var(--text2)"}}><span>{skill}</span><span style={{color:"var(--text3)"}}>{count}</span></div><div className="progress-track"><div className="progress-bar" style={{width:`${Math.min((count/(skills[0]?.count||1))*100,100)}%`}}/></div></div>))}</div>
+  );
+
+  return(
+    <div>
+      <div className="kpi-grid">
+        {[
+          ["Total Jobs",      overview?.total_jobs||0,             "var(--accent2)"],
+          ["Resumes Screened",overview?.total_resumes||0,          "var(--green)"],
+          ["Sessions",        overview?.total_sessions||0,         "var(--amber)"],
+          ["Avg Score",       `${overview?.avg_score_across_all||0}%`, "#fb7185"],
+        ].map(([l,v,c])=>(
+          <div key={l} className="kpi">
+            <div className="kpi-label">{l}</div>
+            <div className="kpi-value" style={{color:c,fontSize:24}}>{v}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid-2" style={{marginBottom:18}}>
+        <div className="card">
+          <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:14}}>Score Distribution</div>
+          <div style={{height:200}}><DonutChart distribution={dist}/></div>
+        </div>
+        <div className="card">
+          <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:14}}>Top Skills in Pool</div>
+          {skills.slice(0,8).map(({skill,count})=>(
+            <div key={skill} style={{marginBottom:8}}>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:3,color:"var(--text2)"}}>
+                <span>{skill}</span><span style={{color:"var(--text3)"}}>{count}</span>
+              </div>
+              <div className="progress-track">
+                <div className="progress-bar" style={{width:`${Math.min((count/(skills[0]?.count||1))*100,100)}%`}}/>
+              </div>
+            </div>
+          ))}
+          {skills.length===0&&<div style={{fontSize:12,color:"var(--text3)"}}>No data yet. Screen some resumes first.</div>}
+        </div>
+      </div>
+
+      {overview?.recent_activity?.length>0&&(
+        <div className="card">
+          <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:14}}>Recent Activity</div>
+          {overview.recent_activity.map((s,i)=>(
+            <div key={i} className="stat-row">
+              <div>
+                <div style={{fontSize:13,color:"var(--text2)",fontWeight:500}}>{s.top_candidate||"—"}</div>
+                <div style={{fontSize:11,color:"var(--text3)"}}>{s.resumes} resumes · {s.at?new Date(s.at).toLocaleDateString():""}</div>
+              </div>
+              <div style={{fontFamily:"var(--mono)",color:"var(--accent2)",fontSize:15}}>{s.avg_score}%</div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
-    {overview?.recent_activity?.length>0&&<div className="card"><div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:16}}>Recent Activity</div>{overview.recent_activity.map((s,i)=>(<div key={i} className="stat-row"><div><div style={{fontSize:13,color:"var(--text2)"}}>{s.top_candidate}</div><div style={{fontSize:11,color:"var(--text3)"}}>{s.resumes} resumes · {new Date(s.at).toLocaleDateString()}</div></div><div style={{fontFamily:"var(--mono)",color:"var(--accent2)"}}>{s.avg_score}%</div></div>))}</div>}
-  </div>);
+  );
+}
+
+// ── Auth Page ──────────────────────────────────────────────────────────────
+function AuthPage({onAuth, toast}){
+  const [tab,setTab]=useState("login");
+  const [loading,setLoading]=useState(false);
+  const [error,setError]=useState("");
+  const [form,setForm]=useState({name:"",email:"",password:""});
+
+  async function submit(){
+    setError(""); setLoading(true);
+    try{
+      const endpoint=tab==="login"?"/auth/login":"/auth/register";
+      const body=tab==="login"
+        ?{email:form.email,password:form.password}
+        :{name:form.name,email:form.email,password:form.password};
+      const data=await api(endpoint,{method:"POST",body:JSON.stringify(body)});
+      setAuth(data.access_token,data.user);
+      toast(`Welcome, ${data.user.name}! 👋`,"success");
+      onAuth(data.user);
+    } catch(e){
+      setError(e.message||"Something went wrong. Please try again.");
+    } finally{
+      setLoading(false);
+    }
+  }
+
+  return(
+    <div className="auth-page">
+      <div className="auth-card">
+        <div style={{textAlign:"center",marginBottom:28}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10,marginBottom:8}}>
+            <div className="logo-icon">⚡</div>
+            <div style={{fontFamily:"var(--serif)",fontSize:26}}>CloudScreen</div>
+          </div>
+          <div style={{fontSize:12,color:"var(--text3)"}}>NLP-powered Resume Intelligence Platform</div>
+        </div>
+
+        <div className="auth-tabs">
+          <button className={`auth-tab ${tab==="login"?"active":""}`}
+            onClick={()=>{setTab("login");setError("")}}>Sign In</button>
+          <button className={`auth-tab ${tab==="register"?"active":""}`}
+            onClick={()=>{setTab("register");setError("")}}>Create Account</button>
+        </div>
+
+        {error&&<div className="err-box">⚠ {error}</div>}
+
+        {tab==="register"&&(
+          <div className="form-group">
+            <label className="label">Full Name</label>
+            <input className="input" placeholder="Your full name"
+              value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}
+              onKeyDown={e=>e.key==="Enter"&&submit()}/>
+          </div>
+        )}
+        <div className="form-group">
+          <label className="label">Email Address</label>
+          <input className="input" type="email" placeholder="you@example.com"
+            value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))}
+            onKeyDown={e=>e.key==="Enter"&&submit()}/>
+        </div>
+        <div className="form-group">
+          <label className="label">Password</label>
+          <input className="input" type="password" placeholder={tab==="register"?"Create a password":"••••••••"}
+            value={form.password} onChange={e=>setForm(f=>({...f,password:e.target.value}))}
+            onKeyDown={e=>e.key==="Enter"&&submit()}/>
+        </div>
+
+        <button className="btn btn-primary"
+          style={{width:"100%",justifyContent:"center",padding:"11px 18px",fontSize:14}}
+          onClick={submit} disabled={loading}>
+          {loading?<><div className="spinner"/>{tab==="login"?" Signing in...":" Creating account..."}</>
+                  :tab==="login"?"Sign In →":"Create Account →"}
+        </button>
+
+        <div style={{textAlign:"center",marginTop:16,fontSize:12,color:"var(--text3)"}}>
+          {tab==="login"?"Don't have an account? ":"Already have an account? "}
+          <span style={{color:"var(--accent2)",cursor:"pointer"}}
+            onClick={()=>{setTab(tab==="login"?"register":"login");setError("")}}>
+            {tab==="login"?"Create one free":"Sign in instead"}
+          </span>
+        </div>
+
+        <div style={{marginTop:20,padding:"12px 14px",background:"var(--bg3)",borderRadius:var(--rs),fontSize:11,color:"var(--text3)",lineHeight:1.7}}>
+          🔒 Your data is private — each account sees only its own jobs and resumes
+        </div>
+      </div>
+    </div>
+  );
 }
 
 // ── Main App ───────────────────────────────────────────────────────────────
 function App(){
-  const[user,setUser]=useState(getUser());
-  const[page,setPage]=useState("screen");
-  const[jobs,setJobs]=useState([]);
-  const[activeJob,setActiveJob]=useState(null);
-  const[resumes,setResumes]=useState([]);
-  const[showCreate,setShowCreate]=useState(false);
-  const{toasts,add:toast}=useToasts();
+  const [user,setUser]=useState(getUser);
+  const [page,setPage]=useState("screen");
+  const [jobs,setJobs]=useState([]);
+  const [activeJob,setActiveJob]=useState(null);
+  const [resumes,setResumes]=useState([]);
+  const [showCreate,setShowCreate]=useState(false);
+  const [loadingJobs,setLoadingJobs]=useState(false);
+  const [apiOk,setApiOk]=useState(null);
+  const {toasts,add:toast}=useToasts();
+
+  // Check API health
+  useEffect(()=>{
+    fetch(`${API}/health`).then(r=>r.ok?setApiOk(true):setApiOk(false))
+      .catch(()=>setApiOk(false));
+  },[]);
 
   async function loadJobs(){
-    try{const data=await authFetch(`${API}/jobs`).then(r=>r.json());setJobs(Array.isArray(data)?data:[]);}
-    catch{setJobs([]);}
+    setLoadingJobs(true);
+    try{
+      const data=await api("/jobs");
+      setJobs(Array.isArray(data)?data:[]);
+    } catch(e){
+      if(e.message.includes("401")||e.message.includes("Invalid")){
+        clearAuth(); setUser(null);
+      }
+      setJobs([]);
+    } finally{
+      setLoadingJobs(false);
+    }
   }
+
   async function loadResumes(jobId){
-    try{const data=await authFetch(`${API}/jobs/${jobId}/resumes`).then(r=>r.json());setResumes(Array.isArray(data)?data:[]);}
-    catch{setResumes([]);}
+    try{
+      const data=await api(`/jobs/${jobId}/resumes`);
+      setResumes(Array.isArray(data)?data:[]);
+    } catch{ setResumes([]); }
   }
-  function selectJob(j){setActiveJob(j);setPage("screen");}
-  function logout(){clearAuth();setUser(null);setJobs([]);setResumes([]);setActiveJob(null);}
 
-  useEffect(()=>{if(user)loadJobs();},[user]);
-  useEffect(()=>{if(activeJob)loadResumes(activeJob.id);else setResumes([]);},[activeJob]);
+  function selectJob(j){ setActiveJob(j); setPage("screen"); }
 
-  if(!user){
-    return(<><AuthPage onAuth={u=>{setUser(u);}} toast={toast}/><ToastContainer toasts={toasts}/></>);
-  }
+  function logout(){ clearAuth(); setUser(null); setJobs([]); setResumes([]); setActiveJob(null); }
+
+  useEffect(()=>{ if(user) loadJobs(); },[user]);
+  useEffect(()=>{ if(activeJob) loadResumes(activeJob.id); else setResumes([]); },[activeJob]);
+
+  if(!user) return <><AuthPage onAuth={u=>{setUser(u);}} toast={toast}/><Toasts toasts={toasts}/></>;
 
   const NAV=[{id:"screen",icon:"🔍",label:"Screen"},{id:"analytics",icon:"📊",label:"Analytics"},{id:"about",icon:"📖",label:"About"}];
 
   return(
     <div className="app">
+      {/* Sidebar */}
       <aside className="sidebar">
         <div className="logo">
           <div className="logo-mark"><div className="logo-icon">⚡</div><div className="logo-name">CloudScreen</div></div>
           <div className="logo-tag">Resume Intelligence</div>
         </div>
+
         <nav className="nav">
-          <div className="nav-section">Navigation</div>
-          {NAV.map(n=><div key={n.id} className={`nav-item ${page===n.id?"active":""}`} onClick={()=>setPage(n.id)}><span className="icon">{n.icon}</span><span>{n.label}</span></div>)}
-          {jobs.length>0&&<><div className="nav-section" style={{marginTop:20}}>My Jobs</div>
-            {jobs.slice(0,8).map(j=><div key={j.id} className={`nav-item ${activeJob?.id===j.id?"active":""}`} onClick={()=>selectJob(j)}><span className="icon">💼</span><span style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{j.title}</span><span style={{fontSize:10,color:"var(--text3)",flexShrink:0}}>({j.resume_count})</span></div>)}
-          </>}
+          <div className="nav-sec">Navigation</div>
+          {NAV.map(n=>(
+            <div key={n.id} className={`nav-item ${page===n.id?"active":""}`} onClick={()=>setPage(n.id)}>
+              <span className="icon">{n.icon}</span><span>{n.label}</span>
+            </div>
+          ))}
+
+          {(jobs.length>0||loadingJobs)&&(
+            <>
+              <div className="nav-sec" style={{marginTop:16}}>My Jobs {loadingJobs&&"…"}</div>
+              {jobs.slice(0,10).map(j=>(
+                <div key={j.id} className={`nav-item ${activeJob?.id===j.id?"active":""}`} onClick={()=>selectJob(j)}>
+                  <span className="icon">💼</span>
+                  <span style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,fontSize:12}}>{j.title}</span>
+                  <span style={{fontSize:10,color:"var(--text3)",flexShrink:0,background:"var(--bg)",borderRadius:10,padding:"1px 6px"}}>{j.resume_count}</span>
+                </div>
+              ))}
+            </>
+          )}
         </nav>
-        <div className="sidebar-footer">
+
+        <div className="sidebar-bottom">
           <div className="user-pill">
-            <div className="user-avatar">{user.name?.[0]?.toUpperCase()}</div>
-            <div style={{overflow:"hidden"}}><div style={{fontSize:12,fontWeight:500,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{user.name}</div><div style={{fontSize:10,color:"var(--text3)",overflow:"hidden",textOverflow:"ellipsis"}}>{user.email}</div></div>
+            <div className="user-avatar">{(user.name||"?")[0].toUpperCase()}</div>
+            <div style={{overflow:"hidden",flex:1}}>
+              <div style={{fontSize:12,fontWeight:500,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{user.name}</div>
+              <div style={{fontSize:10,color:"var(--text3)",overflow:"hidden",textOverflow:"ellipsis"}}>{user.email}</div>
+            </div>
           </div>
-          <button className="btn btn-ghost btn-sm" style={{width:"100%",justifyContent:"center"}} onClick={logout}>Sign Out</button>
+          <button className="btn btn-ghost btn-sm" style={{width:"100%",justifyContent:"center"}} onClick={logout}>
+            Sign Out
+          </button>
         </div>
       </aside>
 
+      {/* Main content */}
       <main className="main">
         <div className="topbar">
           <div>
             {page==="screen"&&<><div className="page-title">Resume Screening</div><div className="page-sub">Upload resumes · NLP extraction · TF-IDF ranking</div></>}
             {page==="analytics"&&<><div className="page-title">Analytics</div><div className="page-sub">Insights across your screening sessions</div></>}
-            {page==="about"&&<><div className="page-title">About & API</div><div className="page-sub">Architecture, tech stack, and endpoints</div></>}
+            {page==="about"&&<><div className="page-title">About</div><div className="page-sub">Architecture, tech stack and API</div></>}
           </div>
-          {page==="screen"&&(
-            <div style={{display:"flex",gap:10,alignItems:"center"}}>
-              {activeJob&&<>
-                <a href={`${API}/jobs/${activeJob.id}/export/pdf`} target="_blank" className="btn btn-ghost btn-sm" style={{textDecoration:"none"}}>⬇ PDF</a>
-                <a href={`${API}/jobs/${activeJob.id}/export/csv`} target="_blank" className="btn btn-ghost btn-sm" style={{textDecoration:"none"}}>⬇ CSV</a>
-              </>}
+          <div style={{display:"flex",gap:8,alignItems:"center"}}>
+            {page==="screen"&&activeJob&&(
+              <>
+                <a href={`${API}/jobs/${activeJob.id}/export/pdf`} target="_blank"
+                  className="btn btn-ghost btn-sm" style={{textDecoration:"none"}}>⬇ PDF</a>
+                <a href={`${API}/jobs/${activeJob.id}/export/csv`} target="_blank"
+                  className="btn btn-ghost btn-sm" style={{textDecoration:"none"}}>⬇ CSV</a>
+              </>
+            )}
+            {page==="screen"&&(
               <button className="btn btn-primary" onClick={()=>setShowCreate(true)}>+ New Job</button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         <div className="content">
+          {/* API offline banner */}
+          {apiOk===false&&(
+            <div className="api-banner">
+              ⚠ Cannot reach the API server. Make sure the backend is running.
+              <code style={{fontFamily:"var(--mono)",fontSize:11,background:"var(--bg3)",padding:"2px 7px",borderRadius:4}}>
+                python start.py
+              </code>
+            </div>
+          )}
+
           {page==="screen"&&(
             <>
-              <div className="card" style={{marginBottom:20}}>
+              {/* Job selector */}
+              <div className="card" style={{marginBottom:18}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
-                  <div style={{fontFamily:"var(--serif)",fontSize:18}}>My Job Postings</div>
-                  {activeJob&&<button className="btn btn-danger btn-sm" onClick={async()=>{await authFetch(`${API}/jobs/${activeJob.id}`,{method:"DELETE"});setActiveJob(null);loadJobs();toast("Job deleted","info");}}>Delete Job</button>}
+                  <div style={{fontFamily:"var(--serif)",fontSize:18}}>
+                    {activeJob?`Screening: ${activeJob.title}`:"Select a Job Posting"}
+                    {activeJob?.company&&<span style={{fontSize:13,color:"var(--text3)",fontFamily:"var(--sans)",fontWeight:400}}> @ {activeJob.company}</span>}
+                  </div>
+                  <div style={{display:"flex",gap:8}}>
+                    {activeJob&&(
+                      <button className="btn btn-danger btn-sm" onClick={async()=>{
+                        if(!confirm(`Delete "${activeJob.title}" and all its resumes?`)) return;
+                        try{
+                          await api(`/jobs/${activeJob.id}`,{method:"DELETE"});
+                          setActiveJob(null); loadJobs(); toast("Job deleted","info");
+                        }catch(e){toast(`Delete failed: ${e.message}`,"error");}
+                      }}>Delete Job</button>
+                    )}
+                  </div>
                 </div>
-                {jobs.length===0
-                  ?<div style={{fontSize:13,color:"var(--text3)"}}>No jobs yet. <span style={{color:"var(--accent2)",cursor:"pointer"}} onClick={()=>setShowCreate(true)}>Create your first job posting →</span></div>
-                  :<div style={{display:"flex",flexWrap:"wrap"}}>{jobs.map(j=><div key={j.id} className={`job-chip ${activeJob?.id===j.id?"active":""}`} onClick={()=>selectJob(j)}>💼 {j.title}{j.company&&<span style={{color:"var(--text3)"}}> · {j.company}</span>}<span style={{fontSize:10,color:"var(--text3)"}}>{j.resume_count}</span></div>)}</div>
-                }
+
+                {jobs.length===0&&!loadingJobs?(
+                  <div style={{fontSize:13,color:"var(--text3)"}}>
+                    No jobs yet.{" "}
+                    <span style={{color:"var(--accent2)",cursor:"pointer",textDecoration:"underline"}}
+                      onClick={()=>setShowCreate(true)}>
+                      Create your first job posting →
+                    </span>
+                  </div>
+                ):(
+                  <div style={{display:"flex",flexWrap:"wrap",gap:0}}>
+                    {jobs.map(j=>(
+                      <div key={j.id} className={`job-chip ${activeJob?.id===j.id?"active":""}`} onClick={()=>selectJob(j)}>
+                        💼 <span style={{fontWeight:500}}>{j.title}</span>
+                        {j.company&&<span style={{color:"var(--text3)"}}> · {j.company}</span>}
+                        <span style={{background:"var(--bg2)",borderRadius:10,padding:"1px 6px",fontSize:10,color:"var(--text3)"}}>{j.resume_count}</span>
+                      </div>
+                    ))}
+                    <div className="job-chip" style={{border:"1px dashed var(--border2)",color:"var(--text3)"}}
+                      onClick={()=>setShowCreate(true)}>
+                      + New Job
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {activeJob?(<>
-                <UploadPanel job={activeJob} toast={toast} onUploaded={()=>{loadResumes(activeJob.id);loadJobs();}}/>
-                {resumes.length>0&&(<>
-                  <div className="kpi-grid" style={{marginTop:20}}>
-                    {[["Candidates",resumes.length,"var(--accent2)"],["Top Score",`${(resumes[0]?.score||0).toFixed(1)}%`,"var(--green)"],["Avg Score",`${(resumes.reduce((s,r)=>s+(r.score||0),0)/resumes.length).toFixed(1)}%`,"var(--amber)"],["Total Skills",resumes.reduce((s,r)=>s+(r.total_skills||0),0),"var(--accent2)"]].map(([l,v,c])=><div key={l} className="kpi"><div className="kpi-label">{l}</div><div className="kpi-value" style={{color:c,fontSize:22}}>{v}</div></div>)}
-                  </div>
-                  <div className="card" style={{marginTop:20,marginBottom:20}}><div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:16}}>Score Comparison</div><div className="chart-wrap"><BarChart resumes={resumes}/></div></div>
-                  <div className="section-head">Candidate Rankings</div>
-                  <RankingsPanel resumes={resumes} jobId={activeJob.id} toast={toast} onDeleted={()=>{loadResumes(activeJob.id);loadJobs();}}/>
-                  <SkillHeatmap jobId={activeJob.id}/>
-                  <BatchCompareChart jobId={activeJob.id}/>
-                </>)}
-              </>):(
-                <div className="empty"><div className="empty-icon">💼</div><div className="empty-text">Select or create a job posting</div><div className="empty-sub">Then upload resumes to start screening</div><button className="btn btn-primary" style={{marginTop:16}} onClick={()=>setShowCreate(true)}>+ Create Job</button></div>
+              {activeJob?(
+                <>
+                  <UploadPanel job={activeJob} toast={toast}
+                    onUploaded={()=>{loadResumes(activeJob.id);loadJobs();}}/>
+
+                  {resumes.length>0&&(
+                    <>
+                      <div className="kpi-grid" style={{marginTop:18}}>
+                        {[
+                          ["Candidates",  resumes.length,                                                                   "var(--accent2)"],
+                          ["Top Score",   `${(resumes[0]?.score||0).toFixed(1)}%`,                                          "var(--green)"],
+                          ["Avg Score",   `${(resumes.reduce((s,r)=>s+(r.score||0),0)/resumes.length).toFixed(1)}%`,        "var(--amber)"],
+                          ["Total Skills",resumes.reduce((s,r)=>s+(r.total_skills||0),0),                                   "var(--accent2)"],
+                        ].map(([l,v,c])=>(
+                          <div key={l} className="kpi">
+                            <div className="kpi-label">{l}</div>
+                            <div className="kpi-value" style={{color:c,fontSize:22}}>{v}</div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="card" style={{marginTop:18,marginBottom:18}}>
+                        <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:14}}>Score Comparison</div>
+                        <div style={{height:220}}><BarChart resumes={resumes}/></div>
+                      </div>
+
+                      <div className="sec-head">Candidate Rankings — click any row to see full details</div>
+                      <RankingsPanel resumes={resumes} jobId={activeJob.id} toast={toast}
+                        onDeleted={()=>{loadResumes(activeJob.id);loadJobs();}}/>
+
+                      <SkillHeatmap jobId={activeJob.id}/>
+                      <BatchRadar jobId={activeJob.id}/>
+                    </>
+                  )}
+                </>
+              ):(
+                <div className="empty">
+                  <div className="empty-icon">💼</div>
+                  <div className="empty-title">No job selected</div>
+                  <div className="empty-sub">Select a job posting above, or create a new one to start screening resumes</div>
+                  <button className="btn btn-primary" style={{marginTop:18}} onClick={()=>setShowCreate(true)}>
+                    + Create Job Posting
+                  </button>
+                </div>
               )}
             </>
           )}
+
           {page==="analytics"&&<AnalyticsPage toast={toast}/>}
+
           {page==="about"&&(
             <div>
-              <div className="card" style={{marginBottom:20}}>
+              <div className="card" style={{marginBottom:18}}>
                 <div style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:8}}>Cloud Resume Screener v2</div>
-                <div style={{fontSize:13,color:"var(--text2)",lineHeight:1.8,maxWidth:600}}>An NLP-powered recruitment intelligence platform. Each user account is private — your jobs and resumes are only visible to you.</div>
+                <div style={{fontSize:13,color:"var(--text2)",lineHeight:1.8,maxWidth:620}}>
+                  An NLP-powered recruitment intelligence platform. Each user account is private —
+                  your jobs and resumes are visible only to you. Powered by spaCy, sklearn TF-IDF,
+                  FastAPI, and Neon PostgreSQL.
+                </div>
               </div>
-              <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:24}}>
-                {["Python 3.13","FastAPI","spaCy EntityRuler","sklearn TF-IDF","SQLAlchemy","Neon PostgreSQL","JWT Auth","AWS S3","React 18","Chart.js","ReportLab"].map(t=><span key={t} className="tag" style={{fontSize:12,padding:"5px 12px"}}>{t}</span>)}
+              <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:20}}>
+                {["Python 3.13","FastAPI","spaCy EntityRuler","sklearn TF-IDF","SQLAlchemy","Neon PostgreSQL","JWT Auth","bcrypt","AWS S3","React 18","Chart.js 4","ReportLab"].map(t=>(
+                  <span key={t} className="tag" style={{fontSize:12,padding:"5px 12px"}}>{t}</span>
+                ))}
               </div>
-              <div style={{fontSize:13,color:"var(--text2)",marginBottom:8}}>API docs: <a href="/docs" target="_blank" style={{color:"var(--accent2)"}}>https://cloud-resume-screener.onrender.com/docs</a></div>
+              <div className="card-sm" style={{fontSize:13,color:"var(--text2)",lineHeight:2}}>
+                <div>📖 <a href="/docs" target="_blank" style={{color:"var(--accent2)"}}>API Docs (Swagger UI)</a></div>
+                <div>🚀 <a href="https://github.com/Jhil-Patel/cloud-resume-screener" target="_blank" style={{color:"var(--accent2)"}}>GitHub Repository</a></div>
+                <div>🧪 <span style={{color:"var(--text3)"}}>39 pytest tests passing</span></div>
+              </div>
             </div>
           )}
         </div>
       </main>
 
-      {showCreate&&<CreateJobModal onClose={()=>setShowCreate(false)} onCreate={j=>{loadJobs();selectJob(j);toast(`Created: ${j.title}`,"success");}}/>}
-      <ToastContainer toasts={toasts}/>
+      {showCreate&&(
+        <CreateJobModal
+          onClose={()=>setShowCreate(false)}
+          toast={toast}
+          onCreate={j=>{ loadJobs(); selectJob(j); }}
+        />
+      )}
+
+      <Toasts toasts={toasts}/>
     </div>
   );
 }
