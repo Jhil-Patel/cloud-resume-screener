@@ -3,1217 +3,790 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CloudScreen — Resume Intelligence Platform</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNjM2NmYxIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojYTc4YmZhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0idXJsKCNnKSIvPjxwYXRoIGQ9Ik0yMiAxMy41YzAtMy0yLjUtNS41LTUuNS01LjUtMi41IDAtNC42IDEuNy01LjMgNEM5LjQgMTIuMiA4IDEzLjcgOCAxNS41IDggMTcuNCA5LjYgMTkgMTEuNSAxOUgyMmMxLjcgMCAzLTEuMyAzLTNzLTEuMy0zLTMtM3oiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjk1Ii8+PHBvbHlnb24gcG9pbnRzPSIxNywxOSAxNCwyNSAxNi41LDIyIDEzLjUsMjIgMTcsMTYgMTkuNSwxOSIgZmlsbD0iI2ZiYmYyNCIvPjwvc3ZnPg=="/>
+<title>CloudScreen — Resume Intelligence</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNjM2NmYxIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojYTc4YmZhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0idXJsKCNnKSIvPjxwYXRoIGQ9Ik0yMiAxMy41YzAtMy0yLjUtNS41LTUuNS01LjUtMi41IDAtNC42IDEuNy01LjMgNEM5LjQgMTIuMiA4IDEzLjcgOCAxNS41IDggMTcuNCA5LjYgMTkgMTEuNSAxOUgyMmMxLjcgMCAzLTEuMyAzLTNzLTEuMy0zLTMtM3oiIGZpbGw9IndoaXRlIi8+PHBvbHlnb24gcG9pbnRzPSIxNywxOSAxNCwyNSAxNi41LDIyIDEzLjUsMjIgMTcsMTYgMTkuNSwxOSIgZmlsbD0iI2ZiYmYyNCIvPjwvc3ZnPg=="/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap"/>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap"/>
 <style>
-:root{--bg:#07080f;--bg2:#0d0f1a;--bg3:#111422;--bg4:#161928;--border:rgba(99,120,255,0.12);--border2:rgba(99,120,255,0.22);--accent:#6366f1;--accent2:#818cf8;--green:#34d399;--amber:#fbbf24;--red:#f87171;--text:#e8eaf5;--text2:#8b93b8;--text3:#485077;--mono:'DM Mono',monospace;--serif:'DM Serif Display',serif;--sans:'Outfit',sans-serif;--r:14px;--rs:8px}
+:root{--bg:#07080f;--bg2:#0d0f1a;--bg3:#111422;--border:rgba(99,120,255,0.12);--border2:rgba(99,120,255,0.22);--accent:#6366f1;--accent2:#818cf8;--green:#34d399;--amber:#fbbf24;--red:#f87171;--text:#e8eaf5;--text2:#8b93b8;--text3:#485077}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
+html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px}
+.spin{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+.sp{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
 .app{display:flex;min-height:100vh}
 .sidebar{width:240px;min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;overflow-y:auto}
-.main{margin-left:240px;flex:1;min-height:100vh}
-.logo{padding:22px 20px 18px;border-bottom:1px solid var(--border);flex-shrink:0}
+.main{margin-left:240px;flex:1}
+.logo{padding:22px 20px 18px;border-bottom:1px solid var(--border)}
 .logo-mark{display:flex;align-items:center;gap:10px;margin-bottom:3px}
 .logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#a78bfa);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.logo-name{font-family:var(--serif);font-size:20px}
+.logo-name{font-family:'DM Serif Display',serif;font-size:20px}
 .logo-tag{font-size:10px;color:var(--text3);letter-spacing:2px;text-transform:uppercase}
 .nav{padding:12px;flex:1}
 .nav-sec{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);padding:0 8px;margin:14px 0 6px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--rs);cursor:pointer;font-size:13px;color:var(--text2);transition:all 0.15s;margin-bottom:2px;border:1px solid transparent;user-select:none}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;margin-bottom:2px;border:1px solid transparent;user-select:none}
 .nav-item:hover{background:var(--bg3);color:var(--text)}
-.nav-item.active{background:rgba(99,102,241,0.15);color:var(--accent2);border-color:rgba(99,102,241,0.2)}
-.nav-item .icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
-.sidebar-bottom{padding:12px;border-top:1px solid var(--border);flex-shrink:0}
+.nav-item.active{background:rgba(99,102,241,.15);color:var(--accent2);border-color:rgba(99,102,241,.2)}
+.sidebar-bottom{padding:12px;border-top:1px solid var(--border)}
 .user-pill{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 10px;margin-bottom:8px}
-.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#a78bfa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;color:#fff}
-.topbar{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:50;backdrop-filter:blur(12px)}
-.page-title{font-family:var(--serif);font-size:21px}
+.user-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#a78bfa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0}
+.topbar{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:50}
+.page-title{font-family:'DM Serif Display',serif;font-size:21px}
 .page-sub{font-size:11px;color:var(--text3);margin-top:2px}
 .content{padding:24px 28px}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px}
-.card-sm{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:14px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:18px}
+.card-sm{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px}
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px}
-.kpi-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
-.kpi-value{font-family:var(--mono);font-size:26px;font-weight:500}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:10px 14px;color:var(--text);font-family:var(--sans);font-size:13.5px;outline:none;transition:border-color 0.15s}
-.input:focus{border-color:var(--accent)}
-.input::placeholder{color:var(--text3)}
-.input.error-field{border-color:var(--red)}
-textarea.input{resize:vertical;min-height:130px;line-height:1.6}
-select.input{cursor:pointer}
-.label{font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;display:block}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px}
+.kpi-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.kpi-val{font-family:'DM Mono',monospace;font-size:26px;font-weight:500}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .form-group{margin-bottom:14px}
-.field-err{font-size:11px;color:var(--red);margin-top:4px}
-.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--rs);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;user-select:none;white-space:nowrap;text-decoration:none}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover:not(:disabled){background:#4f51cc;transform:translateY(-1px)}
-.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
-.btn-ghost:hover:not(:disabled){border-color:var(--border2);color:var(--text)}
-.btn-danger{background:rgba(248,113,113,0.1);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
-.btn-danger:hover:not(:disabled){background:rgba(248,113,113,0.2)}
-.btn-sm{padding:6px 12px;font-size:12px}
-.btn:disabled{opacity:0.5;cursor:not-allowed}
-.upload-zone{border:2px dashed var(--border2);border-radius:var(--r);padding:36px 20px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--bg3)}
-.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(99,102,241,0.06)}
-.rank-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;gap:18px;cursor:pointer;transition:all 0.2s}
+.lbl{font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:5px}
+input,textarea,select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;transition:border-color .15s}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+input::placeholder,textarea::placeholder{color:var(--text3)}
+textarea{resize:vertical;min-height:130px;line-height:1.6}
+.ierr{border-color:var(--red)!important}
+.ferr{font-size:11px;color:var(--red);margin-top:4px}
+.ccnt{font-size:10px;color:var(--text3);text-align:right;margin-top:3px}
+button{font-family:'Outfit',sans-serif;cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:500;border:none;transition:all .15s;text-decoration:none;white-space:nowrap;cursor:pointer}
+.btnp{background:var(--accent);color:#fff}
+.btnp:hover:not(:disabled){background:#4f51cc;transform:translateY(-1px)}
+.btng{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.btng:hover:not(:disabled){border-color:var(--border2);color:var(--text)}
+.btnd{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2)}
+.btnd:hover:not(:disabled){background:rgba(248,113,113,.2)}
+.btnsm{padding:6px 12px;font-size:12px}
+button:disabled{opacity:.5;cursor:not-allowed}
+.upload-zone{border:2px dashed var(--border2);border-radius:14px;padding:36px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg3)}
+.upload-zone:hover,.drag{border-color:var(--accent);background:rgba(99,102,241,.06)}
+.rank-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;gap:18px;cursor:pointer;transition:all .2s}
 .rank-card:hover{border-color:var(--border2);transform:translateY(-1px)}
-.rank-bar-bg{background:var(--bg3);border-radius:4px;height:6px;overflow:hidden}
-.rank-bar{height:6px;border-radius:4px;transition:width 0.7s cubic-bezier(0.4,0,0.2,1)}
-.vbadge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
-.vbadge.strong{background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.2)}
-.vbadge.good{background:rgba(99,102,241,0.12);color:var(--accent2);border:1px solid rgba(99,102,241,0.2)}
-.vbadge.partial{background:rgba(251,191,36,0.12);color:var(--amber);border:1px solid rgba(251,191,36,0.2)}
-.vbadge.weak{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
-.tag{display:inline-flex;align-items:center;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.18);color:var(--accent2);border-radius:20px;padding:3px 9px;font-size:11px;margin:2px}
-.sec-head{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);border-left:3px solid var(--accent);padding-left:10px;margin:22px 0 12px}
+.sbar-bg{background:var(--bg3);border-radius:4px;height:6px;overflow:hidden}
+.sbar{height:6px;border-radius:4px;transition:width .7s}
+.vb{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
+.vbs{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.2)}
+.vbg{background:rgba(99,102,241,.12);color:var(--accent2);border:1px solid rgba(99,102,241,.2)}
+.vbp{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.2)}
+.vbw{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.2)}
+.tag{display:inline-flex;align-items:center;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.18);color:var(--accent2);border-radius:20px;padding:3px 9px;font-size:11px;margin:2px}
+.sh{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);border-left:3px solid var(--accent);padding-left:10px;margin:22px 0 12px}
 .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:9999;max-width:360px}
-.toast{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rs);padding:12px 16px;margin-top:8px;font-size:13px;display:flex;align-items:flex-start;gap:8px;animation:slideIn 0.25s ease;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
-.toast.success{border-left:3px solid var(--green)}
-.toast.error{border-left:3px solid var(--red)}
-.toast.info{border-left:3px solid var(--accent)}
+.toast{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px 16px;margin-top:8px;font-size:13px;display:flex;align-items:flex-start;gap:8px;animation:slideIn .25s ease;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.tok{border-left:3px solid var(--green)}.terr{border-left:3px solid var(--red)}.tinfo{border-left:3px solid var(--accent)}
 @keyframes slideIn{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
-.spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0}
-.spinner-lg{width:32px;height:32px;border-width:3px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.15s}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:28px;width:100%;max-width:680px;max-height:88vh;overflow-y:auto;animation:scaleIn 0.2s cubic-bezier(0.34,1.56,0.64,1)}
-@keyframes scaleIn{from{transform:scale(0.93);opacity:0}to{transform:scale(1);opacity:1}}
-.modal-sm{max-width:460px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:28px;width:100%;max-width:680px;max-height:88vh;overflow-y:auto}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:20px;font-size:12px;cursor:pointer;transition:all .15s;border:1px solid var(--border);margin:3px;background:var(--bg3);color:var(--text2);user-select:none}
+.chip:hover{border-color:var(--border2)}
+.chip.active{background:rgba(99,102,241,.15);border-color:var(--accent);color:var(--accent2)}
 .empty{text-align:center;padding:56px 20px;color:var(--text3)}
-.empty-icon{font-size:44px;margin-bottom:12px;opacity:0.35}
-.empty-title{font-size:15px;color:var(--text2);margin-bottom:6px;font-weight:500}
-.empty-sub{font-size:13px;line-height:1.6}
-.progress-bar{height:3px;background:var(--accent);border-radius:2px}
-.progress-track{background:var(--bg3);border-radius:2px;overflow:hidden}
-.job-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:20px;font-size:12px;cursor:pointer;transition:all 0.15s;border:1px solid var(--border);margin:3px;background:var(--bg3);color:var(--text2)}
-.job-chip:hover{border-color:var(--border2)}
-.job-chip.active{background:rgba(99,102,241,0.15);border-color:var(--accent);color:var(--accent2)}
+.pbar{height:3px;background:var(--accent);border-radius:2px}
+.ptrack{background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:8px}
 .stat-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
 .stat-row:last-child{border-bottom:none}
-.bd-item{margin-bottom:11px}
-.bd-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px}
-.bd-track{background:var(--bg3);border-radius:3px;height:5px;overflow:hidden}
-.bd-fill{height:5px;border-radius:3px}
-/* Auth */
+.bdi{margin-bottom:11px}
+.bdr{display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px}
+.bdt{background:var(--bg3);border-radius:3px;height:5px;overflow:hidden}
+.bdf{height:5px;border-radius:3px}
+.hmt{border-collapse:collapse;width:100%;font-size:11px}
+.hmt th{padding:4px;color:var(--text3);font-weight:400;font-size:9px;text-align:center;writing-mode:vertical-lr;transform:rotate(180deg);height:80px;min-width:30px}
+.hmc{border-radius:4px;padding:3px 2px;font-family:'DM Mono',monospace;font-size:11px;min-width:24px;text-align:center}
 .auth-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px}
-.auth-card{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:38px;width:100%;max-width:420px}
-.auth-tabs{display:flex;background:var(--bg3);border-radius:var(--rs);padding:4px;margin-bottom:26px}
-.auth-tab{flex:1;padding:8px;border-radius:6px;text-align:center;cursor:pointer;font-size:13px;color:var(--text3);transition:all 0.2s;border:none;background:none;font-family:var(--sans)}
+.auth-card{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:38px;width:100%;max-width:420px}
+.auth-tabs{display:flex;background:var(--bg3);border-radius:8px;padding:4px;margin-bottom:26px}
+.auth-tab{flex:1;padding:8px;border-radius:6px;text-align:center;cursor:pointer;font-size:13px;color:var(--text3);transition:all .2s;border:none;background:none;font-family:'Outfit',sans-serif}
 .auth-tab.active{background:var(--accent);color:#fff;font-weight:500}
-.err-box{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);color:var(--red);border-radius:var(--rs);padding:10px 14px;font-size:12.5px;margin-bottom:14px;line-height:1.5}
-.api-banner{background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.2);border-radius:var(--rs);padding:11px 16px;margin-bottom:20px;font-size:12.5px;color:var(--amber);display:flex;align-items:center;gap:10px}
-/* Char counter */
-.char-count{font-size:10px;color:var(--text3);text-align:right;margin-top:3px}
-.char-count.warn{color:var(--amber)}
+.errbox{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);color:var(--red);border-radius:8px;padding:10px 14px;font-size:12.5px;margin-bottom:14px;line-height:1.5}
+@media(max-width:900px){.sidebar{width:56px}.main{margin-left:56px}.kpi-grid{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+<div id="loading"><div class="spin"></div><p style="font-size:14px;color:var(--text3)">Loading CloudScreen...</p></div>
 <div id="root"></div>
-<script type="text/babel">
-const { useState, useEffect, useRef, useCallback, useMemo } = React;
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+// ─── No JSX, no Babel, no htm — pure React.createElement ───────────────────
+// This is the only 100% reliable approach for production without a build step.
+const e = React.createElement;
+const { useState, useEffect, useRef, useCallback } = React;
 
-const API = (window.location.hostname==="localhost"||window.location.hostname==="127.0.0.1")
+const API = (location.hostname==="localhost"||location.hostname==="127.0.0.1")
   ? "http://localhost:8000/api" : "/api";
 
-// ── Auth helpers ───────────────────────────────────────────────────────────
-const getToken  = () => localStorage.getItem("cs_token");
-const getUser   = () => { try{return JSON.parse(localStorage.getItem("cs_user")||"null")}catch{return null} };
-const setAuth   = (t,u) => { localStorage.setItem("cs_token",t); localStorage.setItem("cs_user",JSON.stringify(u)); };
-const clearAuth = () => { localStorage.removeItem("cs_token"); localStorage.removeItem("cs_user"); };
+// ── Auth ───────────────────────────────────────────────────────────────────
+const getToken = () => localStorage.getItem("cs_token");
+const getUser  = () => { try{return JSON.parse(localStorage.getItem("cs_user")||"null")}catch{return null} };
+const setAuth  = (t,u) => { localStorage.setItem("cs_token",t); localStorage.setItem("cs_user",JSON.stringify(u)); };
+const clearAuth= () => { localStorage.removeItem("cs_token"); localStorage.removeItem("cs_user"); };
 
-// Single fetch wrapper — always attaches token, always throws on non-OK
 async function api(path, opts={}) {
   const token = getToken();
-  const isFormData = opts.body instanceof FormData;
+  const isForm = opts.body instanceof FormData;
   const headers = {
     ...(token ? {"Authorization":`Bearer ${token}`} : {}),
-    ...(isFormData ? {} : {"Content-Type":"application/json"}),
-    ...(opts.headers||{}),
+    ...(!isForm ? {"Content-Type":"application/json"} : {}),
   };
-  const res = await fetch(`${API}${path}`, {...opts, headers});
+  const res = await fetch(API+path, {...opts, headers});
   if (!res.ok) {
-    let msg = `Request failed (${res.status})`;
-    try { const j=await res.json(); msg = j.detail||j.message||msg; } catch {}
+    let msg = "Error "+res.status;
+    try { const j=await res.json(); msg=j.detail||j.message||msg; } catch{}
     throw new Error(msg);
   }
-  // For responses that may have no body (204)
   const ct = res.headers.get("content-type")||"";
   if (ct.includes("application/json")) return res.json();
-  if (ct.includes("text/")) return res.text();
   return res;
 }
 
+// ── Helpers ────────────────────────────────────────────────────────────────
+const sc = s => s>=75?"var(--green)":s>=55?"var(--accent2)":s>=35?"var(--amber)":"var(--red)";
+const vc = v => v&&v.includes("Strong")?"vb vbs":v&&v.includes("Good")?"vb vbg":v&&v.includes("Partial")?"vb vbp":"vb vbw";
+
 // ── Toasts ─────────────────────────────────────────────────────────────────
-function useToasts(){
-  const [toasts,setToasts]=useState([]);
-  const add=useCallback((msg,type="info")=>{
-    const id=Date.now();
-    setToasts(t=>[...t,{id,msg,type}]);
-    setTimeout(()=>setToasts(t=>t.filter(x=>x.id!==id)), type==="error"?6000:4000);
+function useToasts() {
+  const [list,setList] = useState([]);
+  const add = useCallback((msg,type) => {
+    type = type||"info";
+    const id = Date.now();
+    setList(l=>[...l,{id,msg,type}]);
+    setTimeout(()=>setList(l=>l.filter(x=>x.id!==id)), type==="error"?6000:4000);
   },[]);
-  return {toasts,add};
+  return {list,add};
 }
-function Toasts({toasts}){
-  return(
-    <div className="toast-wrap">
-      {toasts.map(t=>(
-        <div key={t.id} className={`toast ${t.type}`}>
-          <span style={{fontSize:14,flexShrink:0}}>{t.type==="success"?"✓":t.type==="error"?"⚠":"•"}</span>
-          <span>{t.msg}</span>
-        </div>
-      ))}
-    </div>
+
+function Toasts({list}) {
+  return e("div",{className:"toast-wrap"},
+    list.map(t=>e("div",{key:t.id,className:"toast "+(t.type==="success"?"tok":t.type==="error"?"terr":"tinfo")},
+      e("span",null,t.type==="success"?"✓":t.type==="error"?"⚠":"•"),
+      e("span",null,t.msg)
+    ))
   );
 }
 
-// ── Utility ────────────────────────────────────────────────────────────────
-const scoreColor = s => s>=75?"var(--green)":s>=55?"var(--accent2)":s>=35?"var(--amber)":"var(--red)";
-const verdictCls = v => {
-  if(!v) return "";
-  if(v.includes("Strong")) return "strong";
-  if(v.includes("Good"))   return "good";
-  if(v.includes("Partial"))return "partial";
-  return "weak";
-};
-
-// ── Charts ─────────────────────────────────────────────────────────────────
-function RadarChart({data}){
-  const ref=useRef(null), cRef=useRef(null);
+// ── Chart wrapper ──────────────────────────────────────────────────────────
+function ChartCanvas({type, config, deps}) {
+  const ref = useRef(null);
+  const chartRef = useRef(null);
   useEffect(()=>{
-    if(!ref.current||!data) return;
-    cRef.current?.destroy();
-    const bd=data.score_breakdown||{};
-    cRef.current=new Chart(ref.current,{
-      type:"radar",
-      data:{labels:["TF-IDF","Skills","Experience","Education"],
-        datasets:[{data:[bd.tfidf_similarity||0,bd.skill_match||0,bd.experience_fit||0,bd.education_fit||0],
-          backgroundColor:"rgba(99,102,241,0.15)",borderColor:"#6366f1",
-          pointBackgroundColor:"#818cf8",borderWidth:1.5,pointRadius:3}]},
-      options:{responsive:true,maintainAspectRatio:false,
-        scales:{r:{min:0,max:100,grid:{color:"rgba(99,120,255,0.1)"},ticks:{display:false},
-          pointLabels:{color:"#8b93b8",font:{size:10,family:"Outfit"}}}},
-        plugins:{legend:{display:false}},animation:{duration:400}}
-    });
-    return()=>cRef.current?.destroy();
-  },[data]);
-  return <canvas ref={ref}/>;
-}
-
-function BarChart({resumes}){
-  const ref=useRef(null), cRef=useRef(null);
-  useEffect(()=>{
-    if(!ref.current||!resumes?.length) return;
-    cRef.current?.destroy();
-    const labels=resumes.slice(0,10).map(r=>(r.candidate_name||"?").split(" ")[0]);
-    const scores=resumes.slice(0,10).map(r=>+(r.score||0).toFixed(1));
-    const bg=scores.map(s=>s>=75?"rgba(52,211,153,0.75)":s>=55?"rgba(129,140,248,0.75)":s>=35?"rgba(251,191,36,0.75)":"rgba(248,113,113,0.75)");
-    const bc=scores.map(s=>s>=75?"#34d399":s>=55?"#818cf8":s>=35?"#fbbf24":"#f87171");
-    cRef.current=new Chart(ref.current,{
-      type:"bar",
-      data:{labels,datasets:[{label:"Match %",data:scores,backgroundColor:bg,borderColor:bc,borderWidth:1,borderRadius:6}]},
-      options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{min:0,max:100,grid:{color:"rgba(99,120,255,0.06)"},ticks:{color:"#485077",font:{size:10}}},
-                x:{grid:{display:false},ticks:{color:"#8b93b8",font:{size:11}}}},
-        plugins:{legend:{display:false}},animation:{duration:500}}
-    });
-    return()=>cRef.current?.destroy();
-  },[resumes]);
-  return <canvas ref={ref}/>;
-}
-
-function DonutChart({distribution}){
-  const ref=useRef(null), cRef=useRef(null);
-  useEffect(()=>{
-    if(!ref.current||!distribution) return;
-    cRef.current?.destroy();
-    cRef.current=new Chart(ref.current,{
-      type:"doughnut",
-      data:{labels:Object.keys(distribution),
-        datasets:[{data:Object.values(distribution),
-          backgroundColor:["rgba(248,113,113,0.75)","rgba(251,191,36,0.75)","rgba(99,102,241,0.75)","rgba(129,140,248,0.75)","rgba(52,211,153,0.75)"],
-          borderColor:"transparent",borderWidth:2,hoverOffset:4}]},
-      options:{responsive:true,maintainAspectRatio:false,cutout:"68%",
-        plugins:{legend:{position:"right",labels:{color:"#8b93b8",font:{size:10,family:"Outfit"},boxWidth:10,padding:8}}},
-        animation:{duration:400}}
-    });
-    return()=>cRef.current?.destroy();
-  },[distribution]);
-  return <canvas ref={ref}/>;
-}
-
-function BatchRadar({jobId}){
-  const ref=useRef(null), cRef=useRef(null);
-  const [candidates,setCandidates]=useState([]);
-  useEffect(()=>{
-    if(!jobId) return;
-    api(`/jobs/${jobId}/compare?top=3`).then(setCandidates).catch(()=>{});
-  },[jobId]);
-  useEffect(()=>{
-    if(!ref.current||!candidates.length) return;
-    cRef.current?.destroy();
-    const cols=["#6366f1","#34d399","#fbbf24"];
-    cRef.current=new Chart(ref.current,{
-      type:"radar",
-      data:{labels:["TF-IDF","Skill Match","Exp Fit","Edu Fit"],
-        datasets:candidates.map((c,i)=>({
-          label:`#${c.rank} ${(c.name||"?").split(" ")[0]}`,
-          data:[c.breakdown?.tfidf_similarity||0,c.breakdown?.skill_match||0,c.breakdown?.experience_fit||0,c.breakdown?.education_fit||0],
-          backgroundColor:cols[i]+"28",borderColor:cols[i],pointBackgroundColor:cols[i],borderWidth:2,pointRadius:4
-        }))},
-      options:{responsive:true,maintainAspectRatio:false,
-        scales:{r:{min:0,max:100,grid:{color:"rgba(99,120,255,0.1)"},ticks:{display:false},
-          pointLabels:{color:"#8b93b8",font:{size:10,family:"Outfit"}}}},
-        plugins:{legend:{position:"bottom",labels:{color:"#8b93b8",font:{size:10,family:"Outfit"},boxWidth:10,padding:8}}},
-        animation:{duration:400}}
-    });
-    return()=>cRef.current?.destroy();
-  },[candidates]);
-  if(!candidates.length) return null;
-  return(
-    <div className="card" style={{marginTop:18}}>
-      <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:3}}>Top {candidates.length} — Side-by-Side Comparison</div>
-      <div style={{fontSize:11,color:"var(--text3)",marginBottom:14}}>Radar chart across all 4 scoring dimensions</div>
-      <div style={{height:280}}><canvas ref={ref}/></div>
-    </div>
-  );
-}
-
-// ── Skill Heatmap ──────────────────────────────────────────────────────────
-function SkillHeatmap({jobId}){
-  const [data,setData]=useState(null);
-  useEffect(()=>{
-    if(!jobId) return;
-    api(`/jobs/${jobId}/heatmap`).then(setData).catch(()=>{});
-  },[jobId]);
-  if(!data?.matrix?.length) return null;
-  const maxVal=Math.max(...data.matrix.flatMap(r=>data.categories.map(c=>r[c]||0)),1);
-  return(
-    <div className="card" style={{marginTop:18,overflowX:"auto"}}>
-      <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:14}}>Skill Coverage Heatmap</div>
-      <table style={{borderCollapse:"collapse",width:"100%",fontSize:11}}>
-        <thead><tr>
-          <th style={{padding:"6px 10px",color:"var(--text3)",textAlign:"left",fontWeight:400,minWidth:130}}>Candidate</th>
-          {data.categories.map(c=>(
-            <th key={c} style={{padding:"4px",color:"var(--text3)",fontWeight:400,fontSize:9,textAlign:"center",
-              writingMode:"vertical-lr",transform:"rotate(180deg)",height:80,minWidth:30}}>{c}</th>
-          ))}
-        </tr></thead>
-        <tbody>{data.matrix.map((row,i)=>(
-          <tr key={i} style={{borderTop:"1px solid var(--border)"}}>
-            <td style={{padding:"8px 10px",color:"var(--text2)",fontSize:12,whiteSpace:"nowrap"}}>#{row.rank} {row.name}</td>
-            {data.categories.map(cat=>{
-              const v=row[cat]||0;
-              const bg=v===0?"var(--bg3)":`rgba(99,102,241,${0.12+(v/maxVal)*0.7})`;
-              return(
-                <td key={cat} style={{textAlign:"center",padding:"5px 3px"}}>
-                  <div style={{background:bg,borderRadius:4,padding:"3px 2px",
-                    color:v===0?"var(--text3)":"var(--accent2)",fontFamily:"var(--mono)",
-                    fontSize:11,minWidth:24}}>{v||"—"}</div>
-                </td>
-              );
-            })}
-          </tr>
-        ))}</tbody>
-      </table>
-    </div>
-  );
+    if(!ref.current||!config) return;
+    if(chartRef.current) chartRef.current.destroy();
+    chartRef.current = new Chart(ref.current, {type, ...config});
+    return ()=>{ if(chartRef.current) chartRef.current.destroy(); };
+  }, deps||[]);
+  return e("canvas",{ref});
 }
 
 // ── Gap Analysis ───────────────────────────────────────────────────────────
-function GapPanel({resume}){
-  const gap=resume?.gap_analysis;
-  if(!gap?.total_required) return(
-    <div style={{fontSize:12,color:"var(--text3)",padding:"10px 0"}}>
-      No required skills found in job description to analyse.
-    </div>
-  );
-  const pct=gap.match_percentage||0;
-  const barColor=pct>=70?"var(--green)":pct>=40?"var(--amber)":"var(--red)";
-  return(
-    <div>
-      <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:14}}>
-        <div style={{fontFamily:"var(--mono)",fontSize:32,color:barColor,fontWeight:500}}>{pct}%</div>
-        <div>
-          <div style={{fontSize:13,fontWeight:500}}>Skill Coverage</div>
-          <div style={{fontSize:11,color:"var(--text3)",marginTop:2}}>
-            {gap.total_matched}/{gap.total_required} required skills matched
-          </div>
-        </div>
-      </div>
-      {gap.matched_skills?.length>0&&(
-        <div style={{marginBottom:12}}>
-          <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--green)",marginBottom:7}}>
-            ✓ Has ({gap.total_matched})
-          </div>
-          <div>{gap.matched_skills.map(s=>(
-            <span key={s} style={{background:"rgba(52,211,153,0.1)",border:"1px solid rgba(52,211,153,0.25)",
-              color:"var(--green)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}}>{s}</span>
-          ))}</div>
-        </div>
-      )}
-      {gap.missing_skills?.length>0&&(
-        <div>
-          <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--red)",marginBottom:7}}>
-            ✗ Missing ({gap.total_missing})
-          </div>
-          <div>{gap.missing_skills.map(s=>(
-            <span key={s} style={{background:"rgba(248,113,113,0.1)",border:"1px solid rgba(248,113,113,0.25)",
-              color:"var(--red)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}}>{s}</span>
-          ))}</div>
-        </div>
-      )}
-    </div>
+function GapPanel({resume}) {
+  const gap = resume && resume.gap_analysis;
+  if(!gap||!gap.total_required) return e("div",{style:{fontSize:12,color:"var(--text3)",padding:"10px 0"}},"No required skills found in job description.");
+  const pct = gap.match_percentage||0;
+  const col = pct>=70?"var(--green)":pct>=40?"var(--amber)":"var(--red)";
+  return e("div",null,
+    e("div",{style:{display:"flex",alignItems:"center",gap:14,marginBottom:14}},
+      e("div",{style:{fontFamily:"'DM Mono',monospace",fontSize:32,color:col,fontWeight:500}},pct+"%"),
+      e("div",null,
+        e("div",{style:{fontSize:13,fontWeight:500}},"Skill Coverage"),
+        e("div",{style:{fontSize:11,color:"var(--text3)",marginTop:2}},gap.total_matched+"/"+gap.total_required+" required skills matched")
+      )
+    ),
+    gap.matched_skills&&gap.matched_skills.length>0 && e("div",{style:{marginBottom:12}},
+      e("div",{style:{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--green)",marginBottom:7}},"✓ Has ("+gap.total_matched+")"),
+      e("div",null,gap.matched_skills.map(s=>e("span",{key:s,style:{background:"rgba(52,211,153,.1)",border:"1px solid rgba(52,211,153,.25)",color:"var(--green)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}},s)))
+    ),
+    gap.missing_skills&&gap.missing_skills.length>0 && e("div",null,
+      e("div",{style:{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--red)",marginBottom:7}},"✗ Missing ("+gap.total_missing+")"),
+      e("div",null,gap.missing_skills.map(s=>e("span",{key:s,style:{background:"rgba(248,113,113,.1)",border:"1px solid rgba(248,113,113,.25)",color:"var(--red)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}},s)))
+    )
   );
 }
 
-// ── Candidate Detail Modal ─────────────────────────────────────────────────
-function CandidateModal({resume, onClose}){
+// ── Candidate Modal ────────────────────────────────────────────────────────
+function CandidateModal({resume,onClose}) {
   if(!resume) return null;
-  const bd=resume.score_breakdown||{};
-  const sc=scoreColor(resume.score||0);
-  return(
-    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal">
-        {/* Header */}
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:22}}>
-          <div>
-            <div style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:4}}>{resume.candidate_name}</div>
-            <div style={{fontSize:11,color:"var(--text3)",marginBottom:8}}>{resume.filename}</div>
-            <span className={`vbadge ${verdictCls(resume.verdict)}`}>{resume.verdict}</span>
-          </div>
-          <div style={{textAlign:"right"}}>
-            <div style={{fontFamily:"var(--mono)",fontSize:40,color:sc,lineHeight:1}}>{(resume.score||0).toFixed(1)}</div>
-            <div style={{fontSize:11,color:"var(--text3)"}}>match score</div>
-          </div>
-        </div>
-
-        <div className="grid-2" style={{gap:16,marginBottom:18}}>
-          {/* Contact */}
-          <div className="card-sm">
-            <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--text3)",marginBottom:10}}>Contact</div>
-            {[["📧",resume.email],["📞",resume.phone],["💻",resume.github],["🔗",resume.linkedin]]
-              .filter(([,v])=>v)
-              .map(([icon,val])=>(
-                <div key={icon} style={{fontSize:12,color:"var(--text2)",marginBottom:5,wordBreak:"break-all"}}>
-                  {icon} {val}
-                </div>
-              ))}
-            <div style={{marginTop:8,fontSize:12,color:"var(--text2)"}}>
-              ⏱ {resume.experience_years||0}+ yrs experience
-            </div>
-          </div>
-          {/* Radar */}
-          <div className="card-sm" style={{height:165}}><RadarChart data={resume}/></div>
-        </div>
-
-        {/* Score breakdown */}
-        <div className="sec-head">Score Breakdown</div>
-        {[
-          ["TF-IDF Similarity", bd.tfidf_similarity||0, "#6366f1"],
-          ["Skill Match",       bd.skill_match||0,      "#34d399"],
-          ["Experience Fit",    bd.experience_fit||0,   "#fbbf24"],
-          ["Education Fit",     bd.education_fit||0,    "#818cf8"],
-        ].map(([label,val,color])=>(
-          <div className="bd-item" key={label}>
-            <div className="bd-row">
-              <span style={{color:"var(--text2)"}}>{label}</span>
-              <span style={{fontFamily:"var(--mono)",color}}>{val.toFixed(1)}%</span>
-            </div>
-            <div className="bd-track"><div className="bd-fill" style={{width:`${val}%`,background:color}}/></div>
-          </div>
-        ))}
-
-        {/* Gap Analysis */}
-        <div className="sec-head">Gap Analysis vs Job Description</div>
-        <GapPanel resume={resume}/>
-
-        {/* Keywords */}
-        {resume.matched_keywords?.length>0&&(
-          <>
-            <div className="sec-head">JD Keywords Found in Resume</div>
-            <div>{resume.matched_keywords.slice(0,25).map(kw=>(
-              <span key={kw} style={{background:"rgba(251,191,36,0.1)",border:"1px solid rgba(251,191,36,0.25)",
-                color:"var(--amber)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}}>{kw}</span>
-            ))}</div>
-          </>
-        )}
-
-        {/* Skills */}
-        {resume.skills&&Object.keys(resume.skills).length>0&&(
-          <>
-            <div className="sec-head">Skills Detected by spaCy</div>
-            {Object.entries(resume.skills).map(([cat,skills])=>
-              skills.length>0&&(
-                <div key={cat} style={{marginBottom:10}}>
-                  <div style={{fontSize:11,color:"var(--text3)",marginBottom:5}}>{cat}</div>
-                  <div>{skills.map(s=><span key={s} className="tag">{s}</span>)}</div>
-                </div>
-              )
-            )}
-          </>
-        )}
-
-        {/* Education */}
-        {resume.education?.length>0&&(
-          <>
-            <div className="sec-head">Education</div>
-            {resume.education.map((e,i)=>(
-              <div key={i} className="card-sm" style={{marginBottom:7,fontSize:13,color:"var(--text2)"}}>🎓 {e}</div>
-            ))}
-          </>
-        )}
-
-        <div style={{marginTop:22,display:"flex",justifyContent:"flex-end"}}>
-          <button className="btn btn-ghost" onClick={onClose}>Close</button>
-        </div>
-      </div>
-    </div>
+  const bd = resume.score_breakdown||{};
+  const col = sc(resume.score||0);
+  return e("div",{className:"overlay",onClick:ev=>{if(ev.target===ev.currentTarget)onClose();}},
+    e("div",{className:"modal"},
+      e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:22}},
+        e("div",null,
+          e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:22,marginBottom:4}},resume.candidate_name),
+          e("div",{style:{fontSize:11,color:"var(--text3)",marginBottom:8}},resume.filename),
+          e("span",{className:vc(resume.verdict)},resume.verdict)
+        ),
+        e("div",{style:{textAlign:"right"}},
+          e("div",{style:{fontFamily:"'DM Mono',monospace",fontSize:40,color:col,lineHeight:1}},(resume.score||0).toFixed(1)),
+          e("div",{style:{fontSize:11,color:"var(--text3)"}},"match score")
+        )
+      ),
+      e("div",{className:"grid2",style:{gap:16,marginBottom:18}},
+        e("div",{className:"card-sm"},
+          e("div",{style:{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--text3)",marginBottom:10}},"Contact"),
+          [["📧",resume.email],["📞",resume.phone],["💻",resume.github],["🔗",resume.linkedin]].filter(x=>x[1]).map(([icon,val])=>
+            e("div",{key:icon,style:{fontSize:12,color:"var(--text2)",marginBottom:5,wordBreak:"break-all"}},icon+" "+val)
+          ),
+          e("div",{style:{marginTop:8,fontSize:12,color:"var(--text2)"}},"⏱ "+(resume.experience_years||0)+"+ yrs experience")
+        ),
+        e("div",{className:"card-sm",style:{height:165}},
+          e(ChartCanvas,{type:"radar",config:{
+            data:{labels:["TF-IDF","Skills","Experience","Education"],datasets:[{data:[bd.tfidf_similarity||0,bd.skill_match||0,bd.experience_fit||0,bd.education_fit||0],backgroundColor:"rgba(99,102,241,.15)",borderColor:"#6366f1",pointBackgroundColor:"#818cf8",borderWidth:1.5,pointRadius:3}]},
+            options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,grid:{color:"rgba(99,120,255,.1)"},ticks:{display:false},pointLabels:{color:"#8b93b8",font:{size:10,family:"Outfit"}}}},plugins:{legend:{display:false}}}
+          },deps:[resume.id]})
+        )
+      ),
+      e("div",{className:"sh"},"Score Breakdown"),
+      [["TF-IDF Similarity",bd.tfidf_similarity||0,"#6366f1"],["Skill Match",bd.skill_match||0,"#34d399"],["Experience Fit",bd.experience_fit||0,"#fbbf24"],["Education Fit",bd.education_fit||0,"#818cf8"]].map(([lbl,val,col2])=>
+        e("div",{key:lbl,className:"bdi"},
+          e("div",{className:"bdr"},e("span",{style:{color:"var(--text2)"}},lbl),e("span",{style:{fontFamily:"'DM Mono',monospace",color:col2}},val.toFixed(1)+"%")),
+          e("div",{className:"bdt"},e("div",{className:"bdf",style:{width:val+"%",background:col2}}))
+        )
+      ),
+      e("div",{className:"sh"},"Gap Analysis"),
+      e(GapPanel,{resume}),
+      resume.matched_keywords&&resume.matched_keywords.length>0 && [
+        e("div",{key:"kw-head",className:"sh"},"JD Keywords Found"),
+        e("div",{key:"kw-list"},resume.matched_keywords.slice(0,25).map(kw=>
+          e("span",{key:kw,style:{background:"rgba(251,191,36,.1)",border:"1px solid rgba(251,191,36,.25)",color:"var(--amber)",borderRadius:20,padding:"2px 9px",fontSize:11,margin:2,display:"inline-block"}},kw)
+        ))
+      ],
+      resume.skills&&Object.keys(resume.skills).length>0 && [
+        e("div",{key:"sk-head",className:"sh"},"Skills Detected by spaCy"),
+        ...Object.entries(resume.skills).filter(([,s])=>s.length>0).map(([cat,skills])=>
+          e("div",{key:cat,style:{marginBottom:10}},
+            e("div",{style:{fontSize:11,color:"var(--text3)",marginBottom:5}},cat),
+            e("div",null,skills.map(s=>e("span",{key:s,className:"tag"},s)))
+          )
+        )
+      ],
+      resume.education&&resume.education.length>0 && [
+        e("div",{key:"edu-head",className:"sh"},"Education"),
+        ...resume.education.map((ed,i)=>e("div",{key:i,className:"card-sm",style:{marginBottom:7,fontSize:13,color:"var(--text2)"}},"🎓 "+ed))
+      ],
+      e("div",{style:{marginTop:22,display:"flex",justifyContent:"flex-end"}},
+        e("button",{className:"btn btng",onClick:onClose},"Close")
+      )
+    )
   );
 }
 
-// ── Create Job Modal ────────────────────────────────────────────────────────
+// ── Create Job Modal ───────────────────────────────────────────────────────
 const SAMPLE_JDS = {
-  "Data Engineer": `We are seeking a Data Engineer with experience in Python, SQL, and cloud platforms.
-Required Skills: Python, SQL, Apache Spark, ETL, AWS S3, Airflow, PostgreSQL, Docker, Git.
-Responsibilities: Build scalable data pipelines, work with cloud infrastructure, design data warehouse schemas.
-Education: Bachelor or Master in Computer Science or Data Science.
-Experience: 1-3 years in data engineering.`,
-  "ML Engineer": `Looking for a Machine Learning Engineer to build and deploy ML models at scale.
-Required: Python, TensorFlow or PyTorch, scikit-learn, NLP, REST APIs, Git, Docker, AWS.
-Education: Master in Computer Science or Data Science preferred.
-Experience: 2+ years building production ML systems.`,
-  "Full Stack Developer": `Full Stack Developer to build modern web applications.
-Required: JavaScript, React, Node.js, REST APIs, SQL, Git, Docker.
-Nice to have: TypeScript, AWS, MongoDB, Redis, Next.js.
-Education: Bachelor in Computer Science or Engineering.
-Experience: 2+ years of full-stack development.`,
-  "DevOps / Cloud Engineer": `DevOps Engineer to manage and scale cloud infrastructure.
-Required: AWS or Azure, Kubernetes, Docker, Terraform, CI/CD pipelines, Linux, Python.
-Responsibilities: Infrastructure automation, deployment pipelines, monitoring, security.
-Education: Bachelor in Computer Science or related field.
-Experience: 2+ years in DevOps or cloud engineering.`,
+  "Data Engineer":"We are seeking a Data Engineer with experience in Python, SQL, and cloud platforms.\nRequired Skills: Python, SQL, Apache Spark, ETL, AWS S3, Airflow, PostgreSQL, Docker, Git.\nEducation: Bachelor or Master in Computer Science or Data Science.\nExperience: 1-3 years in data engineering.",
+  "ML Engineer":"Looking for a Machine Learning Engineer to build and deploy ML models.\nRequired: Python, TensorFlow or PyTorch, scikit-learn, NLP, REST APIs, Git, Docker, AWS.\nEducation: Master in CS or Data Science preferred.\nExperience: 2+ years building production ML systems.",
+  "Full Stack Developer":"Full Stack Developer to build modern web applications.\nRequired: JavaScript, React, Node.js, REST APIs, SQL, Git, Docker.\nNice to have: TypeScript, AWS, MongoDB.\nEducation: Bachelor in CS. Experience: 2+ years.",
+  "DevOps / Cloud Engineer":"DevOps Engineer to manage and scale cloud infrastructure.\nRequired: AWS or Azure, Kubernetes, Docker, Terraform, CI/CD, Linux, Python.\nExperience: 2+ years in DevOps or cloud.",
 };
 
-function CreateJobModal({onClose, onCreate, toast}){
-  const [form,setForm]=useState({title:"",company:"",description:"",min_experience:0});
-  const [errors,setErrors]=useState({});
-  const [loading,setLoading]=useState(false);
+function CreateJobModal({onClose,onCreate,toast}) {
+  const [title,setTitle]   = useState("");
+  const [company,setCompany] = useState("");
+  const [desc,setDesc]     = useState("");
+  const [minExp,setMinExp] = useState(0);
+  const [errors,setErrors] = useState({});
+  const [loading,setLoading] = useState(false);
 
-  function validate(){
-    const e={};
-    if(!form.title.trim()) e.title="Job title is required";
-    if(!form.description.trim()) e.description="Job description is required";
-    else if(form.description.trim().length<30) e.description="Description is too short (min 30 characters)";
-    setErrors(e);
-    return Object.keys(e).length===0;
+  function validate() {
+    const er={};
+    if(!title.trim()) er.title="Job title is required";
+    if(!desc.trim()) er.desc="Job description is required";
+    else if(desc.trim().length<30) er.desc="Needs at least 30 characters";
+    setErrors(er);
+    return Object.keys(er).length===0;
   }
 
-  async function submit(){
+  async function submit() {
     if(!validate()) return;
     setLoading(true);
-    try{
-      const data = await api("/jobs", {
-        method:"POST",
-        body: JSON.stringify({
-          title:       form.title.trim(),
-          company:     form.company.trim(),
-          description: form.description.trim(),
-          min_experience: parseInt(form.min_experience)||0,
-        })
-      });
-      toast(`✅ Job "${data.title}" created!`, "success");
+    try {
+      const data = await api("/jobs",{method:"POST",body:JSON.stringify({title:title.trim(),company:company.trim(),description:desc.trim(),min_experience:parseInt(minExp)||0})});
+      toast("Job '"+data.title+"' created!","success");
       onCreate(data);
       onClose();
-    } catch(e){
-      toast(e.message, "error");
-    } finally{
-      setLoading(false);
-    }
+    } catch(ex) { toast("Failed: "+ex.message,"error"); }
+    finally { setLoading(false); }
   }
 
-  function loadSample(key){
-    if(!key) return;
-    setForm(f=>({...f, description:SAMPLE_JDS[key], title:f.title||key}));
-    setErrors(e=>({...e,description:undefined,title:undefined}));
-  }
-
-  return(
-    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal">
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:22}}>
-          <div>
-            <div style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:4}}>Create Job Posting</div>
-            <div style={{fontSize:12,color:"var(--text3)"}}>Define the role to screen candidates against</div>
-          </div>
-          <button style={{background:"none",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:20,lineHeight:1,padding:4}} onClick={onClose}>✕</button>
-        </div>
-
-        {/* Sample JD loader */}
-        <div className="form-group">
-          <label className="label">Quick Start — Load a Sample JD</label>
-          <select className="input" defaultValue="" onChange={e=>loadSample(e.target.value)}>
-            <option value="">— Choose a template to auto-fill —</option>
-            {Object.keys(SAMPLE_JDS).map(k=><option key={k} value={k}>{k}</option>)}
-          </select>
-        </div>
-
-        <div className="grid-2" style={{gap:12}}>
-          <div className="form-group">
-            <label className="label">Job Title *</label>
-            <input className={`input ${errors.title?"error-field":""}`}
-              placeholder="e.g. Senior Data Engineer"
-              value={form.title}
-              onChange={e=>{setForm(f=>({...f,title:e.target.value}));setErrors(er=>({...er,title:undefined}));}}/>
-            {errors.title&&<div className="field-err">{errors.title}</div>}
-          </div>
-          <div className="form-group">
-            <label className="label">Company</label>
-            <input className="input" placeholder="e.g. TechCorp India"
-              value={form.company}
-              onChange={e=>setForm(f=>({...f,company:e.target.value}))}/>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label className="label">Job Description *</label>
-          <textarea className={`input ${errors.description?"error-field":""}`}
-            style={{minHeight:180}}
-            placeholder="Paste the full job description here. Include required skills, years of experience, and education requirements for best results..."
-            value={form.description}
-            onChange={e=>{setForm(f=>({...f,description:e.target.value}));setErrors(er=>({...er,description:undefined}));}}/>
-          <div className={`char-count ${form.description.length<30&&form.description.length>0?"warn":""}`}>
-            {form.description.length} characters{form.description.length<30&&form.description.length>0?" (need at least 30)":""}
-          </div>
-          {errors.description&&<div className="field-err">{errors.description}</div>}
-        </div>
-
-        <div className="form-group">
-          <label className="label">Minimum Experience (years)</label>
-          <input className="input" type="number" min="0" max="20"
-            value={form.min_experience}
-            onChange={e=>setForm(f=>({...f,min_experience:parseInt(e.target.value)||0}))}
-            style={{maxWidth:120}}/>
-        </div>
-
-        <div style={{display:"flex",gap:10,justifyContent:"flex-end",marginTop:8,paddingTop:16,borderTop:"1px solid var(--border)"}}>
-          <button className="btn btn-ghost" onClick={onClose} disabled={loading}>Cancel</button>
-          <button className="btn btn-primary" onClick={submit} disabled={loading}>
-            {loading?<><div className="spinner"/> Creating...</>:"✓ Create Job Posting"}
-          </button>
-        </div>
-      </div>
-    </div>
+  return e("div",{className:"overlay",onClick:ev=>{if(ev.target===ev.currentTarget)onClose();}},
+    e("div",{className:"modal"},
+      e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:22}},
+        e("div",null,
+          e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:22,marginBottom:4}},"Create Job Posting"),
+          e("div",{style:{fontSize:12,color:"var(--text3)"}},"Define the role to screen candidates against")
+        ),
+        e("button",{style:{background:"none",border:"none",color:"var(--text3)",fontSize:20,cursor:"pointer",padding:4},onClick:onClose},"✕")
+      ),
+      e("div",{className:"form-group"},
+        e("label",{className:"lbl"},"Quick Start — Load Sample JD"),
+        e("select",{onChange:ev=>{const k=ev.target.value;if(k){setDesc(SAMPLE_JDS[k]);if(!title)setTitle(k);setErrors({});}},defaultValue:""},
+          e("option",{value:""},"— Choose a template —"),
+          Object.keys(SAMPLE_JDS).map(k=>e("option",{key:k,value:k},k))
+        )
+      ),
+      e("div",{className:"grid2",style:{gap:12}},
+        e("div",{className:"form-group"},
+          e("label",{className:"lbl"},"Job Title *"),
+          e("input",{className:errors.title?"ierr":"",placeholder:"e.g. Senior Data Engineer",value:title,onInput:ev=>{setTitle(ev.target.value);setErrors(er=>({...er,title:undefined}));}}),
+          errors.title&&e("div",{className:"ferr"},errors.title)
+        ),
+        e("div",{className:"form-group"},
+          e("label",{className:"lbl"},"Company"),
+          e("input",{placeholder:"e.g. TechCorp India",value:company,onInput:ev=>setCompany(ev.target.value)})
+        )
+      ),
+      e("div",{className:"form-group"},
+        e("label",{className:"lbl"},"Job Description *"),
+        e("textarea",{className:errors.desc?"ierr":"",style:{minHeight:180},placeholder:"Paste the full job description here...",value:desc,onInput:ev=>{setDesc(ev.target.value);setErrors(er=>({...er,desc:undefined}));}}),
+        e("div",{className:"ccnt"},desc.length+" chars"+(desc.length<30&&desc.length>0?" — need at least 30":"")),
+        errors.desc&&e("div",{className:"ferr"},errors.desc)
+      ),
+      e("div",{className:"form-group"},
+        e("label",{className:"lbl"},"Min. Experience (years)"),
+        e("input",{type:"number",min:0,max:20,value:minExp,style:{maxWidth:120},onInput:ev=>setMinExp(ev.target.value)})
+      ),
+      e("div",{style:{display:"flex",gap:10,justifyContent:"flex-end",marginTop:8,paddingTop:16,borderTop:"1px solid var(--border)"}},
+        e("button",{className:"btn btng",onClick:onClose,disabled:loading},"Cancel"),
+        e("button",{className:"btn btnp",onClick:submit,disabled:loading},
+          loading?[e("div",{key:"sp",className:"sp"}),e("span",{key:"t"}," Creating...")]:"✓ Create Job Posting"
+        )
+      )
+    )
   );
 }
 
 // ── Upload Panel ───────────────────────────────────────────────────────────
-function UploadPanel({job, onUploaded, toast}){
-  const [files,setFiles]=useState([]);
-  const [drag,setDrag]=useState(false);
-  const [loading,setLoading]=useState(false);
-  const [progress,setProgress]=useState("");
-  const inputRef=useRef(null);
+function UploadPanel({job,onUploaded,toast}) {
+  const [files,setFiles]   = useState([]);
+  const [drag,setDrag]     = useState(false);
+  const [loading,setLoading] = useState(false);
+  const inputRef = useRef(null);
 
-  function addFiles(newFiles){
-    const valid=[...newFiles].filter(f=>f.type==="application/pdf"||f.name.endsWith(".txt")||f.name.endsWith(".pdf"));
-    const invalid=[...newFiles].filter(f=>!valid.includes(f));
-    if(invalid.length) toast(`⚠ ${invalid.length} file(s) skipped — only PDF and TXT supported`, "info");
-    setFiles(prev=>{
-      const names=new Set(prev.map(f=>f.name));
-      const added=valid.filter(f=>!names.has(f.name));
-      if(added.length<valid.length) toast(`${valid.length-added.length} duplicate file(s) skipped`, "info");
-      return [...prev,...added];
-    });
+  function addFiles(newFiles) {
+    const valid=[...newFiles].filter(f=>f.name.endsWith(".pdf")||f.name.endsWith(".txt"));
+    if(valid.length<newFiles.length) toast((newFiles.length-valid.length)+" file(s) skipped — PDF/TXT only","info");
+    setFiles(prev=>{const names=new Set(prev.map(f=>f.name));return[...prev,...valid.filter(f=>!names.has(f.name))];});
   }
 
-  async function upload(){
+  async function upload() {
     if(!files.length||!job) return;
     setLoading(true);
-    setProgress("Uploading and processing...");
-    try{
-      const fd=new FormData();
-      files.forEach(f=>fd.append("files",f));
-      const data=await api(`/jobs/${job.id}/upload`,{method:"POST",body:fd});
-      toast(`✅ ${data.message}`, "success");
-      setFiles([]);
-      onUploaded();
-    } catch(e){
-      toast(`Upload failed: ${e.message}`, "error");
-    } finally{
-      setLoading(false);
-      setProgress("");
-    }
+    try {
+      const fd=new FormData(); files.forEach(f=>fd.append("files",f));
+      const data=await api("/jobs/"+job.id+"/upload",{method:"POST",body:fd});
+      toast(data.message,"success"); setFiles([]); onUploaded();
+    } catch(ex) { toast("Upload failed: "+ex.message,"error"); }
+    finally { setLoading(false); }
   }
 
-  const totalSize=(files.reduce((s,f)=>s+f.size,0)/1024/1024).toFixed(1);
+  const totalMB = (files.reduce((s,f)=>s+f.size,0)/1024/1024).toFixed(1);
 
-  return(
-    <div className="card">
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-        <div style={{fontFamily:"var(--serif)",fontSize:18}}>Upload Resumes</div>
-        <div style={{fontSize:11,color:"var(--text3)"}}>PDF and TXT supported</div>
-      </div>
-
-      <div
-        className={`upload-zone ${drag?"drag":""}`}
-        onClick={()=>inputRef.current?.click()}
-        onDragOver={e=>{e.preventDefault();setDrag(true)}}
-        onDragLeave={()=>setDrag(false)}
-        onDrop={e=>{e.preventDefault();setDrag(false);addFiles(e.dataTransfer.files)}}
-      >
-        <div style={{fontSize:38,marginBottom:10}}>📂</div>
-        <div style={{fontSize:14,color:"var(--text2)",fontWeight:500}}>Drop PDF or TXT resumes here</div>
-        <div style={{fontSize:12,color:"var(--text3)",marginTop:5}}>or click to browse · multiple files supported</div>
-        <input ref={inputRef} type="file" multiple accept=".pdf,.txt"
-          style={{display:"none"}} onChange={e=>addFiles(e.target.files)}/>
-      </div>
-
-      {files.length>0&&(
-        <div style={{marginTop:14}}>
-          <div style={{fontSize:11,color:"var(--text3)",marginBottom:8}}>
-            {files.length} file{files.length>1?"s":""} selected · {totalSize} MB total
-          </div>
-          {files.map((f,i)=>(
-            <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",
-              background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,
-              padding:"8px 12px",marginBottom:6,fontSize:12}}>
-              <div style={{display:"flex",alignItems:"center",gap:8}}>
-                <span>{f.name.endsWith(".pdf")?"📄":"📝"}</span>
-                <span style={{color:"var(--text2)"}}>{f.name}</span>
-              </div>
-              <div style={{display:"flex",alignItems:"center",gap:10}}>
-                <span style={{color:"var(--text3)"}}>{(f.size/1024).toFixed(0)} KB</span>
-                <button style={{background:"none",border:"none",cursor:"pointer",
-                  color:"var(--text3)",fontSize:14,lineHeight:1,padding:2}}
-                  onClick={()=>setFiles(prev=>prev.filter((_,j)=>j!==i))}>✕</button>
-              </div>
-            </div>
-          ))}
-
-          {loading&&<div style={{fontSize:12,color:"var(--text3)",margin:"10px 0",display:"flex",alignItems:"center",gap:8}}>
-            <div className="spinner"/> {progress}
-          </div>}
-
-          <div style={{marginTop:14,display:"flex",gap:10,alignItems:"center"}}>
-            <button className="btn btn-primary" onClick={upload} disabled={loading}>
-              {loading?<><div className="spinner"/> Analysing...</>:`🚀 Screen ${files.length} Resume${files.length>1?"s":""}`}
-            </button>
-            <button className="btn btn-ghost" onClick={()=>setFiles([])} disabled={loading}>Clear All</button>
-          </div>
-        </div>
-      )}
-    </div>
+  return e("div",{className:"card"},
+    e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}},
+      e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:18}},"Upload Resumes"),
+      e("div",{style:{fontSize:11,color:"var(--text3)"}},"PDF and TXT supported")
+    ),
+    e("div",{className:"upload-zone"+(drag?" drag":""),
+      onClick:()=>inputRef.current&&inputRef.current.click(),
+      onDragOver:ev=>{ev.preventDefault();setDrag(true)},
+      onDragLeave:()=>setDrag(false),
+      onDrop:ev=>{ev.preventDefault();setDrag(false);addFiles(ev.dataTransfer.files)}},
+      e("div",{style:{fontSize:38,marginBottom:10}},"📂"),
+      e("div",{style:{fontSize:14,color:"var(--text2)",fontWeight:500}},"Drop PDF or TXT resumes here"),
+      e("div",{style:{fontSize:12,color:"var(--text3)",marginTop:5}},"or click to browse · multiple files supported"),
+      e("input",{ref:inputRef,type:"file",multiple:true,accept:".pdf,.txt",style:{display:"none"},onChange:ev=>addFiles(ev.target.files)})
+    ),
+    files.length>0 && e("div",{style:{marginTop:14}},
+      e("div",{style:{fontSize:11,color:"var(--text3)",marginBottom:8}},files.length+" file"+(files.length>1?"s":"")+" · "+totalMB+" MB total"),
+      files.map((f,i)=>e("div",{key:i,style:{display:"flex",alignItems:"center",justifyContent:"space-between",background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 12px",marginBottom:6,fontSize:12}},
+        e("span",{style:{color:"var(--text2)"}},f.name.endsWith(".pdf")?"📄 ":"📝 "+f.name),
+        e("span",{style:{display:"flex",alignItems:"center",gap:10}},
+          e("span",{style:{color:"var(--text3)"}},(f.size/1024).toFixed(0)+" KB"),
+          e("button",{style:{background:"none",border:"none",color:"var(--text3)",fontSize:14,cursor:"pointer",lineHeight:1,padding:2},onClick:()=>setFiles(prev=>prev.filter((_,j)=>j!==i))},"✕")
+        )
+      )),
+      e("div",{style:{marginTop:14,display:"flex",gap:10,alignItems:"center"}},
+        e("button",{className:"btn btnp",onClick:upload,disabled:loading},
+          loading?[e("div",{key:"sp",className:"sp"}),e("span",{key:"t"}," Analysing...")]:"🚀 Screen "+files.length+" Resume"+(files.length>1?"s":"")
+        ),
+        e("button",{className:"btn btng",onClick:()=>setFiles([]),disabled:loading},"Clear All")
+      )
+    )
   );
 }
 
 // ── Rankings Panel ─────────────────────────────────────────────────────────
-function RankingsPanel({resumes, jobId, onDeleted, toast}){
-  const [selected,setSelected]=useState(null);
-  const [deleting,setDeleting]=useState(null);
+function RankingsPanel({resumes,jobId,onDeleted,toast}) {
+  const [selected,setSelected] = useState(null);
+  const [deleting,setDeleting] = useState(null);
 
-  async function deleteResume(r,e){
-    e.stopPropagation();
-    if(!confirm(`Remove ${r.candidate_name} from rankings?`)) return;
+  async function del(r,ev) {
+    ev.stopPropagation();
+    if(!confirm("Remove "+r.candidate_name+" from rankings?")) return;
     setDeleting(r.id);
-    try{
-      await api(`/jobs/${jobId}/resumes/${r.id}`,{method:"DELETE"});
-      toast(`Removed ${r.candidate_name}`, "info");
-      onDeleted();
-    } catch(e){
-      toast(`Delete failed: ${e.message}`, "error");
-    } finally{
-      setDeleting(null);
-    }
+    try { await api("/jobs/"+jobId+"/resumes/"+r.id,{method:"DELETE"}); toast("Removed "+r.candidate_name,"info"); onDeleted(); }
+    catch(ex) { toast("Delete failed: "+ex.message,"error"); }
+    finally { setDeleting(null); }
   }
 
-  if(!resumes?.length) return(
-    <div className="empty">
-      <div className="empty-icon">📋</div>
-      <div className="empty-title">No resumes screened yet</div>
-      <div className="empty-sub">Upload PDF or TXT resumes above to see the ranked leaderboard</div>
-    </div>
+  if(!resumes||!resumes.length) return e("div",{className:"empty"},
+    e("div",{style:{fontSize:44,marginBottom:12,opacity:.35}},"📋"),
+    e("div",{style:{fontSize:15,color:"var(--text2)",marginBottom:6,fontWeight:500}},"No resumes screened yet"),
+    e("div",{style:{fontSize:13}},"Upload PDF or TXT resumes above to see the ranked leaderboard")
   );
 
-  return(
-    <>
-      {resumes.map(r=>{
-        const sc=scoreColor(r.score||0);
-        return(
-          <div key={r.id} className="rank-card" onClick={()=>setSelected(r)}>
-            <div style={{fontFamily:"var(--mono)",fontSize:22,fontWeight:500,color:sc,minWidth:38}}>#{r.rank}</div>
-            <div style={{flex:1,minWidth:0}}>
-              <div style={{fontSize:15,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{r.candidate_name}</div>
-              <div style={{fontSize:11,color:"var(--text3)",marginTop:2}}>{r.filename}</div>
-              <div style={{marginTop:7}}><span className={`vbadge ${verdictCls(r.verdict)}`}>{r.verdict}</span></div>
-            </div>
-            <div style={{minWidth:190}}>
-              <div style={{display:"flex",justifyContent:"space-between",marginBottom:5,fontSize:12}}>
-                <span style={{color:"var(--text3)"}}>Match Score</span>
-                <span style={{fontFamily:"var(--mono)",fontWeight:500,color:sc}}>{(r.score||0).toFixed(1)}%</span>
-              </div>
-              <div className="rank-bar-bg"><div className="rank-bar" style={{width:`${r.score||0}%`,background:sc}}/></div>
-            </div>
-            <div style={{fontSize:11,color:"var(--text3)",minWidth:100,textAlign:"right",lineHeight:1.8}}>
-              🛠 {r.total_skills||0} skills<br/>⏱ {r.experience_years||0}+ yrs
-            </div>
-            <button className="btn btn-danger btn-sm"
-              onClick={e=>deleteResume(r,e)} disabled={deleting===r.id}
-              style={{flexShrink:0}}>
-              {deleting===r.id?"…":"✕"}
-            </button>
-          </div>
-        );
-      })}
-      {selected&&<CandidateModal resume={selected} onClose={()=>setSelected(null)}/>}
-    </>
+  return e("div",null,
+    resumes.map(r=>e("div",{key:r.id,className:"rank-card",onClick:()=>setSelected(r)},
+      e("div",{style:{fontFamily:"'DM Mono',monospace",fontSize:22,fontWeight:500,color:sc(r.score||0),minWidth:38}},"#"+r.rank),
+      e("div",{style:{flex:1,minWidth:0}},
+        e("div",{style:{fontSize:15,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},r.candidate_name),
+        e("div",{style:{fontSize:11,color:"var(--text3)",marginTop:2}},r.filename),
+        e("div",{style:{marginTop:7}},e("span",{className:vc(r.verdict)},r.verdict))
+      ),
+      e("div",{style:{minWidth:190}},
+        e("div",{style:{display:"flex",justifyContent:"space-between",marginBottom:5,fontSize:12}},
+          e("span",{style:{color:"var(--text3)"}},"Match Score"),
+          e("span",{style:{fontFamily:"'DM Mono',monospace",fontWeight:500,color:sc(r.score||0)}},(r.score||0).toFixed(1)+"%")
+        ),
+        e("div",{className:"sbar-bg"},e("div",{className:"sbar",style:{width:(r.score||0)+"%",background:sc(r.score||0)}}))
+      ),
+      e("div",{style:{fontSize:11,color:"var(--text3)",minWidth:100,textAlign:"right",lineHeight:1.8}},"🛠 "+(r.total_skills||0)+" skills\n⏱ "+(r.experience_years||0)+"+ yrs"),
+      e("button",{className:"btn btnd btnsm",onClick:ev=>del(r,ev),disabled:deleting===r.id,style:{flexShrink:0}},deleting===r.id?"…":"✕")
+    )),
+    selected&&e(CandidateModal,{resume:selected,onClose:()=>setSelected(null)})
   );
 }
 
-// ── Analytics Page ─────────────────────────────────────────────────────────
-function AnalyticsPage({toast}){
-  const [overview,setOverview]=useState(null);
-  const [skills,setSkills]=useState([]);
-  const [dist,setDist]=useState(null);
-  const [loading,setLoading]=useState(true);
+// ── Skill Heatmap ──────────────────────────────────────────────────────────
+function SkillHeatmap({jobId}) {
+  const [data,setData] = useState(null);
+  useEffect(()=>{if(!jobId)return;api("/jobs/"+jobId+"/heatmap").then(setData).catch(()=>{});},[jobId]);
+  if(!data||!data.matrix||!data.matrix.length) return null;
+  const maxVal = Math.max(...data.matrix.flatMap(r=>data.categories.map(c=>r[c]||0)),1);
+  return e("div",{className:"card",style:{overflowX:"auto"}},
+    e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:16,marginBottom:14}},"Skill Coverage Heatmap"),
+    e("table",{className:"hmt"},
+      e("thead",null,e("tr",null,
+        e("th",{style:{textAlign:"left",fontSize:10,minWidth:130,padding:"6px 10px",writingMode:"initial",transform:"none",height:"auto"}},"Candidate"),
+        data.categories.map(c=>e("th",{key:c},c))
+      )),
+      e("tbody",null,data.matrix.map((row,i)=>e("tr",{key:i,style:{borderTop:"1px solid var(--border)"}},
+        e("td",{style:{padding:"8px 10px",color:"var(--text2)",fontSize:12,whiteSpace:"nowrap"}},"#"+row.rank+" "+row.name),
+        data.categories.map(cat=>{
+          const v=row[cat]||0;
+          const bg=v===0?"var(--bg3)":"rgba(99,102,241,"+(0.12+(v/maxVal)*0.7)+")";
+          return e("td",{key:cat,style:{textAlign:"center",padding:"5px 3px"}},
+            e("div",{className:"hmc",style:{background:bg,color:v===0?"var(--text3)":"var(--accent2)"}},v||"—")
+          );
+        })
+      )))
+    )
+  );
+}
 
+// ── Batch Radar ────────────────────────────────────────────────────────────
+function BatchRadar({jobId}) {
+  const [candidates,setCandidates] = useState([]);
+  useEffect(()=>{if(!jobId)return;api("/jobs/"+jobId+"/compare?top=3").then(setCandidates).catch(()=>{});},[jobId]);
+  if(!candidates.length) return null;
+  const cols = ["#6366f1","#34d399","#fbbf24"];
+  const datasets = candidates.map((c,i)=>({
+    label:"#"+c.rank+" "+(c.name||"?").split(" ")[0],
+    data:[c.breakdown&&c.breakdown.tfidf_similarity||0,c.breakdown&&c.breakdown.skill_match||0,c.breakdown&&c.breakdown.experience_fit||0,c.breakdown&&c.breakdown.education_fit||0],
+    backgroundColor:cols[i]+"28",borderColor:cols[i],pointBackgroundColor:cols[i],borderWidth:2,pointRadius:4
+  }));
+  return e("div",{className:"card"},
+    e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:16,marginBottom:3}},"Top "+candidates.length+" — Side-by-Side Comparison"),
+    e("div",{style:{fontSize:11,color:"var(--text3)",marginBottom:14}},"Radar chart across all 4 scoring dimensions"),
+    e("div",{style:{height:280}},e(ChartCanvas,{type:"radar",config:{
+      data:{labels:["TF-IDF","Skill Match","Exp Fit","Edu Fit"],datasets},
+      options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,grid:{color:"rgba(99,120,255,.1)"},ticks:{display:false},pointLabels:{color:"#8b93b8",font:{size:10,family:"Outfit"}}}},plugins:{legend:{position:"bottom",labels:{color:"#8b93b8",font:{size:10,family:"Outfit"},boxWidth:10,padding:8}}}}
+    },deps:[candidates.length]}))
+  );
+}
+
+// ── Analytics ──────────────────────────────────────────────────────────────
+function AnalyticsPage({toast}) {
+  const [ov,setOv]   = useState(null);
+  const [sk,setSk]   = useState([]);
+  const [dist,setDist] = useState(null);
+  const [loading,setLoading] = useState(true);
   useEffect(()=>{
-    setLoading(true);
-    Promise.all([
-      api("/analytics/overview"),
-      api("/analytics/skills"),
-      api("/analytics/score-distribution"),
-    ]).then(([ov,sk,di])=>{
-      setOverview(ov); setSkills(sk.top_skills||[]); setDist(di.distribution);
-    }).catch(e=>toast(`Failed to load analytics: ${e.message}`,"error"))
+    Promise.all([api("/analytics/overview"),api("/analytics/skills"),api("/analytics/score-distribution")])
+      .then(([o,s,d])=>{setOv(o);setSk(s.top_skills||[]);setDist(d.distribution);})
+      .catch(ex=>toast("Analytics error: "+ex.message,"error"))
       .finally(()=>setLoading(false));
   },[]);
-
-  if(loading) return(
-    <div style={{display:"flex",justifyContent:"center",padding:80}}>
-      <div className="spinner spinner-lg"/>
-    </div>
-  );
-
-  return(
-    <div>
-      <div className="kpi-grid">
-        {[
-          ["Total Jobs",      overview?.total_jobs||0,             "var(--accent2)"],
-          ["Resumes Screened",overview?.total_resumes||0,          "var(--green)"],
-          ["Sessions",        overview?.total_sessions||0,         "var(--amber)"],
-          ["Avg Score",       `${overview?.avg_score_across_all||0}%`, "#fb7185"],
-        ].map(([l,v,c])=>(
-          <div key={l} className="kpi">
-            <div className="kpi-label">{l}</div>
-            <div className="kpi-value" style={{color:c,fontSize:24}}>{v}</div>
-          </div>
-        ))}
-      </div>
-
-      <div className="grid-2" style={{marginBottom:18}}>
-        <div className="card">
-          <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:14}}>Score Distribution</div>
-          <div style={{height:200}}><DonutChart distribution={dist}/></div>
-        </div>
-        <div className="card">
-          <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:14}}>Top Skills in Pool</div>
-          {skills.slice(0,8).map(({skill,count})=>(
-            <div key={skill} style={{marginBottom:8}}>
-              <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:3,color:"var(--text2)"}}>
-                <span>{skill}</span><span style={{color:"var(--text3)"}}>{count}</span>
-              </div>
-              <div className="progress-track">
-                <div className="progress-bar" style={{width:`${Math.min((count/(skills[0]?.count||1))*100,100)}%`}}/>
-              </div>
-            </div>
-          ))}
-          {skills.length===0&&<div style={{fontSize:12,color:"var(--text3)"}}>No data yet. Screen some resumes first.</div>}
-        </div>
-      </div>
-
-      {overview?.recent_activity?.length>0&&(
-        <div className="card">
-          <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:14}}>Recent Activity</div>
-          {overview.recent_activity.map((s,i)=>(
-            <div key={i} className="stat-row">
-              <div>
-                <div style={{fontSize:13,color:"var(--text2)",fontWeight:500}}>{s.top_candidate||"—"}</div>
-                <div style={{fontSize:11,color:"var(--text3)"}}>{s.resumes} resumes · {s.at?new Date(s.at).toLocaleDateString():""}</div>
-              </div>
-              <div style={{fontFamily:"var(--mono)",color:"var(--accent2)",fontSize:15}}>{s.avg_score}%</div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+  if(loading) return e("div",{style:{display:"flex",justifyContent:"center",padding:80}},e("div",{className:"spin",style:{width:32,height:32,borderWidth:3}}));
+  const kpis=[["Total Jobs",ov&&ov.total_jobs||0,"var(--accent2)"],["Resumes Screened",ov&&ov.total_resumes||0,"var(--green)"],["Sessions",ov&&ov.total_sessions||0,"var(--amber)"],["Avg Score",(ov&&ov.avg_score_across_all||0)+"%","#fb7185"]];
+  return e("div",null,
+    e("div",{className:"kpi-grid"},kpis.map(([l,v,c])=>e("div",{key:l,className:"kpi"},e("div",{className:"kpi-lbl"},l),e("div",{className:"kpi-val",style:{color:c,fontSize:24}},v)))),
+    e("div",{className:"grid2",style:{marginBottom:18}},
+      e("div",{className:"card",style:{marginBottom:0}},
+        e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:16,marginBottom:14}},"Score Distribution"),
+        e("div",{style:{height:200}},dist&&e(ChartCanvas,{type:"doughnut",config:{
+          data:{labels:Object.keys(dist),datasets:[{data:Object.values(dist),backgroundColor:["rgba(248,113,113,.75)","rgba(251,191,36,.75)","rgba(99,102,241,.75)","rgba(129,140,248,.75)","rgba(52,211,153,.75)"],borderColor:"transparent",hoverOffset:4}]},
+          options:{responsive:true,maintainAspectRatio:false,cutout:"68%",plugins:{legend:{position:"right",labels:{color:"#8b93b8",font:{size:10,family:"Outfit"},boxWidth:10,padding:8}}}}
+        },deps:[JSON.stringify(dist)]}))
+      ),
+      e("div",{className:"card",style:{marginBottom:0}},
+        e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:16,marginBottom:14}},"Top Skills in Pool"),
+        sk.length===0?e("div",{style:{fontSize:12,color:"var(--text3)"}},"No data yet."):
+        sk.slice(0,8).map(({skill,count})=>e("div",{key:skill,style:{marginBottom:8}},
+          e("div",{style:{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:3,color:"var(--text2)"}},e("span",null,skill),e("span",{style:{color:"var(--text3)"}},count)),
+          e("div",{className:"ptrack"},e("div",{className:"pbar",style:{width:Math.min((count/(sk[0]&&sk[0].count||1))*100,100)+"%"}}))
+        ))
+      )
+    ),
+    ov&&ov.recent_activity&&ov.recent_activity.length>0&&e("div",{className:"card"},
+      e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:16,marginBottom:14}},"Recent Activity"),
+      ov.recent_activity.map((s,i)=>e("div",{key:i,className:"stat-row"},
+        e("div",null,
+          e("div",{style:{fontSize:13,color:"var(--text2)",fontWeight:500}},s.top_candidate||"—"),
+          e("div",{style:{fontSize:11,color:"var(--text3)"}},s.resumes+" resumes · "+(s.at?new Date(s.at).toLocaleDateString():""))
+        ),
+        e("div",{style:{fontFamily:"'DM Mono',monospace",color:"var(--accent2)",fontSize:15}},s.avg_score+"%")
+      ))
+    )
   );
 }
 
 // ── Auth Page ──────────────────────────────────────────────────────────────
-function AuthPage({onAuth, toast}){
-  const [tab,setTab]=useState("login");
-  const [loading,setLoading]=useState(false);
-  const [error,setError]=useState("");
-  const [form,setForm]=useState({name:"",email:"",password:""});
+function AuthPage({onAuth,toast}) {
+  const [tab,setTab]   = useState("login");
+  const [name,setName] = useState("");
+  const [email,setEmail] = useState("");
+  const [pass,setPass] = useState("");
+  const [error,setError] = useState("");
+  const [loading,setLoading] = useState(false);
 
-  async function submit(){
+  async function submit() {
     setError(""); setLoading(true);
-    try{
+    try {
       const endpoint=tab==="login"?"/auth/login":"/auth/register";
-      const body=tab==="login"
-        ?{email:form.email,password:form.password}
-        :{name:form.name,email:form.email,password:form.password};
+      const body=tab==="login"?{email,password:pass}:{name,email,password:pass};
       const data=await api(endpoint,{method:"POST",body:JSON.stringify(body)});
       setAuth(data.access_token,data.user);
-      toast(`Welcome, ${data.user.name}! 👋`,"success");
+      toast("Welcome, "+data.user.name+"! 👋","success");
       onAuth(data.user);
-    } catch(e){
-      setError(e.message||"Something went wrong. Please try again.");
-    } finally{
-      setLoading(false);
-    }
+    } catch(ex) { setError(ex.message||"Something went wrong."); }
+    finally { setLoading(false); }
   }
 
-  return(
-    <div className="auth-page">
-      <div className="auth-card">
-        <div style={{textAlign:"center",marginBottom:28}}>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10,marginBottom:8}}>
-            <div className="logo-icon">⚡</div>
-            <div style={{fontFamily:"var(--serif)",fontSize:26}}>CloudScreen</div>
-          </div>
-          <div style={{fontSize:12,color:"var(--text3)"}}>NLP-powered Resume Intelligence Platform</div>
-        </div>
+  function onKey(ev){if(ev.key==="Enter")submit();}
 
-        <div className="auth-tabs">
-          <button className={`auth-tab ${tab==="login"?"active":""}`}
-            onClick={()=>{setTab("login");setError("")}}>Sign In</button>
-          <button className={`auth-tab ${tab==="register"?"active":""}`}
-            onClick={()=>{setTab("register");setError("")}}>Create Account</button>
-        </div>
-
-        {error&&<div className="err-box">⚠ {error}</div>}
-
-        {tab==="register"&&(
-          <div className="form-group">
-            <label className="label">Full Name</label>
-            <input className="input" placeholder="Your full name"
-              value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}
-              onKeyDown={e=>e.key==="Enter"&&submit()}/>
-          </div>
-        )}
-        <div className="form-group">
-          <label className="label">Email Address</label>
-          <input className="input" type="email" placeholder="you@example.com"
-            value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))}
-            onKeyDown={e=>e.key==="Enter"&&submit()}/>
-        </div>
-        <div className="form-group">
-          <label className="label">Password</label>
-          <input className="input" type="password" placeholder={tab==="register"?"Create a password":"••••••••"}
-            value={form.password} onChange={e=>setForm(f=>({...f,password:e.target.value}))}
-            onKeyDown={e=>e.key==="Enter"&&submit()}/>
-        </div>
-
-        <button className="btn btn-primary"
-          style={{width:"100%",justifyContent:"center",padding:"11px 18px",fontSize:14}}
-          onClick={submit} disabled={loading}>
-          {loading?<><div className="spinner"/>{tab==="login"?" Signing in...":" Creating account..."}</>
-                  :tab==="login"?"Sign In →":"Create Account →"}
-        </button>
-
-        <div style={{textAlign:"center",marginTop:16,fontSize:12,color:"var(--text3)"}}>
-          {tab==="login"?"Don't have an account? ":"Already have an account? "}
-          <span style={{color:"var(--accent2)",cursor:"pointer"}}
-            onClick={()=>{setTab(tab==="login"?"register":"login");setError("")}}>
-            {tab==="login"?"Create one free":"Sign in instead"}
-          </span>
-        </div>
-
-        <div style={{marginTop:20,padding:"12px 14px",background:"var(--bg3)",borderRadius:var(--rs),fontSize:11,color:"var(--text3)",lineHeight:1.7}}>
-          🔒 Your data is private — each account sees only its own jobs and resumes
-        </div>
-      </div>
-    </div>
+  return e("div",{className:"auth-page"},
+    e("div",{className:"auth-card"},
+      e("div",{style:{textAlign:"center",marginBottom:28}},
+        e("div",{style:{display:"flex",alignItems:"center",justifyContent:"center",gap:10,marginBottom:8}},
+          e("div",{className:"logo-icon"},"⚡"),
+          e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:26}},"CloudScreen")
+        ),
+        e("div",{style:{fontSize:12,color:"var(--text3)"}},"NLP-powered Resume Intelligence Platform")
+      ),
+      e("div",{className:"auth-tabs"},
+        e("button",{className:"auth-tab"+(tab==="login"?" active":""),onClick:()=>{setTab("login");setError("")}},"Sign In"),
+        e("button",{className:"auth-tab"+(tab==="register"?" active":""),onClick:()=>{setTab("register");setError("")}},"Create Account")
+      ),
+      error&&e("div",{className:"errbox"},"⚠ "+error),
+      tab==="register"&&e("div",{className:"form-group"},
+        e("label",{className:"lbl"},"Full Name"),
+        e("input",{placeholder:"Your full name",value:name,onInput:ev=>setName(ev.target.value),onKeyDown:onKey})
+      ),
+      e("div",{className:"form-group"},
+        e("label",{className:"lbl"},"Email Address"),
+        e("input",{type:"email",placeholder:"you@example.com",value:email,onInput:ev=>setEmail(ev.target.value),onKeyDown:onKey})
+      ),
+      e("div",{className:"form-group"},
+        e("label",{className:"lbl"},"Password"),
+        e("input",{type:"password",placeholder:"••••••••",value:pass,onInput:ev=>setPass(ev.target.value),onKeyDown:onKey})
+      ),
+      e("button",{className:"btn btnp",style:{width:"100%",justifyContent:"center",padding:"11px 18px",fontSize:14},onClick:submit,disabled:loading},
+        loading?[e("div",{key:"sp",className:"sp"}),e("span",{key:"t"},tab==="login"?" Signing in...":" Creating...")]
+               :tab==="login"?"Sign In →":"Create Account →"
+      ),
+      e("div",{style:{textAlign:"center",marginTop:16,fontSize:12,color:"var(--text3)"}},
+        tab==="login"?"Don't have an account? ":"Already have an account? ",
+        e("span",{style:{color:"var(--accent2)",cursor:"pointer"},onClick:()=>{setTab(tab==="login"?"register":"login");setError("")}},
+          tab==="login"?"Create one free":"Sign in instead"
+        )
+      ),
+      e("div",{style:{marginTop:20,padding:"12px 14px",background:"var(--bg3)",borderRadius:8,fontSize:11,color:"var(--text3)",lineHeight:1.7}},
+        "🔒 Your data is private — each account sees only its own jobs and resumes"
+      )
+    )
   );
 }
 
 // ── Main App ───────────────────────────────────────────────────────────────
-function App(){
-  const [user,setUser]=useState(getUser);
-  const [page,setPage]=useState("screen");
-  const [jobs,setJobs]=useState([]);
-  const [activeJob,setActiveJob]=useState(null);
-  const [resumes,setResumes]=useState([]);
-  const [showCreate,setShowCreate]=useState(false);
-  const [loadingJobs,setLoadingJobs]=useState(false);
-  const [apiOk,setApiOk]=useState(null);
-  const {toasts,add:toast}=useToasts();
+function App() {
+  const [user,setUser]       = useState(getUser);
+  const [page,setPage]       = useState("screen");
+  const [jobs,setJobs]       = useState([]);
+  const [activeJob,setJob]   = useState(null);
+  const [resumes,setResumes] = useState([]);
+  const [showCreate,setShowCreate] = useState(false);
+  const {list:toasts,add:toast} = useToasts();
 
-  // Check API health
-  useEffect(()=>{
-    fetch(`${API}/health`).then(r=>r.ok?setApiOk(true):setApiOk(false))
-      .catch(()=>setApiOk(false));
-  },[]);
-
-  async function loadJobs(){
-    setLoadingJobs(true);
-    try{
-      const data=await api("/jobs");
-      setJobs(Array.isArray(data)?data:[]);
-    } catch(e){
-      if(e.message.includes("401")||e.message.includes("Invalid")){
-        clearAuth(); setUser(null);
-      }
-      setJobs([]);
-    } finally{
-      setLoadingJobs(false);
-    }
+  async function loadJobs() {
+    try { const data=await api("/jobs"); setJobs(Array.isArray(data)?data:[]); }
+    catch(ex) { if(ex.message.includes("401")||ex.message.includes("Invalid")){clearAuth();setUser(null);} setJobs([]); }
   }
-
-  async function loadResumes(jobId){
-    try{
-      const data=await api(`/jobs/${jobId}/resumes`);
-      setResumes(Array.isArray(data)?data:[]);
-    } catch{ setResumes([]); }
+  async function loadResumes(jid) {
+    try { const data=await api("/jobs/"+jid+"/resumes"); setResumes(Array.isArray(data)?data:[]); }
+    catch { setResumes([]); }
   }
+  function selectJob(j){setJob(j);setPage("screen");}
+  function logout(){clearAuth();setUser(null);setJobs([]);setResumes([]);setJob(null);}
 
-  function selectJob(j){ setActiveJob(j); setPage("screen"); }
+  useEffect(()=>{if(user)loadJobs();},[user&&user.id]);
+  useEffect(()=>{if(activeJob)loadResumes(activeJob.id);else setResumes([]);},[activeJob&&activeJob.id]);
 
-  function logout(){ clearAuth(); setUser(null); setJobs([]); setResumes([]); setActiveJob(null); }
-
-  useEffect(()=>{ if(user) loadJobs(); },[user]);
-  useEffect(()=>{ if(activeJob) loadResumes(activeJob.id); else setResumes([]); },[activeJob]);
-
-  if(!user) return <><AuthPage onAuth={u=>{setUser(u);}} toast={toast}/><Toasts toasts={toasts}/></>;
+  if(!user) return e("div",null,e(AuthPage,{onAuth:u=>setUser(u),toast}),e(Toasts,{list:toasts}));
 
   const NAV=[{id:"screen",icon:"🔍",label:"Screen"},{id:"analytics",icon:"📊",label:"Analytics"},{id:"about",icon:"📖",label:"About"}];
 
-  return(
-    <div className="app">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="logo">
-          <div className="logo-mark"><div className="logo-icon">⚡</div><div className="logo-name">CloudScreen</div></div>
-          <div className="logo-tag">Resume Intelligence</div>
-        </div>
+  return e("div",{className:"app"},
+    // ── Sidebar
+    e("aside",{className:"sidebar"},
+      e("div",{className:"logo"},
+        e("div",{className:"logo-mark"},e("div",{className:"logo-icon"},"⚡"),e("div",{className:"logo-name"},"CloudScreen")),
+        e("div",{className:"logo-tag"},"Resume Intelligence")
+      ),
+      e("nav",{className:"nav"},
+        e("div",{className:"nav-sec"},"Navigation"),
+        NAV.map(n=>e("div",{key:n.id,className:"nav-item"+(page===n.id?" active":""),onClick:()=>setPage(n.id)},
+          e("span",{style:{fontSize:14,width:18,textAlign:"center"}},n.icon),
+          e("span",null,n.label)
+        )),
+        jobs.length>0&&[
+          e("div",{key:"jsec",className:"nav-sec",style:{marginTop:16}},"My Jobs"),
+          ...jobs.slice(0,10).map(j=>e("div",{key:j.id,className:"nav-item"+(activeJob&&activeJob.id===j.id?" active":""),onClick:()=>selectJob(j)},
+            e("span",{style:{fontSize:14,width:18,textAlign:"center"}},"💼"),
+            e("span",{style:{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,fontSize:12}},j.title),
+            e("span",{style:{fontSize:10,color:"var(--text3)",background:"var(--bg)",borderRadius:10,padding:"1px 6px",flexShrink:0}},j.resume_count)
+          ))
+        ]
+      ),
+      e("div",{className:"sidebar-bottom"},
+        e("div",{className:"user-pill"},
+          e("div",{className:"user-av"},(user.name||"?")[0].toUpperCase()),
+          e("div",{style:{overflow:"hidden",flex:1}},
+            e("div",{style:{fontSize:12,fontWeight:500,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},user.name),
+            e("div",{style:{fontSize:10,color:"var(--text3)",overflow:"hidden",textOverflow:"ellipsis"}},user.email)
+          )
+        ),
+        e("button",{className:"btn btng btnsm",style:{width:"100%",justifyContent:"center"},onClick:logout},"Sign Out")
+      )
+    ),
 
-        <nav className="nav">
-          <div className="nav-sec">Navigation</div>
-          {NAV.map(n=>(
-            <div key={n.id} className={`nav-item ${page===n.id?"active":""}`} onClick={()=>setPage(n.id)}>
-              <span className="icon">{n.icon}</span><span>{n.label}</span>
-            </div>
-          ))}
+    // ── Main
+    e("main",{className:"main"},
+      e("div",{className:"topbar"},
+        e("div",null,
+          page==="screen"&&[e("div",{key:"t",className:"page-title"},"Resume Screening"),e("div",{key:"s",className:"page-sub"},"Upload resumes · NLP extraction · TF-IDF ranking")],
+          page==="analytics"&&[e("div",{key:"t",className:"page-title"},"Analytics"),e("div",{key:"s",className:"page-sub"},"Insights across your screening sessions")],
+          page==="about"&&[e("div",{key:"t",className:"page-title"},"About"),e("div",{key:"s",className:"page-sub"},"Architecture, tech stack and API")]
+        ),
+        e("div",{style:{display:"flex",gap:8,alignItems:"center"}},
+          page==="screen"&&activeJob&&[
+            e("a",{key:"pdf",href:API+"/jobs/"+activeJob.id+"/export/pdf",target:"_blank",className:"btn btng btnsm",style:{textDecoration:"none"}},"⬇ PDF"),
+            e("a",{key:"csv",href:API+"/jobs/"+activeJob.id+"/export/csv",target:"_blank",className:"btn btng btnsm",style:{textDecoration:"none"}},"⬇ CSV")
+          ],
+          page==="screen"&&e("button",{className:"btn btnp",onClick:()=>setShowCreate(true)},"+ New Job")
+        )
+      ),
 
-          {(jobs.length>0||loadingJobs)&&(
-            <>
-              <div className="nav-sec" style={{marginTop:16}}>My Jobs {loadingJobs&&"…"}</div>
-              {jobs.slice(0,10).map(j=>(
-                <div key={j.id} className={`nav-item ${activeJob?.id===j.id?"active":""}`} onClick={()=>selectJob(j)}>
-                  <span className="icon">💼</span>
-                  <span style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,fontSize:12}}>{j.title}</span>
-                  <span style={{fontSize:10,color:"var(--text3)",flexShrink:0,background:"var(--bg)",borderRadius:10,padding:"1px 6px"}}>{j.resume_count}</span>
-                </div>
-              ))}
-            </>
-          )}
-        </nav>
-
-        <div className="sidebar-bottom">
-          <div className="user-pill">
-            <div className="user-avatar">{(user.name||"?")[0].toUpperCase()}</div>
-            <div style={{overflow:"hidden",flex:1}}>
-              <div style={{fontSize:12,fontWeight:500,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{user.name}</div>
-              <div style={{fontSize:10,color:"var(--text3)",overflow:"hidden",textOverflow:"ellipsis"}}>{user.email}</div>
-            </div>
-          </div>
-          <button className="btn btn-ghost btn-sm" style={{width:"100%",justifyContent:"center"}} onClick={logout}>
-            Sign Out
-          </button>
-        </div>
-      </aside>
-
-      {/* Main content */}
-      <main className="main">
-        <div className="topbar">
-          <div>
-            {page==="screen"&&<><div className="page-title">Resume Screening</div><div className="page-sub">Upload resumes · NLP extraction · TF-IDF ranking</div></>}
-            {page==="analytics"&&<><div className="page-title">Analytics</div><div className="page-sub">Insights across your screening sessions</div></>}
-            {page==="about"&&<><div className="page-title">About</div><div className="page-sub">Architecture, tech stack and API</div></>}
-          </div>
-          <div style={{display:"flex",gap:8,alignItems:"center"}}>
-            {page==="screen"&&activeJob&&(
-              <>
-                <a href={`${API}/jobs/${activeJob.id}/export/pdf`} target="_blank"
-                  className="btn btn-ghost btn-sm" style={{textDecoration:"none"}}>⬇ PDF</a>
-                <a href={`${API}/jobs/${activeJob.id}/export/csv`} target="_blank"
-                  className="btn btn-ghost btn-sm" style={{textDecoration:"none"}}>⬇ CSV</a>
-              </>
-            )}
-            {page==="screen"&&(
-              <button className="btn btn-primary" onClick={()=>setShowCreate(true)}>+ New Job</button>
-            )}
-          </div>
-        </div>
-
-        <div className="content">
-          {/* API offline banner */}
-          {apiOk===false&&(
-            <div className="api-banner">
-              ⚠ Cannot reach the API server. Make sure the backend is running.
-              <code style={{fontFamily:"var(--mono)",fontSize:11,background:"var(--bg3)",padding:"2px 7px",borderRadius:4}}>
-                python start.py
-              </code>
-            </div>
-          )}
-
-          {page==="screen"&&(
-            <>
-              {/* Job selector */}
-              <div className="card" style={{marginBottom:18}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
-                  <div style={{fontFamily:"var(--serif)",fontSize:18}}>
-                    {activeJob?`Screening: ${activeJob.title}`:"Select a Job Posting"}
-                    {activeJob?.company&&<span style={{fontSize:13,color:"var(--text3)",fontFamily:"var(--sans)",fontWeight:400}}> @ {activeJob.company}</span>}
-                  </div>
-                  <div style={{display:"flex",gap:8}}>
-                    {activeJob&&(
-                      <button className="btn btn-danger btn-sm" onClick={async()=>{
-                        if(!confirm(`Delete "${activeJob.title}" and all its resumes?`)) return;
-                        try{
-                          await api(`/jobs/${activeJob.id}`,{method:"DELETE"});
-                          setActiveJob(null); loadJobs(); toast("Job deleted","info");
-                        }catch(e){toast(`Delete failed: ${e.message}`,"error");}
-                      }}>Delete Job</button>
-                    )}
-                  </div>
-                </div>
-
-                {jobs.length===0&&!loadingJobs?(
-                  <div style={{fontSize:13,color:"var(--text3)"}}>
-                    No jobs yet.{" "}
-                    <span style={{color:"var(--accent2)",cursor:"pointer",textDecoration:"underline"}}
-                      onClick={()=>setShowCreate(true)}>
-                      Create your first job posting →
-                    </span>
-                  </div>
-                ):(
-                  <div style={{display:"flex",flexWrap:"wrap",gap:0}}>
-                    {jobs.map(j=>(
-                      <div key={j.id} className={`job-chip ${activeJob?.id===j.id?"active":""}`} onClick={()=>selectJob(j)}>
-                        💼 <span style={{fontWeight:500}}>{j.title}</span>
-                        {j.company&&<span style={{color:"var(--text3)"}}> · {j.company}</span>}
-                        <span style={{background:"var(--bg2)",borderRadius:10,padding:"1px 6px",fontSize:10,color:"var(--text3)"}}>{j.resume_count}</span>
-                      </div>
-                    ))}
-                    <div className="job-chip" style={{border:"1px dashed var(--border2)",color:"var(--text3)"}}
-                      onClick={()=>setShowCreate(true)}>
-                      + New Job
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {activeJob?(
-                <>
-                  <UploadPanel job={activeJob} toast={toast}
-                    onUploaded={()=>{loadResumes(activeJob.id);loadJobs();}}/>
-
-                  {resumes.length>0&&(
-                    <>
-                      <div className="kpi-grid" style={{marginTop:18}}>
-                        {[
-                          ["Candidates",  resumes.length,                                                                   "var(--accent2)"],
-                          ["Top Score",   `${(resumes[0]?.score||0).toFixed(1)}%`,                                          "var(--green)"],
-                          ["Avg Score",   `${(resumes.reduce((s,r)=>s+(r.score||0),0)/resumes.length).toFixed(1)}%`,        "var(--amber)"],
-                          ["Total Skills",resumes.reduce((s,r)=>s+(r.total_skills||0),0),                                   "var(--accent2)"],
-                        ].map(([l,v,c])=>(
-                          <div key={l} className="kpi">
-                            <div className="kpi-label">{l}</div>
-                            <div className="kpi-value" style={{color:c,fontSize:22}}>{v}</div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="card" style={{marginTop:18,marginBottom:18}}>
-                        <div style={{fontFamily:"var(--serif)",fontSize:16,marginBottom:14}}>Score Comparison</div>
-                        <div style={{height:220}}><BarChart resumes={resumes}/></div>
-                      </div>
-
-                      <div className="sec-head">Candidate Rankings — click any row to see full details</div>
-                      <RankingsPanel resumes={resumes} jobId={activeJob.id} toast={toast}
-                        onDeleted={()=>{loadResumes(activeJob.id);loadJobs();}}/>
-
-                      <SkillHeatmap jobId={activeJob.id}/>
-                      <BatchRadar jobId={activeJob.id}/>
-                    </>
-                  )}
-                </>
-              ):(
-                <div className="empty">
-                  <div className="empty-icon">💼</div>
-                  <div className="empty-title">No job selected</div>
-                  <div className="empty-sub">Select a job posting above, or create a new one to start screening resumes</div>
-                  <button className="btn btn-primary" style={{marginTop:18}} onClick={()=>setShowCreate(true)}>
-                    + Create Job Posting
-                  </button>
-                </div>
-              )}
-            </>
-          )}
-
-          {page==="analytics"&&<AnalyticsPage toast={toast}/>}
-
-          {page==="about"&&(
-            <div>
-              <div className="card" style={{marginBottom:18}}>
-                <div style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:8}}>Cloud Resume Screener v2</div>
-                <div style={{fontSize:13,color:"var(--text2)",lineHeight:1.8,maxWidth:620}}>
-                  An NLP-powered recruitment intelligence platform. Each user account is private —
-                  your jobs and resumes are visible only to you. Powered by spaCy, sklearn TF-IDF,
-                  FastAPI, and Neon PostgreSQL.
-                </div>
-              </div>
-              <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:20}}>
-                {["Python 3.13","FastAPI","spaCy EntityRuler","sklearn TF-IDF","SQLAlchemy","Neon PostgreSQL","JWT Auth","bcrypt","AWS S3","React 18","Chart.js 4","ReportLab"].map(t=>(
-                  <span key={t} className="tag" style={{fontSize:12,padding:"5px 12px"}}>{t}</span>
-                ))}
-              </div>
-              <div className="card-sm" style={{fontSize:13,color:"var(--text2)",lineHeight:2}}>
-                <div>📖 <a href="/docs" target="_blank" style={{color:"var(--accent2)"}}>API Docs (Swagger UI)</a></div>
-                <div>🚀 <a href="https://github.com/Jhil-Patel/cloud-resume-screener" target="_blank" style={{color:"var(--accent2)"}}>GitHub Repository</a></div>
-                <div>🧪 <span style={{color:"var(--text3)"}}>39 pytest tests passing</span></div>
-              </div>
-            </div>
-          )}
-        </div>
-      </main>
-
-      {showCreate&&(
-        <CreateJobModal
-          onClose={()=>setShowCreate(false)}
-          toast={toast}
-          onCreate={j=>{ loadJobs(); selectJob(j); }}
-        />
-      )}
-
-      <Toasts toasts={toasts}/>
-    </div>
+      e("div",{className:"content"},
+        page==="screen"&&e("div",null,
+          // Job selector card
+          e("div",{className:"card"},
+            e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}},
+              e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:18}},activeJob?"Screening: "+activeJob.title+(activeJob.company?" @ "+activeJob.company:""):"Select a Job Posting"),
+              activeJob&&e("button",{className:"btn btnd btnsm",onClick:async()=>{
+                if(!confirm("Delete this job and all its resumes?"))return;
+                try{await api("/jobs/"+activeJob.id,{method:"DELETE"});setJob(null);loadJobs();toast("Job deleted","info");}
+                catch(ex){toast("Delete failed: "+ex.message,"error");}
+              }},"Delete Job")
+            ),
+            jobs.length===0
+              ?e("div",{style:{fontSize:13,color:"var(--text3)"}},
+                  "No jobs yet. ",e("span",{style:{color:"var(--accent2)",cursor:"pointer",textDecoration:"underline"},onClick:()=>setShowCreate(true)},"Create your first job posting →"))
+              :e("div",{style:{display:"flex",flexWrap:"wrap"}},
+                  jobs.map(j=>e("div",{key:j.id,className:"chip"+(activeJob&&activeJob.id===j.id?" active":""),onClick:()=>selectJob(j)},
+                    "💼 ",e("span",{style:{fontWeight:500}},j.title),
+                    j.company&&e("span",{style:{color:"var(--text3)"}}," · "+j.company),
+                    e("span",{style:{background:"var(--bg2)",borderRadius:10,padding:"1px 6px",fontSize:10,color:"var(--text3)"}},j.resume_count)
+                  )),
+                  e("div",{className:"chip",style:{border:"1px dashed var(--border2)",color:"var(--text3)"},onClick:()=>setShowCreate(true)},"+ New Job")
+                )
+          ),
+          // Upload + rankings
+          activeJob?e("div",null,
+            e(UploadPanel,{job:activeJob,toast,onUploaded:()=>{loadResumes(activeJob.id);loadJobs();}}),
+            resumes.length>0&&e("div",null,
+              e("div",{className:"kpi-grid"},
+                [["Candidates",resumes.length,"var(--accent2)"],["Top Score",(resumes[0]&&resumes[0].score||0).toFixed(1)+"%","var(--green)"],["Avg Score",(resumes.reduce((s,r)=>s+(r.score||0),0)/resumes.length).toFixed(1)+"%","var(--amber)"],["Total Skills",resumes.reduce((s,r)=>s+(r.total_skills||0),0),"var(--accent2)"]].map(([l,v,c])=>
+                  e("div",{key:l,className:"kpi"},e("div",{className:"kpi-lbl"},l),e("div",{className:"kpi-val",style:{color:c,fontSize:22}},v))
+                )
+              ),
+              e("div",{className:"card"},
+                e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:16,marginBottom:14}},"Score Comparison"),
+                e("div",{style:{height:220}},e(ChartCanvas,{type:"bar",config:{
+                  data:{labels:resumes.slice(0,10).map(r=>(r.candidate_name||"?").split(" ")[0]),
+                    datasets:[{label:"Match %",data:resumes.slice(0,10).map(r=>+(r.score||0).toFixed(1)),
+                      backgroundColor:resumes.slice(0,10).map(r=>r.score>=75?"rgba(52,211,153,.75)":r.score>=55?"rgba(129,140,248,.75)":r.score>=35?"rgba(251,191,36,.75)":"rgba(248,113,113,.75)"),
+                      borderColor:resumes.slice(0,10).map(r=>r.score>=75?"#34d399":r.score>=55?"#818cf8":r.score>=35?"#fbbf24":"#f87171"),
+                      borderWidth:1,borderRadius:6}]},
+                  options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:0,max:100,grid:{color:"rgba(99,120,255,.06)"},ticks:{color:"#485077",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#8b93b8",font:{size:11}}}},plugins:{legend:{display:false}}}
+                },deps:[resumes.length]}))
+              ),
+              e("div",{className:"sh"},"Candidate Rankings — click any row for full details"),
+              e(RankingsPanel,{resumes,jobId:activeJob.id,toast,onDeleted:()=>{loadResumes(activeJob.id);loadJobs();}}),
+              e(SkillHeatmap,{jobId:activeJob.id}),
+              e(BatchRadar,{jobId:activeJob.id})
+            )
+          ):e("div",{className:"empty"},
+            e("div",{style:{fontSize:44,marginBottom:12,opacity:.35}},"💼"),
+            e("div",{style:{fontSize:15,color:"var(--text2)",marginBottom:6,fontWeight:500}},"No job selected"),
+            e("div",{style:{fontSize:13}},"Select a job posting above, or create a new one"),
+            e("button",{className:"btn btnp",style:{marginTop:18},onClick:()=>setShowCreate(true)},"+ Create Job Posting")
+          )
+        ),
+        page==="analytics"&&e(AnalyticsPage,{toast}),
+        page==="about"&&e("div",null,
+          e("div",{className:"card"},
+            e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:22,marginBottom:8}},"Cloud Resume Screener v2"),
+            e("div",{style:{fontSize:13,color:"var(--text2)",lineHeight:1.8,maxWidth:620}},"NLP-powered recruitment intelligence. Each account is private. Powered by spaCy EntityRuler, sklearn TF-IDF, FastAPI, JWT auth, and Neon PostgreSQL.")
+          ),
+          e("div",{style:{display:"flex",flexWrap:"wrap",gap:8,marginBottom:18}},
+            ["Python 3.13","FastAPI","spaCy EntityRuler","sklearn TF-IDF","SQLAlchemy","Neon PostgreSQL","JWT + bcrypt","React 18 (no build)","Chart.js 4","ReportLab"].map(t=>
+              e("span",{key:t,className:"tag",style:{fontSize:12,padding:"5px 12px"}},t))
+          ),
+          e("div",{className:"card-sm",style:{fontSize:13,color:"var(--text2)",lineHeight:2.2}},
+            e("div",null,"📖 ",e("a",{href:"/docs",target:"_blank",style:{color:"var(--accent2)"}},"Swagger API Docs")),
+            e("div",null,"🚀 ",e("a",{href:"https://github.com/Jhil-Patel/cloud-resume-screener",target:"_blank",style:{color:"var(--accent2)"}},"GitHub Repository")),
+            e("div",null,"🧪 ",e("span",{style:{color:"var(--text3)"}},"39 pytest tests passing"))
+          )
+        )
+      )
+    ),
+    showCreate&&e(CreateJobModal,{onClose:()=>setShowCreate(false),toast,onCreate:j=>{loadJobs();selectJob(j);}}),
+    e(Toasts,{list:toasts})
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+// Mount
+try {
+  ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+  document.getElementById("loading").style.display="none";
+} catch(err) {
+  document.getElementById("loading").innerHTML='<div style="color:#f87171;font-size:14px;text-align:center;padding:20px"><b>Failed to load app</b><br><small>'+err.message+'</small><br><br><a href="/docs" style="color:#818cf8">Try API docs instead</a></div>';
+}
 </script>
 </body>
 </html>
