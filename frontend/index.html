@@ -276,20 +276,145 @@ function CandidateModal({resume,onClose}) {
 }
 
 // ── Create Job Modal ───────────────────────────────────────────────────────
-const SAMPLE_JDS = {
-  "Data Engineer":"We are seeking a Data Engineer with experience in Python, SQL, and cloud platforms.\nRequired Skills: Python, SQL, Apache Spark, ETL, AWS S3, Airflow, PostgreSQL, Docker, Git.\nEducation: Bachelor or Master in Computer Science or Data Science.\nExperience: 1-3 years in data engineering.",
-  "ML Engineer":"Looking for a Machine Learning Engineer to build and deploy ML models.\nRequired: Python, TensorFlow or PyTorch, scikit-learn, NLP, REST APIs, Git, Docker, AWS.\nEducation: Master in CS or Data Science preferred.\nExperience: 2+ years building production ML systems.",
-  "Full Stack Developer":"Full Stack Developer to build modern web applications.\nRequired: JavaScript, React, Node.js, REST APIs, SQL, Git, Docker.\nNice to have: TypeScript, AWS, MongoDB.\nEducation: Bachelor in CS. Experience: 2+ years.",
-  "DevOps / Cloud Engineer":"DevOps Engineer to manage and scale cloud infrastructure.\nRequired: AWS or Azure, Kubernetes, Docker, Terraform, CI/CD, Linux, Python.\nExperience: 2+ years in DevOps or cloud.",
+// ── Job templates grouped by category ──────────────────────────────────────
+const JD_CATEGORIES = {
+  "🤖 AI / ML": {
+    "ML Engineer": {
+      title:"ML Engineer",
+      desc:"We are looking for a Machine Learning Engineer to build and deploy scalable ML models in production.\n\nRequired Skills: Python, TensorFlow, PyTorch, scikit-learn, NLP, Deep Learning, REST APIs, Git, Docker, AWS or GCP.\nNice to have: Kubernetes, MLflow, Airflow, LLMs, HuggingFace Transformers, RAG, LangChain.\nEducation: Master in Computer Science, Data Science, or AI preferred.\nExperience: 2+ years building and deploying production ML systems.",
+      exp:2, skills:["Python","PyTorch","TensorFlow","scikit-learn","NLP","Docker","AWS"]
+    },
+    "Data Scientist": {
+      title:"Data Scientist",
+      desc:"Seeking a Data Scientist to extract insights from large datasets and build predictive models.\n\nRequired Skills: Python, R, Machine Learning, Statistical Analysis, pandas, numpy, matplotlib, scikit-learn, SQL, Git.\nNice to have: Deep Learning, TensorFlow, PyTorch, Tableau, Spark, A/B Testing.\nEducation: Master or PhD in Statistics, Mathematics, Computer Science, or Data Science.\nExperience: 2+ years in data science or analytics roles.",
+      exp:2, skills:["Python","R","Machine Learning","SQL","pandas","scikit-learn","Statistics"]
+    },
+    "NLP Engineer": {
+      title:"NLP Engineer",
+      desc:"Looking for an NLP Engineer to build language understanding systems and deploy LLM-based solutions.\n\nRequired Skills: Python, NLP, HuggingFace Transformers, BERT, GPT, LLMs, spaCy, PyTorch, REST APIs, Git.\nNice to have: RAG, LangChain, Vector Databases (Pinecone, Weaviate), AWS SageMaker, Docker, FastAPI.\nEducation: Master in Computer Science or Computational Linguistics.\nExperience: 2+ years in NLP or applied AI.",
+      exp:2, skills:["Python","NLP","HuggingFace","BERT","PyTorch","spaCy","LLM","RAG"]
+    },
+    "Computer Vision Engineer": {
+      title:"Computer Vision Engineer",
+      desc:"Looking for a Computer Vision Engineer to build image recognition and video analytics systems.\n\nRequired Skills: Python, OpenCV, PyTorch or TensorFlow, Deep Learning, CNNs, Object Detection (YOLO), Git, Docker.\nNice to have: AWS Rekognition, CUDA, TensorRT, MLflow, Kubernetes.\nEducation: Bachelor or Master in Computer Science, Electrical Engineering.\nExperience: 2+ years in computer vision or image processing.",
+      exp:2, skills:["Python","OpenCV","PyTorch","Deep Learning","Computer Vision","Docker"]
+    }
+  },
+  "☁️ Data & Cloud": {
+    "Data Engineer": {
+      title:"Data Engineer",
+      desc:"We are seeking a Data Engineer to build and maintain scalable data pipelines and infrastructure.\n\nRequired Skills: Python, SQL, Apache Spark, PySpark, ETL Pipelines, Apache Airflow, AWS S3, EC2, RDS, PostgreSQL, Docker, Git.\nNice to have: Kafka, Databricks, Snowflake, Redshift, dbt, Terraform, Kubernetes.\nEducation: Bachelor or Master in Computer Science, Data Science, or related field.\nExperience: 1-3 years in data engineering or data infrastructure.",
+      exp:1, skills:["Python","SQL","Apache Spark","ETL","AWS S3","Airflow","PostgreSQL","Docker"]
+    },
+    "Cloud Architect": {
+      title:"Cloud Architect",
+      desc:"Seeking an experienced Cloud Architect to design and oversee cloud infrastructure strategy.\n\nRequired Skills: AWS or Azure or GCP, Cloud Architecture, Microservices, Kubernetes, Docker, Terraform, CI/CD, Security, Cost Optimization, System Design.\nNice to have: Multi-cloud, Service Mesh (Istio), Serverless, CloudFormation, Ansible.\nEducation: Bachelor in Computer Science or related. Cloud certifications (AWS SA, GCP PE) preferred.\nExperience: 5+ years in cloud infrastructure and architecture.",
+      exp:5, skills:["AWS","Azure","GCP","Kubernetes","Terraform","Docker","CI/CD","System Design"]
+    },
+    "DevOps Engineer": {
+      title:"DevOps Engineer",
+      desc:"We are hiring a DevOps Engineer to manage CI/CD pipelines and cloud infrastructure automation.\n\nRequired Skills: AWS or Azure, Kubernetes, Docker, Terraform, Ansible, CI/CD, Jenkins or GitHub Actions, Linux, Python, Bash scripting, Git.\nNice to have: Helm, Prometheus, Grafana, ELK Stack, HashiCorp Vault.\nEducation: Bachelor in Computer Science or Engineering.\nExperience: 2+ years in DevOps, SRE, or cloud engineering.",
+      exp:2, skills:["AWS","Kubernetes","Docker","Terraform","CI/CD","Linux","Python","Git"]
+    },
+    "Data Analyst": {
+      title:"Data Analyst",
+      desc:"Looking for a Data Analyst to transform raw data into actionable business insights.\n\nRequired Skills: SQL, Python or R, Excel, Data Visualization (Tableau or Power BI), Statistical Analysis, pandas, numpy, Google Analytics.\nNice to have: Machine Learning basics, BigQuery, Looker, dbt, AWS, A/B testing.\nEducation: Bachelor in Statistics, Mathematics, Economics, or Computer Science.\nExperience: 1-2 years in data analysis or business intelligence.",
+      exp:1, skills:["SQL","Python","Excel","Tableau","Power BI","Statistics","pandas"]
+    }
+  },
+  "🌐 Web & Mobile": {
+    "Full Stack Developer": {
+      title:"Full Stack Developer",
+      desc:"We need a Full Stack Developer to build and maintain modern web applications end-to-end.\n\nRequired Skills: JavaScript, TypeScript, React, Node.js, REST APIs, PostgreSQL or MySQL, Git, Docker, HTML, CSS.\nNice to have: Next.js, GraphQL, AWS, MongoDB, Redis, Tailwind CSS, CI/CD.\nEducation: Bachelor in Computer Science or Engineering.\nExperience: 2+ years of full-stack web development.",
+      exp:2, skills:["JavaScript","React","Node.js","TypeScript","PostgreSQL","Docker","REST API","Git"]
+    },
+    "Frontend Developer": {
+      title:"Frontend Developer",
+      desc:"Seeking a Frontend Developer to build beautiful, responsive, and performant web interfaces.\n\nRequired Skills: JavaScript, TypeScript, React or Vue or Angular, HTML5, CSS3, Tailwind CSS, REST APIs, Git, Webpack or Vite.\nNice to have: Next.js, GraphQL, React Native, Figma, Jest, Cypress, Accessibility (WCAG).\nEducation: Bachelor in Computer Science or related field.\nExperience: 2+ years in frontend development.",
+      exp:2, skills:["JavaScript","TypeScript","React","HTML","CSS","Tailwind","Git"]
+    },
+    "Backend Developer": {
+      title:"Backend Developer",
+      desc:"Looking for a Backend Developer to build robust APIs and server-side systems.\n\nRequired Skills: Python or Java or Go, REST APIs, PostgreSQL, Redis, Docker, Git, System Design, Linux.\nNice to have: FastAPI or Django or Spring Boot, Kafka, Kubernetes, gRPC, AWS, Microservices.\nEducation: Bachelor in Computer Science or Engineering.\nExperience: 2+ years in backend development.",
+      exp:2, skills:["Python","REST API","PostgreSQL","Redis","Docker","Git","System Design"]
+    },
+    "Mobile Developer": {
+      title:"Mobile App Developer",
+      desc:"We are hiring a Mobile Developer to build cross-platform mobile applications.\n\nRequired Skills: React Native or Flutter, JavaScript or Dart, REST APIs, Git, iOS and Android deployment, Firebase.\nNice to have: Swift, Kotlin, Redux, GraphQL, Push Notifications, App Store optimization.\nEducation: Bachelor in Computer Science or Engineering.\nExperience: 2+ years in mobile app development.",
+      exp:2, skills:["React Native","Flutter","JavaScript","REST API","Firebase","Git","iOS","Android"]
+    }
+  },
+  "🔐 Security & Systems": {
+    "Cybersecurity Engineer": {
+      title:"Cybersecurity Engineer",
+      desc:"Looking for a Cybersecurity Engineer to protect our systems and data from threats.\n\nRequired Skills: Network Security, Penetration Testing, SIEM, Vulnerability Assessment, Python, Linux, Firewalls, IAM, Compliance (ISO 27001, SOC2).\nNice to have: AWS Security, Kubernetes Security, Zero Trust, CISSP or CEH certification, DevSecOps.\nEducation: Bachelor in Computer Science, Cybersecurity, or related field.\nExperience: 3+ years in cybersecurity or information security.",
+      exp:3, skills:["Network Security","Penetration Testing","Python","Linux","IAM","SIEM","Compliance"]
+    },
+    "Software Engineer (SWE)": {
+      title:"Software Engineer",
+      desc:"Seeking a Software Engineer to design, build, and maintain scalable software systems.\n\nRequired Skills: Python or Java or C++ or Go, Data Structures and Algorithms, System Design, REST APIs, Git, SQL, Docker, Linux.\nNice to have: Microservices, Kubernetes, AWS, CI/CD, Redis, Kafka.\nEducation: Bachelor or Master in Computer Science or Engineering.\nExperience: 1-3 years in software development.",
+      exp:1, skills:["Python","Data Structures","Algorithms","System Design","SQL","Docker","Git"]
+    }
+  }
 };
+
+// Flat lookup by name for quick access
+const SAMPLE_JDS = {};
+Object.values(JD_CATEGORIES).forEach(cat=>Object.entries(cat).forEach(([k,v])=>{SAMPLE_JDS[k]=v.desc;}));
+
+// All skill suggestions for the skill picker
+const ALL_SKILLS = [
+  "Python","JavaScript","TypeScript","Java","Go","C++","R","Scala","Rust","Kotlin",
+  "React","Node.js","Vue","Angular","Next.js","FastAPI","Django","Flask","Spring Boot","Express",
+  "AWS","Azure","GCP","Docker","Kubernetes","Terraform","CI/CD","GitHub Actions","Ansible","Helm",
+  "PostgreSQL","MySQL","MongoDB","Redis","Elasticsearch","Cassandra","SQLite","Snowflake","BigQuery","Redshift",
+  "Apache Spark","PySpark","Kafka","Airflow","dbt","ETL","Databricks","Hadoop","Flink",
+  "Machine Learning","Deep Learning","NLP","Computer Vision","TensorFlow","PyTorch","scikit-learn","XGBoost",
+  "HuggingFace","BERT","GPT","LLM","RAG","LangChain","OpenCV","spaCy","pandas","numpy",
+  "Git","GitHub","Linux","Bash","Postman","Figma","Jira","Agile","Scrum","System Design",
+  "REST API","GraphQL","Microservices","Terraform","Prometheus","Grafana"
+];
 
 function CreateJobModal({onClose,onCreate,toast}) {
   const [title,setTitle]   = useState("");
   const [company,setCompany] = useState("");
   const [desc,setDesc]     = useState("");
   const [minExp,setMinExp] = useState(0);
+  const [maxExp,setMaxExp] = useState(5);
+  const [jobType,setJobType] = useState("Full-time");
+  const [location,setLocation] = useState("");
+  const [selectedSkills,setSelectedSkills] = useState([]);
+  const [skillSearch,setSkillSearch] = useState("");
   const [errors,setErrors] = useState({});
   const [loading,setLoading] = useState(false);
+  const [activeCategory,setActiveCategory] = useState(null);
+
+  function loadTemplate(categoryName, jobName) {
+    const job = JD_CATEGORIES[categoryName][jobName];
+    setTitle(job.title);
+    setDesc(job.desc);
+    setMinExp(job.exp);
+    setMaxExp(job.exp + 3);
+    setSelectedSkills(job.skills);
+    setErrors({});
+    setActiveCategory(null);
+  }
+
+  function toggleSkill(skill) {
+    setSelectedSkills(prev =>
+      prev.includes(skill) ? prev.filter(s=>s!==skill) : [...prev, skill]
+    );
+  }
+
+  // Append selected skills into the description when submitting
+  function buildFinalDesc() {
+    let d = desc.trim();
+    if(selectedSkills.length > 0) {
+      const skillLine = "\nKey Skills: " + selectedSkills.join(", ") + ".";
+      if(!d.includes("Key Skills:")) d += skillLine;
+    }
+    return d;
+  }
 
   function validate() {
     const er={};
@@ -304,55 +429,159 @@ function CreateJobModal({onClose,onCreate,toast}) {
     if(!validate()) return;
     setLoading(true);
     try {
-      const data = await api("/jobs",{method:"POST",body:JSON.stringify({title:title.trim(),company:company.trim(),description:desc.trim(),min_experience:parseInt(minExp)||0})});
-      toast("Job '"+data.title+"' created!","success");
-      onCreate(data);
-      onClose();
+      const finalDesc = buildFinalDesc();
+      const data = await api("/jobs",{method:"POST",body:JSON.stringify({
+        title:title.trim(), company:company.trim(),
+        description:finalDesc, min_experience:parseInt(minExp)||0
+      })});
+      toast("Job \'"+data.title+"\' created!","success");
+      onCreate(data); onClose();
     } catch(ex) { toast("Failed: "+ex.message,"error"); }
     finally { setLoading(false); }
   }
 
+  const filteredSkills = skillSearch.length > 0
+    ? ALL_SKILLS.filter(s=>s.toLowerCase().includes(skillSearch.toLowerCase()) && !selectedSkills.includes(s))
+    : ALL_SKILLS.filter(s=>!selectedSkills.includes(s)).slice(0,30);
+
   return e("div",{className:"overlay",onClick:ev=>{if(ev.target===ev.currentTarget)onClose();}},
-    e("div",{className:"modal"},
-      e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:22}},
+    e("div",{className:"modal",style:{maxWidth:780}},
+
+      // Header
+      e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:20}},
         e("div",null,
-          e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:22,marginBottom:4}},"Create Job Posting"),
-          e("div",{style:{fontSize:12,color:"var(--text3)"}},"Define the role to screen candidates against")
+          e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:22,marginBottom:3}},"Create Job Posting"),
+          e("div",{style:{fontSize:12,color:"var(--text3)"}},"Fill manually or load a template to auto-fill all fields")
         ),
         e("button",{style:{background:"none",border:"none",color:"var(--text3)",fontSize:20,cursor:"pointer",padding:4},onClick:onClose},"✕")
       ),
-      e("div",{className:"form-group"},
-        e("label",{className:"lbl"},"Quick Start — Load Sample JD"),
-        e("select",{onChange:ev=>{const k=ev.target.value;if(k){setDesc(SAMPLE_JDS[k]);if(!title)setTitle(k);setErrors({});}},defaultValue:""},
-          e("option",{value:""},"— Choose a template —"),
-          Object.keys(SAMPLE_JDS).map(k=>e("option",{key:k,value:k},k))
+
+      // Template picker
+      e("div",{style:{marginBottom:20}},
+        e("div",{className:"lbl",style:{marginBottom:8}},"Quick Start — Choose a Job Template"),
+        e("div",{style:{display:"flex",flexWrap:"wrap",gap:6,marginBottom:10}},
+          Object.keys(JD_CATEGORIES).map(cat=>
+            e("button",{key:cat,
+              style:{padding:"5px 12px",borderRadius:20,fontSize:12,cursor:"pointer",border:"1px solid",
+                borderColor: activeCategory===cat?"var(--accent)":"var(--border)",
+                background: activeCategory===cat?"rgba(99,102,241,.15)":"var(--bg3)",
+                color: activeCategory===cat?"var(--accent2)":"var(--text2)"},
+              onClick:()=>setActiveCategory(activeCategory===cat?null:cat)},
+              cat
+            )
+          )
+        ),
+        activeCategory && e("div",{style:{display:"flex",flexWrap:"wrap",gap:6}},
+          Object.keys(JD_CATEGORIES[activeCategory]).map(job=>
+            e("button",{key:job,
+              style:{padding:"6px 14px",borderRadius:8,fontSize:12,cursor:"pointer",
+                border:"1px solid var(--border2)",background:"var(--bg3)",color:"var(--text2)",
+                transition:"all .15s"},
+              onMouseOver:ev=>{ev.target.style.background="var(--accent)";ev.target.style.color="#fff";},
+              onMouseOut:ev=>{ev.target.style.background="var(--bg3)";ev.target.style.color="var(--text2)";},
+              onClick:()=>loadTemplate(activeCategory,job)},
+              job
+            )
+          )
         )
       ),
+
+      // Row 1: Title + Company
       e("div",{className:"grid2",style:{gap:12}},
         e("div",{className:"form-group"},
           e("label",{className:"lbl"},"Job Title *"),
-          e("input",{className:errors.title?"ierr":"",placeholder:"e.g. Senior Data Engineer",value:title,onInput:ev=>{setTitle(ev.target.value);setErrors(er=>({...er,title:undefined}));}}),
-          errors.title&&e("div",{className:"ferr"},errors.title)
+          e("input",{className:errors.title?"ierr":"",placeholder:"e.g. Senior Data Engineer",
+            value:title,onInput:ev=>{setTitle(ev.target.value);setErrors(er=>({...er,title:undefined}));}}),
+          errors.title && e("div",{className:"ferr"},errors.title)
         ),
         e("div",{className:"form-group"},
           e("label",{className:"lbl"},"Company"),
-          e("input",{placeholder:"e.g. TechCorp India",value:company,onInput:ev=>setCompany(ev.target.value)})
+          e("input",{placeholder:"e.g. Google India",value:company,onInput:ev=>setCompany(ev.target.value)})
         )
       ),
+
+      // Row 2: Job Type + Location
+      e("div",{className:"grid2",style:{gap:12}},
+        e("div",{className:"form-group"},
+          e("label",{className:"lbl"},"Job Type"),
+          e("select",{value:jobType,onChange:ev=>setJobType(ev.target.value)},
+            ["Full-time","Part-time","Contract","Internship","Freelance"].map(t=>e("option",{key:t,value:t},t))
+          )
+        ),
+        e("div",{className:"form-group"},
+          e("label",{className:"lbl"},"Location / Mode"),
+          e("input",{placeholder:"e.g. Bangalore / Remote / Hybrid",value:location,onInput:ev=>setLocation(ev.target.value)})
+        )
+      ),
+
+      // Row 3: Experience range
+      e("div",{className:"grid2",style:{gap:12}},
+        e("div",{className:"form-group"},
+          e("label",{className:"lbl"},"Min. Experience (years)"),
+          e("input",{type:"number",min:0,max:20,value:minExp,onInput:ev=>setMinExp(ev.target.value)})
+        ),
+        e("div",{className:"form-group"},
+          e("label",{className:"lbl"},"Max. Experience (years)"),
+          e("input",{type:"number",min:0,max:30,value:maxExp,onInput:ev=>setMaxExp(ev.target.value)})
+        )
+      ),
+
+      // Skills picker
+      e("div",{className:"form-group"},
+        e("label",{className:"lbl"},"Required Skills"),
+        // Selected skills chips
+        selectedSkills.length > 0 && e("div",{style:{display:"flex",flexWrap:"wrap",gap:4,marginBottom:8,padding:"8px 10px",background:"var(--bg3)",borderRadius:8,border:"1px solid var(--border)"}},
+          selectedSkills.map(s=>e("span",{key:s,
+            style:{display:"inline-flex",alignItems:"center",gap:4,background:"rgba(99,102,241,.15)",
+              border:"1px solid rgba(99,102,241,.3)",color:"var(--accent2)",
+              borderRadius:20,padding:"3px 10px",fontSize:12,cursor:"pointer"},
+            onClick:()=>toggleSkill(s)},
+            s, e("span",{style:{fontSize:10,opacity:.7}}," ✕")
+          ))
+        ),
+        // Skill search
+        e("input",{placeholder:"Search skills to add (e.g. Python, AWS, Docker)...",
+          value:skillSearch,
+          onInput:ev=>setSkillSearch(ev.target.value),
+          style:{marginBottom:6}}),
+        // Skill suggestions
+        e("div",{style:{display:"flex",flexWrap:"wrap",gap:4,maxHeight:90,overflowY:"auto"}},
+          filteredSkills.slice(0,25).map(s=>e("span",{key:s,
+            style:{background:"var(--bg3)",border:"1px solid var(--border)",color:"var(--text2)",
+              borderRadius:20,padding:"3px 10px",fontSize:11,cursor:"pointer",transition:"all .1s"},
+            onMouseOver:ev=>{ev.target.style.borderColor="var(--accent)";ev.target.style.color="var(--accent2)";},
+            onMouseOut:ev=>{ev.target.style.borderColor="var(--border)";ev.target.style.color="var(--text2)";},
+            onClick:()=>toggleSkill(s)},
+            "+ "+s
+          ))
+        ),
+        selectedSkills.length > 0 && e("div",{style:{fontSize:10,color:"var(--text3)",marginTop:4}},
+          selectedSkills.length+" skills selected — these will be appended to the job description for better NLP matching"
+        )
+      ),
+
+      // Job Description
       e("div",{className:"form-group"},
         e("label",{className:"lbl"},"Job Description *"),
-        e("textarea",{className:errors.desc?"ierr":"",style:{minHeight:180},placeholder:"Paste the full job description here...",value:desc,onInput:ev=>{setDesc(ev.target.value);setErrors(er=>({...er,desc:undefined}));}}),
+        e("textarea",{className:errors.desc?"ierr":"",style:{minHeight:160},
+          placeholder:"Describe responsibilities, requirements, education, and any additional details...",
+          value:desc,onInput:ev=>{setDesc(ev.target.value);setErrors(er=>({...er,desc:undefined}));}}),
         e("div",{className:"ccnt"},desc.length+" chars"+(desc.length<30&&desc.length>0?" — need at least 30":"")),
-        errors.desc&&e("div",{className:"ferr"},errors.desc)
+        errors.desc && e("div",{className:"ferr"},errors.desc)
       ),
-      e("div",{className:"form-group"},
-        e("label",{className:"lbl"},"Min. Experience (years)"),
-        e("input",{type:"number",min:0,max:20,value:minExp,style:{maxWidth:120},onInput:ev=>setMinExp(ev.target.value)})
-      ),
-      e("div",{style:{display:"flex",gap:10,justifyContent:"flex-end",marginTop:8,paddingTop:16,borderTop:"1px solid var(--border)"}},
-        e("button",{className:"btn btng",onClick:onClose,disabled:loading},"Cancel"),
-        e("button",{className:"btn btnp",onClick:submit,disabled:loading},
-          loading?[e("div",{key:"sp",className:"sp"}),e("span",{key:"t"}," Creating...")]:"✓ Create Job Posting"
+
+      // Footer
+      e("div",{style:{display:"flex",gap:10,justifyContent:"space-between",alignItems:"center",
+        marginTop:8,paddingTop:16,borderTop:"1px solid var(--border)"}},
+        e("div",{style:{fontSize:11,color:"var(--text3)"}},
+          selectedSkills.length>0 ? "✓ "+selectedSkills.length+" skills · " : "",
+          desc.length+" chars"
+        ),
+        e("div",{style:{display:"flex",gap:10}},
+          e("button",{className:"btn btng",onClick:onClose,disabled:loading},"Cancel"),
+          e("button",{className:"btn btnp",onClick:submit,disabled:loading},
+            loading?[e("div",{key:"sp",className:"sp"}),e("span",{key:"t"}," Creating...")]:"✓ Create Job Posting"
+          )
         )
       )
     )
