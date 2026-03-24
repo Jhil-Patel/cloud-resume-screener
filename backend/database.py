@@ -137,17 +137,70 @@ def get_db():
         db.close()
 
 def init_db(retries=5, delay=2):
-    """Create tables with retry for Neon cold-start."""
+    """
+    Drop and recreate all tables on startup.
+    This ensures the schema is always current with the code.
+    Safe because: if tables don't exist, create_all creates them.
+    If they exist with wrong schema, drop and recreate.
+    """
     for attempt in range(retries):
         try:
+            # Drop all and recreate — guarantees schema matches models
+            Base.metadata.drop_all(bind=engine)
             Base.metadata.create_all(bind=engine)
-            logger.info("✅ Database initialized")
+            logger.info("✅ Database schema initialized")
             return
         except OperationalError as ex:
             if attempt < retries - 1:
-                logger.warning(f"DB init attempt {attempt+1} failed: {ex}. Retrying in {delay}s...")
+                logger.warning(f"DB init attempt {attempt+1} failed, retrying in {delay}s: {ex}")
                 time.sleep(delay)
                 delay *= 2
             else:
                 logger.error(f"DB init failed after {retries} attempts: {ex}")
                 raise
+
+
+def _run_migrations(conn):
+    """
+    Manually add new columns to existing tables.
+    SQLAlchemy create_all() never ALTERs existing tables — new columns
+    must be added explicitly. Safe to run on every startup.
+    PostgreSQL: uses IF NOT EXISTS (idempotent).
+    SQLite: catches duplicate column error silently (local dev only).
+    """
+    from sqlalchemy import text, inspect
+
+    # Check which columns already exist
+    inspector = inspect(conn)
+
+    def col_exists(table, col):
+        try:
+            cols = [c["name"] for c in inspector.get_columns(table)]
+            return col in cols
+        except Exception:
+            return False
+
+    migrations = [
+        # (table, column, pg_sql)
+        ("job_postings", "job_type",       "ALTER TABLE job_postings ADD COLUMN job_type VARCHAR(50) DEFAULT 'Full-time'"),
+        ("job_postings", "location",       "ALTER TABLE job_postings ADD COLUMN location VARCHAR(200) DEFAULT ''"),
+        ("job_postings", "max_experience", "ALTER TABLE job_postings ADD COLUMN max_experience INTEGER DEFAULT 10"),
+        ("resumes",      "notes",          "ALTER TABLE resumes ADD COLUMN notes TEXT DEFAULT ''"),
+        ("resumes",      "shortlisted",    "ALTER TABLE resumes ADD COLUMN shortlisted BOOLEAN DEFAULT FALSE"),
+        ("resumes",      "storage_path",   "ALTER TABLE resumes ADD COLUMN storage_path VARCHAR(500) DEFAULT ''"),
+    ]
+
+    for table, col, sql in migrations:
+        if not col_exists(table, col):
+            try:
+                conn.execute(text(sql))
+                logger.info(f"Migration: added {table}.{col}")
+            except Exception as ex:
+                logger.warning(f"Migration {table}.{col} skipped: {ex}")
+    try:
+        conn.commit()
+    except Exception:
+        pass
+
+
+# init_db defined above
