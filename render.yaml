@@ -9,6 +9,6 @@ services:
     healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
-        value: postgresql://neondb_owner:npg_eLRpTaEA8y0X@ep-calm-sunset-adp8f102-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+        value: postgresql://neondb_owner:npg_eLRpTaEA8y0X@ep-calm-sunset-adp8f102-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require
       - key: SECRET_KEY
         value: cloudscreener-jhil-patel-jwt-secret-2025-masters-project

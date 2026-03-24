@@ -85,6 +85,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .chip:hover{border-color:var(--border2)}
 .chip.active{background:rgba(99,102,241,.15);border-color:var(--accent);color:var(--accent2)}
 .empty{text-align:center;padding:56px 20px;color:var(--text3)}
+.shortlisted-card{border-color:rgba(251,191,36,.3)!important;background:rgba(251,191,36,.03)!important}
 .pbar{height:3px;background:var(--accent);border-radius:2px}
 .ptrack{background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:8px}
 .stat-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
@@ -126,22 +127,40 @@ const getUser  = () => { try{return JSON.parse(localStorage.getItem("cs_user")||
 const setAuth  = (t,u) => { localStorage.setItem("cs_token",t); localStorage.setItem("cs_user",JSON.stringify(u)); };
 const clearAuth= () => { localStorage.removeItem("cs_token"); localStorage.removeItem("cs_user"); };
 
-async function api(path, opts={}) {
+async function api(path, opts={}, retries=2) {
   const token = getToken();
   const isForm = opts.body instanceof FormData;
   const headers = {
     ...(token ? {"Authorization":`Bearer ${token}`} : {}),
     ...(!isForm ? {"Content-Type":"application/json"} : {}),
   };
-  const res = await fetch(API+path, {...opts, headers});
-  if (!res.ok) {
-    let msg = "Error "+res.status;
-    try { const j=await res.json(); msg=j.detail||j.message||msg; } catch{}
-    throw new Error(msg);
+  for(let attempt=0; attempt<=retries; attempt++) {
+    try {
+      const res = await fetch(API+path, {...opts, headers});
+      if (res.status === 503) {
+        // Neon DB waking up — wait and retry
+        if(attempt < retries) { await new Promise(r=>setTimeout(r, 2000*(attempt+1))); continue; }
+      }
+      if (!res.ok) {
+        let msg = "Error "+res.status;
+        try { const j=await res.json(); msg=j.detail||j.message||msg; } catch{}
+        // Give a user-friendly message for common errors
+        if(res.status===500) msg = "Server error. Please try again in a moment.";
+        if(res.status===503) msg = "Database waking up. Please retry in 5 seconds.";
+        if(res.status===401) msg = "Session expired. Please sign in again.";
+        throw new Error(msg);
+      }
+      const ct = res.headers.get("content-type")||"";
+      if (ct.includes("application/json")) return res.json();
+      return res;
+    } catch(ex) {
+      if(attempt < retries && (ex.message.includes("503") || ex.message.includes("waking"))) {
+        await new Promise(r=>setTimeout(r, 2000*(attempt+1)));
+        continue;
+      }
+      throw ex;
+    }
   }
-  const ct = res.headers.get("content-type")||"";
-  if (ct.includes("application/json")) return res.json();
-  return res;
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -208,7 +227,7 @@ function GapPanel({resume}) {
 }
 
 // ── Candidate Modal ────────────────────────────────────────────────────────
-function CandidateModal({resume,onClose}) {
+function CandidateModal({resume,onClose,jobId,toast,onRefresh}) {
   if(!resume) return null;
   const bd = resume.score_breakdown||{};
   const col = sc(resume.score||0);
@@ -268,8 +287,47 @@ function CandidateModal({resume,onClose}) {
         e("div",{key:"edu-head",className:"sh"},"Education"),
         ...resume.education.map((ed,i)=>e("div",{key:i,className:"card-sm",style:{marginBottom:7,fontSize:13,color:"var(--text2)"}},"🎓 "+ed))
       ],
-      e("div",{style:{marginTop:22,display:"flex",justifyContent:"flex-end"}},
+      // Notes section
+      e("div",{className:"sh"},"Recruiter Notes"),
+      e(NotesEditor,{resume,jobId,toast,onRefresh}),
+      e("div",{style:{marginTop:22,display:"flex",justifyContent:"space-between",alignItems:"center"}},
+        e("div",{style:{fontSize:11,color:"var(--text3)"}},
+          "Rank #"+resume.rank+" · Uploaded "+(resume.uploaded_at?new Date(resume.uploaded_at).toLocaleDateString():"")
+        ),
         e("button",{className:"btn btng",onClick:onClose},"Close")
+      )
+    )
+  );
+}
+
+function NotesEditor({resume,jobId,toast,onRefresh}) {
+  const [notes,setNotes] = useState(resume.notes||"");
+  const [saving,setSaving] = useState(false);
+  const [saved,setSaved] = useState(false);
+
+  async function save() {
+    setSaving(true);
+    try {
+      await api("/jobs/"+jobId+"/resumes/"+resume.id+"/notes",{method:"PATCH",body:JSON.stringify({notes})});
+      setSaved(true); setTimeout(()=>setSaved(false),2000);
+      if(onRefresh) onRefresh();
+      toast("Notes saved","success");
+    } catch(ex){ toast("Failed to save: "+ex.message,"error"); }
+    finally { setSaving(false); }
+  }
+
+  return e("div",null,
+    e("textarea",{
+      placeholder:"Add private notes about this candidate (only visible to you)...",
+      value:notes, onInput:ev=>{ setNotes(ev.target.value); setSaved(false); },
+      style:{width:"100%",background:"var(--bg3)",border:"1px solid var(--border)",
+        borderRadius:8,padding:"10px 14px",color:"var(--text)",fontFamily:"'Outfit',sans-serif",
+        fontSize:13,outline:"none",resize:"vertical",minHeight:80,lineHeight:1.6}
+    }),
+    e("div",{style:{display:"flex",justifyContent:"flex-end",marginTop:6,gap:8,alignItems:"center"}},
+      saved && e("span",{style:{fontSize:11,color:"var(--green)"}},"✓ Saved"),
+      e("button",{className:"btn btnp btnsm",onClick:save,disabled:saving},
+        saving ? "Saving..." : "Save Note"
       )
     )
   );
@@ -649,9 +707,15 @@ function UploadPanel({job,onUploaded,toast}) {
 }
 
 // ── Rankings Panel ─────────────────────────────────────────────────────────
-function RankingsPanel({resumes,jobId,onDeleted,toast}) {
+function RankingsPanel({resumes,jobId,onDeleted,toast,onRefresh}) {
   const [selected,setSelected] = useState(null);
   const [deleting,setDeleting] = useState(null);
+  const [search,setSearch]     = useState("");
+  const [filterVerdict,setFilterVerdict] = useState("");
+  const [filterShortlisted,setFilterShortlisted] = useState(false);
+  const [minScore,setMinScore] = useState(0);
+  const [sortBy,setSortBy]     = useState("rank");
+  const [togglingId,setTogglingId] = useState(null);
 
   async function del(r,ev) {
     ev.stopPropagation();
@@ -662,31 +726,126 @@ function RankingsPanel({resumes,jobId,onDeleted,toast}) {
     finally { setDeleting(null); }
   }
 
+  async function toggleShortlist(r,ev) {
+    ev.stopPropagation();
+    setTogglingId(r.id);
+    try {
+      await api("/jobs/"+jobId+"/resumes/"+r.id+"/shortlist",{method:"PATCH",body:JSON.stringify({shortlisted:!r.shortlisted})});
+      toast((!r.shortlisted?"⭐ Shortlisted: ":"Removed from shortlist: ")+r.candidate_name, "success");
+      if(onRefresh) onRefresh();
+    } catch(ex) { toast("Failed: "+ex.message,"error"); }
+    finally { setTogglingId(null); }
+  }
+
   if(!resumes||!resumes.length) return e("div",{className:"empty"},
     e("div",{style:{fontSize:44,marginBottom:12,opacity:.35}},"📋"),
     e("div",{style:{fontSize:15,color:"var(--text2)",marginBottom:6,fontWeight:500}},"No resumes screened yet"),
     e("div",{style:{fontSize:13}},"Upload PDF or TXT resumes above to see the ranked leaderboard")
   );
 
+  // Filter + sort
+  let filtered = resumes.filter(r=>{
+    if(filterShortlisted && !r.shortlisted) return false;
+    if(filterVerdict && r.verdict !== filterVerdict) return false;
+    if(r.score < minScore) return false;
+    if(search) {
+      const sl=search.toLowerCase();
+      const nameMatch = (r.candidate_name||"").toLowerCase().includes(sl);
+      const skillMatch = Object.values(r.skills||{}).flat().some(s=>s.toLowerCase().includes(sl));
+      if(!nameMatch && !skillMatch) return false;
+    }
+    return true;
+  });
+  if(sortBy==="score") filtered = [...filtered].sort((a,b)=>b.score-a.score);
+  else if(sortBy==="name") filtered = [...filtered].sort((a,b)=>(a.candidate_name||"").localeCompare(b.candidate_name||""));
+  else if(sortBy==="exp") filtered = [...filtered].sort((a,b)=>b.experience_years-a.experience_years);
+
+  const shortlistedCount = resumes.filter(r=>r.shortlisted).length;
+
   return e("div",null,
-    resumes.map(r=>e("div",{key:r.id,className:"rank-card",onClick:()=>setSelected(r)},
-      e("div",{style:{fontFamily:"'DM Mono',monospace",fontSize:22,fontWeight:500,color:sc(r.score||0),minWidth:38}},"#"+r.rank),
-      e("div",{style:{flex:1,minWidth:0}},
-        e("div",{style:{fontSize:15,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},r.candidate_name),
-        e("div",{style:{fontSize:11,color:"var(--text3)",marginTop:2}},r.filename),
-        e("div",{style:{marginTop:7}},e("span",{className:vc(r.verdict)},r.verdict))
+    // Toolbar
+    e("div",{style:{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center",marginBottom:14,
+      padding:"12px 14px",background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10}},
+      e("input",{placeholder:"🔍 Search by name or skill...",value:search,
+        onInput:ev=>setSearch(ev.target.value),
+        style:{flex:1,minWidth:160,background:"var(--bg3)",border:"1px solid var(--border)",
+          borderRadius:8,padding:"7px 12px",color:"var(--text)",fontSize:12,outline:"none"}}),
+      e("select",{value:filterVerdict,onChange:ev=>setFilterVerdict(ev.target.value),
+        style:{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,
+          padding:"7px 10px",color:"var(--text2)",fontSize:12,cursor:"pointer"}},
+        e("option",{value:""},"All Verdicts"),
+        ["Strong Match","Good Match","Partial Match","Weak Match"].map(v=>e("option",{key:v,value:v},v))
       ),
-      e("div",{style:{minWidth:190}},
+      e("select",{value:sortBy,onChange:ev=>setSortBy(ev.target.value),
+        style:{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,
+          padding:"7px 10px",color:"var(--text2)",fontSize:12,cursor:"pointer"}},
+        e("option",{value:"rank"},"Sort: Rank"),
+        e("option",{value:"score"},"Sort: Score"),
+        e("option",{value:"name"},"Sort: Name"),
+        e("option",{value:"exp"},"Sort: Experience")
+      ),
+      e("button",{
+        style:{padding:"7px 12px",borderRadius:8,border:"1px solid",fontSize:12,cursor:"pointer",
+          borderColor:filterShortlisted?"var(--amber)":"var(--border)",
+          background:filterShortlisted?"rgba(251,191,36,.15)":"var(--bg3)",
+          color:filterShortlisted?"var(--amber)":"var(--text2)"},
+        onClick:()=>setFilterShortlisted(!filterShortlisted)},
+        "⭐ Shortlisted"+(shortlistedCount>0?" ("+shortlistedCount+")":"")
+      ),
+      e("div",{style:{fontSize:11,color:"var(--text3)",whiteSpace:"nowrap"}},
+        filtered.length+" / "+resumes.length+" shown"
+      )
+    ),
+
+    // Cards
+    filtered.length===0 ? e("div",{style:{textAlign:"center",padding:32,color:"var(--text3)",fontSize:13}},"No candidates match the current filter.") :
+    filtered.map(r=>e("div",{key:r.id,className:"rank-card"+(r.shortlisted?" shortlisted-card":""),
+      style:{borderColor:r.shortlisted?"rgba(251,191,36,.4)":""},
+      onClick:()=>setSelected(r)},
+      // Rank
+      e("div",{style:{fontFamily:"'DM Mono',monospace",fontSize:20,fontWeight:500,color:sc(r.score||0),minWidth:36,flexShrink:0}},
+        r.shortlisted ? e("div",null, e("div",null,"⭐"), e("div",{style:{fontSize:12}}, "#"+r.rank)) : "#"+r.rank
+      ),
+      // Info
+      e("div",{style:{flex:1,minWidth:0}},
+        e("div",{style:{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}},
+          e("div",{style:{fontSize:14,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:180}},r.candidate_name),
+          r.notes && e("span",{style:{fontSize:10,color:"var(--amber)",background:"rgba(251,191,36,.1)",
+            border:"1px solid rgba(251,191,36,.2)",borderRadius:10,padding:"1px 7px"}},"📝 Note")
+        ),
+        e("div",{style:{fontSize:11,color:"var(--text3)",marginTop:2,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",maxWidth:200}},r.filename),
+        e("div",{style:{marginTop:6}},e("span",{className:vc(r.verdict)},r.verdict))
+      ),
+      // Score bar
+      e("div",{style:{minWidth:170,flexShrink:0}},
         e("div",{style:{display:"flex",justifyContent:"space-between",marginBottom:5,fontSize:12}},
-          e("span",{style:{color:"var(--text3)"}},"Match Score"),
+          e("span",{style:{color:"var(--text3)"}},"Match"),
           e("span",{style:{fontFamily:"'DM Mono',monospace",fontWeight:500,color:sc(r.score||0)}},(r.score||0).toFixed(1)+"%")
         ),
         e("div",{className:"sbar-bg"},e("div",{className:"sbar",style:{width:(r.score||0)+"%",background:sc(r.score||0)}}))
       ),
-      e("div",{style:{fontSize:11,color:"var(--text3)",minWidth:100,textAlign:"right",lineHeight:1.8}},"🛠 "+(r.total_skills||0)+" skills\n⏱ "+(r.experience_years||0)+"+ yrs"),
-      e("button",{className:"btn btnd btnsm",onClick:ev=>del(r,ev),disabled:deleting===r.id,style:{flexShrink:0}},deleting===r.id?"…":"✕")
+      // Meta
+      e("div",{style:{fontSize:11,color:"var(--text3)",minWidth:90,textAlign:"right",lineHeight:1.9,flexShrink:0}},
+        "🛠 "+(r.total_skills||0)+" skills",e("br"),"⏱ "+(r.experience_years||0)+"+ yrs"
+      ),
+      // Actions
+      e("div",{style:{display:"flex",flexDirection:"column",gap:5,flexShrink:0},onClick:ev=>ev.stopPropagation()},
+        e("button",{
+          style:{padding:"4px 8px",borderRadius:6,border:"1px solid",fontSize:11,cursor:"pointer",
+            borderColor:r.shortlisted?"var(--amber)":"var(--border)",
+            background:r.shortlisted?"rgba(251,191,36,.15)":"var(--bg3)",
+            color:r.shortlisted?"var(--amber)":"var(--text3)"},
+          disabled:togglingId===r.id,
+          onClick:ev=>toggleShortlist(r,ev)},
+          togglingId===r.id?"…":r.shortlisted?"⭐":"☆"
+        ),
+        e("button",{className:"btn btnd btnsm",style:{padding:"4px 8px",fontSize:11},
+          onClick:ev=>del(r,ev),disabled:deleting===r.id},
+          deleting===r.id?"…":"✕"
+        )
+      )
     )),
-    selected&&e(CandidateModal,{resume:selected,onClose:()=>setSelected(null)})
+    selected&&e(CandidateModal,{resume:selected,jobId,onClose:()=>setSelected(null),toast,onRefresh})
   );
 }
 
@@ -751,7 +910,7 @@ function AnalyticsPage({toast}) {
       .finally(()=>setLoading(false));
   },[]);
   if(loading) return e("div",{style:{display:"flex",justifyContent:"center",padding:80}},e("div",{className:"spin",style:{width:32,height:32,borderWidth:3}}));
-  const kpis=[["Total Jobs",ov&&ov.total_jobs||0,"var(--accent2)"],["Resumes Screened",ov&&ov.total_resumes||0,"var(--green)"],["Sessions",ov&&ov.total_sessions||0,"var(--amber)"],["Avg Score",(ov&&ov.avg_score_across_all||0)+"%","#fb7185"]];
+  const kpis=[["Total Jobs",ov&&ov.total_jobs||0,"var(--accent2)"],["Resumes Screened",ov&&ov.total_resumes||0,"var(--green)"],["Shortlisted",ov&&ov.total_shortlisted||0,"var(--amber)"],["Avg Score",(ov&&ov.avg_score_across_all||0)+"%","#fb7185"]];
   return e("div",null,
     e("div",{className:"kpi-grid"},kpis.map(([l,v,c])=>e("div",{key:l,className:"kpi"},e("div",{className:"kpi-lbl"},l),e("div",{className:"kpi-val",style:{color:c,fontSize:24}},v)))),
     e("div",{className:"grid2",style:{marginBottom:18}},
@@ -975,7 +1134,9 @@ function App() {
                 },deps:[resumes.length]}))
               ),
               e("div",{className:"sh"},"Candidate Rankings — click any row for full details"),
-              e(RankingsPanel,{resumes,jobId:activeJob.id,toast,onDeleted:()=>{loadResumes(activeJob.id);loadJobs();}}),
+              e(RankingsPanel,{resumes,jobId:activeJob.id,toast,
+  onDeleted:()=>{loadResumes(activeJob.id);loadJobs();},
+  onRefresh:()=>loadResumes(activeJob.id)}),
               e(SkillHeatmap,{jobId:activeJob.id}),
               e(BatchRadar,{jobId:activeJob.id})
             )
@@ -999,7 +1160,34 @@ function App() {
           e("div",{className:"card-sm",style:{fontSize:13,color:"var(--text2)",lineHeight:2.2}},
             e("div",null,"📖 ",e("a",{href:"/docs",target:"_blank",style:{color:"var(--accent2)"}},"Swagger API Docs")),
             e("div",null,"🚀 ",e("a",{href:"https://github.com/Jhil-Patel/cloud-resume-screener",target:"_blank",style:{color:"var(--accent2)"}},"GitHub Repository")),
-            e("div",null,"🧪 ",e("span",{style:{color:"var(--text3)"}},"39 pytest tests passing"))
+            e("div",null,"🧪 ",e("span",{style:{color:"var(--text3)"}},"39 pytest tests passing")),
+            e("div",null,"⭐ ",e("span",{style:{color:"var(--text3)"}},"Features: Shortlisting · Notes · Search/Filter · PDF/CSV Export · Gap Analysis · Skill Heatmap · Batch Comparison"))
+          ),
+          e("div",{className:"card",style:{marginTop:0}},
+            e("div",{style:{fontFamily:"'DM Serif Display',serif",fontSize:18,marginBottom:14}},"API Endpoints"),
+            [
+              ["POST","/api/auth/register","Create account"],
+              ["POST","/api/auth/login","Sign in, get JWT token"],
+              ["GET","/api/jobs","List your job postings"],
+              ["POST","/api/jobs","Create a job posting"],
+              ["POST","/api/jobs/{id}/upload","Upload + NLP parse + rank resumes"],
+              ["GET","/api/jobs/{id}/resumes","Get ranked candidates (search/filter)"],
+              ["PATCH","/api/jobs/{id}/resumes/{rid}/shortlist","Star/unstar a candidate"],
+              ["PATCH","/api/jobs/{id}/resumes/{rid}/notes","Save recruiter notes"],
+              ["GET","/api/jobs/{id}/heatmap","Skill coverage heatmap data"],
+              ["GET","/api/jobs/{id}/compare","Top-N radar comparison"],
+              ["GET","/api/jobs/{id}/export/pdf","Download PDF report"],
+              ["GET","/api/jobs/{id}/export/csv","Download CSV export"],
+              ["GET","/api/analytics/overview","Platform analytics"],
+            ].map(function(row){
+              var method=row[0],path=row[1],desc=row[2];
+              var mc=method==="GET"?"rgba(52,211,153,.8)":method==="POST"?"rgba(99,102,241,.8)":"rgba(251,191,36,.8)";
+              return e("div",{key:path,style:{display:"flex",gap:10,alignItems:"baseline",padding:"7px 0",borderBottom:"1px solid var(--border)",fontSize:12}},
+                e("span",{style:{fontFamily:"'DM Mono',monospace",fontSize:10,padding:"2px 7px",borderRadius:4,background:mc,color:"#fff",flexShrink:0}},method),
+                e("span",{style:{fontFamily:"'DM Mono',monospace",color:"var(--text2)",flexShrink:0,fontSize:11}},path),
+                e("span",{style:{color:"var(--text3)"}},desc)
+              );
+            })
           )
         )
       )

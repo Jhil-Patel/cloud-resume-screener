@@ -308,6 +308,65 @@ class TestNLPEngine:
         assert ranked[0]["score"] > ranked[1]["score"]
 
 
+
+
+# ── New Feature Tests ──────────────────────────────────────────────────────
+class TestNewFeatures:
+    def test_shortlist_candidate(self, client, auth_headers, job, uploaded):
+        resumes = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers).json()
+        r_id = resumes[0]["id"]
+        r = client.patch(f"/api/jobs/{job['id']}/resumes/{r_id}/shortlist",
+            json={"shortlisted": True}, headers=auth_headers)
+        assert r.status_code == 200
+        assert r.json()["shortlisted"] is True
+
+    def test_unshortlist_candidate(self, client, auth_headers, job, uploaded):
+        resumes = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers).json()
+        r_id = resumes[0]["id"]
+        client.patch(f"/api/jobs/{job['id']}/resumes/{r_id}/shortlist",
+            json={"shortlisted": True}, headers=auth_headers)
+        r = client.patch(f"/api/jobs/{job['id']}/resumes/{r_id}/shortlist",
+            json={"shortlisted": False}, headers=auth_headers)
+        assert r.status_code == 200
+        assert r.json()["shortlisted"] is False
+
+    def test_add_notes(self, client, auth_headers, job, uploaded):
+        resumes = client.get(f"/api/jobs/{job['id']}/resumes", headers=auth_headers).json()
+        r_id = resumes[0]["id"]
+        r = client.patch(f"/api/jobs/{job['id']}/resumes/{r_id}/notes",
+            json={"notes": "Strong Python skills, good cultural fit"}, headers=auth_headers)
+        assert r.status_code == 200
+        assert "Strong Python" in r.json()["notes"]
+
+    def test_search_resumes_by_name(self, client, auth_headers, job, uploaded):
+        r = client.get(f"/api/jobs/{job['id']}/resumes?search=Arjun", headers=auth_headers)
+        assert r.status_code == 200
+
+    def test_filter_by_verdict(self, client, auth_headers, job, uploaded):
+        r = client.get(f"/api/jobs/{job['id']}/resumes?verdict=Weak+Match", headers=auth_headers)
+        assert r.status_code == 200
+        for res in r.json():
+            assert res["verdict"] == "Weak Match"
+
+    def test_job_stats(self, client, auth_headers, job, uploaded):
+        r = client.get(f"/api/jobs/{job['id']}/stats", headers=auth_headers)
+        assert r.status_code == 200
+        data = r.json()
+        for key in ["total","shortlisted","avg_score","score_buckets","verdict_counts","top_skills"]:
+            assert key in data
+        assert data["total"] >= 1
+
+    def test_health_includes_db_status(self, client, auth_headers):
+        r = client.get("/api/health")
+        assert r.status_code == 200
+        assert "db" in r.json()
+        assert r.json()["db"] == "connected"
+
+    def test_analytics_has_shortlisted(self, client, auth_headers, uploaded):
+        r = client.get("/api/analytics/overview", headers=auth_headers)
+        assert r.status_code == 200
+        assert "total_shortlisted" in r.json()
+
 # ── Cleanup ────────────────────────────────────────────────────────────────────
 def teardown_module(module):
     try:
